@@ -172,9 +172,7 @@ const local: App.I18n.Schema = {
     log: '日志',
     log_login: '登录日志',
     log_operation: '操作日志',
-    web3: 'Web3',
-    web3_dashboard: 'Web3控制台',
-    web3_contract: '合约管理'
+    web3: 'Web3'
   },
   page: {
     login: {

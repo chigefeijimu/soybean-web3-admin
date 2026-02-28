@@ -172,9 +172,7 @@ const local: App.I18n.Schema = {
     log: 'Log',
     log_login: 'Login Log',
     log_operation: 'Operation Log',
-    web3: 'Web3',
-    web3_dashboard: 'Web3 Dashboard',
-    web3_contract: 'Contract Management'
+    web3: 'Web3'
   },
   page: {
     login: {

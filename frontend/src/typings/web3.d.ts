@@ -1,24 +1,7 @@
 import 'viem'
 
-declare module 'viem' {
-  export interface Chain {
-    id: number
-    name: string
-    network: string
-    nativeCurrency: {
-      name: string
-      symbol: string
-      decimals: number
-    }
-    rpcUrls: {
-      default: { http: string[]; webSocket?: string[] }
-      public: { http: string[]; webSocket?: string[] }
-    }
-    blockExplorers: {
-      default: { name: string; url: string }
-    }
-  }
-}
+// Extend viem Chain interface for custom chains
+// Note: viem already has Chain interface, we augment it with custom properties if needed
 
 // Extend wagmi config types
 export interface Web3Wallet {
