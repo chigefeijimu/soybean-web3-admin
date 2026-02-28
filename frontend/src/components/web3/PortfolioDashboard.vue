@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useWeb3 } from '@/composables/web3/useWeb3'
-import { getTokenBalances } from '@/service/api/web3'
+import { getTokenBalances, getTokenPrices } from '@/service/api/web3'
 
 interface Token {
   address: string
@@ -22,7 +22,7 @@ const COMMON_TOKENS = [
   { address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', name: 'Wrapped Bitcoin', symbol: 'WBTC', decimals: 8 },
 ]
 
-const ethPrice = ref(2500) // Mock price, would fetch from oracle
+const ethPrice = ref(0) // Fetched from CoinGecko API
 
 // Local state
 const sortBy = ref<'value' | 'balance' | 'name'>('value')
@@ -32,6 +32,22 @@ const isLoading = ref(false)
 
 // Get account and chainId from composable
 const { account, chainId } = useWeb3()
+
+// Fetch real prices from backend
+const fetchPrices = async () => {
+  try {
+    const response = await getTokenPrices()
+    if (response.data?.success && response.data?.data) {
+      const prices = response.data.data
+      // Get ETH price (could be in different formats)
+      ethPrice.value = prices.ethereum?.usd || prices.ETH?.usd || prices.eth?.usd || 0
+    }
+  } catch (e) {
+    console.error('Failed to fetch prices:', e)
+    // Fallback to a default if API fails
+    ethPrice.value = 2500
+  }
+}
 
 const loadPortfolio = async () => {
   if (!account.value) return
@@ -54,9 +70,17 @@ const loadPortfolio = async () => {
       tokens.value = balances.map((bal: any, index: number) => {
         const tokenInfo = COMMON_TOKENS[index] || { name: 'Unknown', symbol: '???', decimals: 18 }
         const balance = parseFloat(bal.formatted_balance || '0')
-        const value = tokenInfo.symbol === 'ETH' 
-          ? balance * ethPrice.value 
-          : balance * ethPrice.value * 0.001 // Mock non-ETH price
+        
+        // Get token-specific price
+        let tokenPrice = ethPrice.value // Default to ETH price
+        const symbol = tokenInfo.symbol.toLowerCase()
+        if (symbol === 'usdc' || symbol === 'usdt' || symbol === 'dai') {
+          tokenPrice = 1 // Stablecoins
+        } else if (symbol === 'wbtc') {
+          tokenPrice = ethPrice.value * 60 // Approximate BTC/ETH ratio
+        }
+        
+        const value = balance * tokenPrice
         
         return {
           address: bal.token_address,
@@ -162,7 +186,9 @@ const getTokenColor = (index: number): string => {
   return colors[index % colors.length]
 }
 
-onMounted(() => {
+onMounted(async () => {
+  // Fetch prices first
+  await fetchPrices()
   if (account.value) {
     loadPortfolio()
   }
