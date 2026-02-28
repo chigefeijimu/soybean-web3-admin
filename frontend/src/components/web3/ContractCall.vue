@@ -170,9 +170,14 @@ const executeRead = async () => {
       
       // Parse result using viem's decoder
       try {
+        const method = currentMethod.value
+        if (!method) {
+          result.value = response
+          return
+        }
         const decoded = decodeFunctionResult({
-          abi: [currentMethod.value],
-          functionName: currentMethod.value.name,
+          abi: [method],
+          functionName: method.name,
           data: response
         })
         // Format the result for display

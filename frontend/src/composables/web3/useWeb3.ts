@@ -11,13 +11,13 @@ const balance = ref('0')
 const isConnecting = ref(false)
 
 // Chain information
-const CHAIN_INFO: Record<number, { name: string; symbol: string; explorer: string }> = {
-  1: { name: 'Ethereum', symbol: 'ETH', explorer: 'https://etherscan.io' },
-  11155111: { name: 'Sepolia', symbol: 'ETH', explorer: 'https://sepolia.etherscan.io' },
-  137: { name: 'Polygon', symbol: 'MATIC', explorer: 'https://polygonscan.com' },
-  42161: { name: 'Arbitrum', symbol: 'ETH', explorer: 'https://arbiscan.io' },
-  10: { name: 'Optimism', symbol: 'ETH', explorer: 'https://optimistic.etherscan.io' },
-  56: { name: 'BSC', symbol: 'BNB', explorer: 'https://bscscan.com' },
+const CHAIN_INFO: Record<number, { name: string; symbol: string; explorer: string; chainId: number }> = {
+  1: { name: 'Ethereum', symbol: 'ETH', explorer: 'https://etherscan.io', chainId: 1 },
+  11155111: { name: 'Sepolia', symbol: 'ETH', explorer: 'https://sepolia.etherscan.io', chainId: 11155111 },
+  137: { name: 'Polygon', symbol: 'MATIC', explorer: 'https://polygonscan.com', chainId: 137 },
+  42161: { name: 'Arbitrum', symbol: 'ETH', explorer: 'https://arbiscan.io', chainId: 42161 },
+  10: { name: 'Optimism', symbol: 'ETH', explorer: 'https://optimistic.etherscan.io', chainId: 10 },
+  56: { name: 'BSC', symbol: 'BNB', explorer: 'https://bscscan.com', chainId: 56 },
 }
 
 export function useWeb3() {
