@@ -122,3 +122,86 @@ export async function getTokenBalances(data: {
     data
   })
 }
+
+// Market Data APIs
+export async function getMarketOverview() {
+  return request({
+    url: '/web3/market/overview',
+    method: 'GET'
+  })
+}
+
+export async function getTokenPrice(symbol: string) {
+  return request({
+    url: `/web3/market/price/${symbol}`,
+    method: 'GET'
+  })
+}
+
+export async function getTokenPrices() {
+  return request({
+    url: '/web3/market/prices',
+    method: 'GET'
+  })
+}
+
+export async function getGasPrice(chainId: string) {
+  return request({
+    url: `/web3/market/gas/${chainId}`,
+    method: 'GET'
+  })
+}
+
+export async function getDeFiProtocols() {
+  return request({
+    url: '/web3/market/defi',
+    method: 'GET'
+  })
+}
+
+export async function getPriceHistory(symbol: string, days: number = 7) {
+  return request({
+    url: `/web3/market/history/${symbol}/${days}`,
+    method: 'GET'
+  })
+}
+
+export async function searchTokens(query: string) {
+  return request({
+    url: `/web3/market/search/${query}`,
+    method: 'GET'
+  })
+}
+
+export async function getTrendingTokens() {
+  return request({
+    url: '/web3/market/trending',
+    method: 'GET'
+  })
+}
+
+export async function getTopGainers() {
+  return request({
+    url: '/web3/market/gainers',
+    method: 'GET'
+  })
+}
+
+export async function getTopLosers() {
+  return request({
+    url: '/web3/market/losers',
+    method: 'GET'
+  })
+}
+
+// Transaction Receipt Parser APIs
+export async function parseTransactionReceipt(data: {
+  transactionHash: string
+  chainId?: number
+}) {
+  return request({
+    url: '/web3/transaction/parse-receipt',
+    method: 'POST',
+    data
+  })
+}
