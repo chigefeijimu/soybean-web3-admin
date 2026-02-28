@@ -36,7 +36,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage } = useTabl
       title: $t('page.manage.menu.menuType'),
       align: 'center',
       width: 80,
-      render: row => {
+      render: (row: Api.SystemManage.Menu) => {
         const tagMap: Record<Api.SystemManage.MenuType, NaiveUI.ThemeColor> = {
           directory: 'default',
           menu: 'primary'
@@ -94,7 +94,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage } = useTabl
       title: $t('page.manage.menu.menuStatus'),
       align: 'center',
       width: 80,
-      render: row => {
+      render: (row: Api.SystemManage.Menu) => {
         if (row.status === null) {
           return null;
         }
@@ -114,7 +114,7 @@ const { columns, columnChecks, data, loading, getData, getDataByPage } = useTabl
       title: $t('page.manage.menu.hideInMenu'),
       align: 'center',
       width: 80,
-      render: row => {
+      render: (row: Api.SystemManage.Menu) => {
         const hide: CommonType.YesOrNo = row.hideInMenu ? 'Y' : 'N';
 
         const tagMap: Record<CommonType.YesOrNo, NaiveUI.ThemeColor> = {

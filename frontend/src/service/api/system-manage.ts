@@ -31,29 +31,13 @@ export function fetchGetUserList(params?: Api.SystemManage.UserSearchParams) {
 }
 
 /** get menu list */
-export const fetchGetMenuList = () =>
-  request<Api.SystemManage.Menu[]>({
+export function fetchGetMenuList(params?: Api.Common.CommonSearchParams) {
+  return request<Api.SystemManage.MenuList>({
     url: '/route',
-    method: 'get'
-  })
-    .then(response => {
-      const menus = response.data || [];
-      return {
-        data: {
-          records: menus,
-          total: menus.length,
-          current: 1,
-          size: menus.length
-        },
-        error: null
-      };
-    })
-    .catch(error => {
-      return {
-        data: null,
-        error: error.message
-      };
-    });
+    method: 'get',
+    params
+  });
+}
 
 /** get all pages */
 export function fetchGetAllPages() {
