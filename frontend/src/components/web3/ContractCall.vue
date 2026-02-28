@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useWeb3 } from '@/composables/web3/useWeb3'
 import { encodeFunctionData, decodeFunctionResult, parseEther, formatEther, type Address, type Hex } from 'viem'
+import { callContractDirect } from '@/service/api/web3'
 
 const props = defineProps<{
   contractAddress?: string
@@ -21,6 +22,7 @@ const params = ref<string[]>([])
 const result = ref<any>(null)
 const isLoading = ref(false)
 const error = ref('')
+const useBackendApi = ref(false) // New: toggle between browser wallet and backend API
 
 // Sample ABI methods
 const sampleMethods = [
@@ -134,51 +136,70 @@ const executeRead = async () => {
   result.value = null
   
   try {
-    if (!(window as any).ethereum) {
-      throw new Error('No Ethereum provider found')
-    }
-    
-    const data = encodeFunctionCall()
-    
-    const response = await (window as any).ethereum.request({
-      method: 'eth_call',
-      params: [{
-        to: contractAddress.value,
-        data: data,
-      }, 'latest']
-    })
-    
-    // Parse result using viem's decoder
-    try {
-      const decoded = decodeFunctionResult({
-        abi: [currentMethod.value],
-        functionName: currentMethod.value.name,
-        data: response
+    if (useBackendApi.value) {
+      // Use backend API (no wallet needed)
+      const response = await callContractDirect({
+        contractAddress: contractAddress.value,
+        chainId: chainId.value || 1,
+        methodName: selectedMethod.value,
+        params: params.value[0] || undefined,
+        fromAddress: account.value || undefined
       })
-      // Format the result for display
-      if (typeof decoded === 'bigint') {
-        result.value = decoded.toString()
-      } else if (Array.isArray(decoded)) {
-        result.value = decoded.map(d => typeof d === 'bigint' ? d.toString() : d).join(', ')
+      
+      if (response.data.success) {
+        result.value = response.data.data.result
+        emit('success', { method: selectedMethod.value, result: result.value })
       } else {
-        result.value = String(decoded)
+        throw new Error(response.data.msg || 'Backend call failed')
       }
-    } catch (e) {
-      // Fallback to manual parsing if decode fails
-      console.warn('Failed to decode result, using raw response:', e)
-      if (currentMethod.value?.outputs?.[0]) {
-        const outputType = currentMethod.value.outputs[0].type
-        if (outputType === 'uint256' || outputType.startsWith('uint')) {
-          result.value = BigInt(response).toString()
+    } else {
+      // Use browser wallet directly
+      if (!(window as any).ethereum) {
+        throw new Error('No Ethereum provider found')
+      }
+      
+      const data = encodeFunctionCall()
+      
+      const response = await (window as any).ethereum.request({
+        method: 'eth_call',
+        params: [{
+          to: contractAddress.value,
+          data: data,
+        }, 'latest']
+      })
+      
+      // Parse result using viem's decoder
+      try {
+        const decoded = decodeFunctionResult({
+          abi: [currentMethod.value],
+          functionName: currentMethod.value.name,
+          data: response
+        })
+        // Format the result for display
+        if (typeof decoded === 'bigint') {
+          result.value = decoded.toString()
+        } else if (Array.isArray(decoded)) {
+          result.value = decoded.map(d => typeof d === 'bigint' ? d.toString() : d).join(', ')
+        } else {
+          result.value = String(decoded)
+        }
+      } catch (e) {
+        // Fallback to manual parsing if decode fails
+        console.warn('Failed to decode result, using raw response:', e)
+        if (currentMethod.value?.outputs?.[0]) {
+          const outputType = currentMethod.value.outputs[0].type
+          if (outputType === 'uint256' || outputType.startsWith('uint')) {
+            result.value = BigInt(response).toString()
+          } else {
+            result.value = response
+          }
         } else {
           result.value = response
         }
-      } else {
-        result.value = response
       }
+      
+      emit('success', { method: selectedMethod.value, result: result.value })
     }
-    
-    emit('success', { method: selectedMethod.value, result: result.value })
   } catch (e: any) {
     error.value = e.message || 'Call failed'
     emit('error', error.value)
@@ -270,6 +291,24 @@ const reset = () => {
       <button @click="error = ''" class="text-red-400 hover:text-white">✕</button>
     </div>
 
+    <!-- Backend API Toggle -->
+    <div class="mb-4 p-4 bg-slate-900/30 rounded-xl flex items-center justify-between">
+      <div>
+        <label class="text-sm font-medium text-slate-300">Use Backend API</label>
+        <p class="text-xs text-slate-500">Call via server (no wallet needed for read)</p>
+      </div>
+      <button 
+        @click="useBackendApi = !useBackendApi"
+        :class="useBackendApi ? 'bg-green-500' : 'bg-slate-600'"
+        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+      >
+        <span 
+          :class="useBackendApi ? 'translate-x-6' : 'translate-x-1'"
+          class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+        />
+      </button>
+    </div>
+
     <!-- Contract Address -->
     <div class="mb-4">
       <label class="block text-sm font-medium text-slate-400 mb-2">
@@ -343,7 +382,7 @@ const reset = () => {
         :disabled="isLoading || !selectedMethod"
         class="flex-1 py-3 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-semibold transition-colors"
       >
-        {{ isLoading ? 'Reading...' : 'Read' }}
+        {{ isLoading ? 'Reading...' : (useBackendApi ? 'Call API' : 'Read') }}
       </button>
       
       <button 

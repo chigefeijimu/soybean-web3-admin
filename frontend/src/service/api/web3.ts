@@ -101,6 +101,21 @@ export async function callContractMethod(
   })
 }
 
+// Direct contract call by address (no contract ID needed)
+export async function callContractDirect(data: {
+  contractAddress: string
+  chainId?: number
+  methodName: string
+  params?: string
+  fromAddress?: string
+}) {
+  return request({
+    url: '/web3/contract/call-direct',
+    method: 'POST',
+    data
+  })
+}
+
 // Transaction APIs
 export async function getTransactionList(params?: { userId?: string }) {
   return request({
