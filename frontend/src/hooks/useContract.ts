@@ -86,7 +86,7 @@ export function useContract(options: UseContractOptions): UseContractReturn {
     args: any[] = [], 
     value?: string
   ): Promise<string | null> => {
-    if (!isConnected.value) {
+    if (!isConnected) {
       writeError.value = new Error('Wallet not connected')
       return null
     }
@@ -122,8 +122,8 @@ export function useContract(options: UseContractOptions): UseContractReturn {
   return {
     // State
     isConnected,
-    address: walletAddress,
-    chainId: walletChainId,
+    address: walletAddress ?? null,
+    chainId: walletChainId ?? null,
     chainConfig: chainConfig.value,
     isCorrectChain: isCorrectChain.value,
     
@@ -140,7 +140,7 @@ export function useContract(options: UseContractOptions): UseContractReturn {
     
     // Transaction
     txHash: txHash.value,
-    isConfirming: isConfirming.value,
+    isConfirming,
     isConfirmed: isConfirmed.value,
     receipt
   }
