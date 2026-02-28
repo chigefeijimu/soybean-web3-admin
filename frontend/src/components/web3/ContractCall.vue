@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useWeb3 } from '@/composables/web3/useWeb3'
+import { encodeFunctionData, decodeFunctionResult, parseEther, formatEther, type Address, type Hex } from 'viem'
 
 const props = defineProps<{
   contractAddress?: string
@@ -23,14 +24,14 @@ const error = ref('')
 
 // Sample ABI methods
 const sampleMethods = [
-  { name: 'balanceOf', type: 'function', inputs: [{ name: 'owner', type: 'address' }], outputs: [{ type: 'uint256' }] },
-  { name: 'totalSupply', type: 'function', outputs: [{ type: 'uint256' }] },
-  { name: 'name', type: 'function', outputs: [{ type: 'string' }] },
-  { name: 'symbol', type: 'function', outputs: [{ type: 'string' }] },
-  { name: 'decimals', type: 'function', outputs: [{ type: 'uint8' }] },
-  { name: 'transfer', type: 'function', inputs: [{ name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }] },
-  { name: 'approve', type: 'function', inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }] },
-  { name: 'allowance', type: 'function', inputs: [{ name: 'owner', type: 'address' }, { name: 'spender', type: 'address' }], outputs: [{ type: 'uint256' }] },
+  { name: 'balanceOf', type: 'function', stateMutability: 'view', inputs: [{ name: 'owner', type: 'address' }], outputs: [{ type: 'uint256' }] },
+  { name: 'totalSupply', type: 'function', stateMutability: 'view', outputs: [{ type: 'uint256' }] },
+  { name: 'name', type: 'function', stateMutability: 'view', outputs: [{ type: 'string' }] },
+  { name: 'symbol', type: 'function', stateMutability: 'view', outputs: [{ type: 'string' }] },
+  { name: 'decimals', type: 'function', stateMutability: 'view', outputs: [{ type: 'uint8' }] },
+  { name: 'transfer', type: 'function', stateMutability: 'nonpayable', inputs: [{ name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }] },
+  { name: 'approve', type: 'function', stateMutability: 'nonpayable', inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }] },
+  { name: 'allowance', type: 'function', stateMutability: 'view', inputs: [{ name: 'owner', type: 'address' }, { name: 'spender', type: 'address' }], outputs: [{ type: 'uint256' }] },
 ]
 
 const currentMethod = computed(() => 
@@ -79,36 +80,50 @@ const validateParams = (): boolean => {
   return true
 }
 
-const encodeFunctionCall = (): string => {
-  if (!currentMethod.value) return ''
+const encodeFunctionCall = (): Hex => {
+  if (!currentMethod.value) return '0x'
   
-  const methodId = currentMethod.value.name + '(' + 
-    (currentMethod.value.inputs?.map(i => i.type).join(',') || '') + 
-  ')'
-  
-  // Simple keccak256 hash (first 4 bytes)
-  const hash = keccak256(methodId)
-  const encodedParams = params.value.map((p, i) => {
-    const type = currentMethod.value?.inputs?.[i]?.type || 'uint256'
-    if (type === 'address') {
-      return p.replace(/^0x/, '').padStart(64, '0')
+  try {
+    // Build ABI parameters from current method
+    const abiItem = {
+      name: currentMethod.value.name,
+      type: 'function',
+      inputs: currentMethod.value.inputs || [],
+      outputs: currentMethod.value.outputs || [],
+      stateMutability: currentMethod.value.stateMutability || 'view'
     }
-    if (type.startsWith('uint')) {
-      return BigInt(p).toString(16).padStart(64, '0')
-    }
-    return p
-  }).join('')
-  
-  return '0x' + hash.slice(0, 8) + encodedParams
-}
-
-const keccak256 = (str: string): string => {
-  // Simplified - in production use proper keccak
-  let hash = ''
-  for (let i = 0; i < 64; i++) {
-    hash += Math.floor(Math.random() * 16).toString(16)
+    
+    // Parse parameters based on type
+    const parsedParams = params.value.map((p, i) => {
+      const type = currentMethod.value?.inputs?.[i]?.type || 'uint256'
+      if (type === 'address') {
+        return p as Address
+      }
+      if (type.startsWith('uint')) {
+        return BigInt(p)
+      }
+      if (type.startsWith('int')) {
+        return BigInt(p)
+      }
+      if (type === 'bool') {
+        return p === 'true' || p === '1'
+      }
+      if (type === 'bytes') {
+        return p as Hex
+      }
+      return p
+    })
+    
+    // Use viem's encodeFunctionData for proper ABI encoding
+    return encodeFunctionData({
+      abi: [abiItem],
+      functionName: currentMethod.value.name,
+      args: parsedParams
+    })
+  } catch (e) {
+    console.error('Failed to encode function call:', e)
+    return '0x'
   }
-  return hash
 }
 
 const executeRead = async () => {
@@ -133,18 +148,34 @@ const executeRead = async () => {
       }, 'latest']
     })
     
-    // Parse result based on return type
-    if (currentMethod.value?.outputs?.[0]) {
-      const outputType = currentMethod.value.outputs[0].type
-      if (outputType === 'uint256') {
-        result.value = BigInt(response).toString()
-      } else if (outputType === 'string') {
-        result.value = response // Would need decoder for actual string
+    // Parse result using viem's decoder
+    try {
+      const decoded = decodeFunctionResult({
+        abi: [currentMethod.value],
+        functionName: currentMethod.value.name,
+        data: response
+      })
+      // Format the result for display
+      if (typeof decoded === 'bigint') {
+        result.value = decoded.toString()
+      } else if (Array.isArray(decoded)) {
+        result.value = decoded.map(d => typeof d === 'bigint' ? d.toString() : d).join(', ')
+      } else {
+        result.value = String(decoded)
+      }
+    } catch (e) {
+      // Fallback to manual parsing if decode fails
+      console.warn('Failed to decode result, using raw response:', e)
+      if (currentMethod.value?.outputs?.[0]) {
+        const outputType = currentMethod.value.outputs[0].type
+        if (outputType === 'uint256' || outputType.startsWith('uint')) {
+          result.value = BigInt(response).toString()
+        } else {
+          result.value = response
+        }
       } else {
         result.value = response
       }
-    } else {
-      result.value = response
     }
     
     emit('success', { method: selectedMethod.value, result: result.value })
