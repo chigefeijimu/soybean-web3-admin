@@ -24,6 +24,15 @@ const COMMON_TOKENS = [
 
 const ethPrice = ref(2500) // Mock price, would fetch from oracle
 
+// Local state
+const sortBy = ref<'value' | 'balance' | 'name'>('value')
+const tokens = ref<Token[]>([])
+const totalValue = ref(0)
+const isLoading = ref(false)
+
+// Get account and chainId from composable
+const { account, chainId } = useWeb3()
+
 const loadPortfolio = async () => {
   if (!account.value) return
   
@@ -77,6 +86,18 @@ const loadPortfolio = async () => {
   }
 }
 
+// Add sortedTokens computed
+const sortedTokens = computed(() => {
+  const list = [...tokens.value]
+  if (sortBy.value === 'value') {
+    return list.sort((a, b) => b.value - a.value)
+  }
+  if (sortBy.value === 'balance') {
+    return list.sort((a, b) => parseFloat(b.balance) - parseFloat(a.balance))
+  }
+  return list.sort((a, b) => a.name.localeCompare(b.name))
+})
+
 function getMockTokens(): Token[] {
   return [
     {
@@ -108,12 +129,6 @@ function getMockTokens(): Token[] {
     },
   ]
 }
-  return [...tokens.value].sort((a, b) => {
-    if (sortBy.value === 'value') return b.value - a.value
-    if (sortBy.value === 'balance') return parseFloat(b.balance) - parseFloat(a.balance)
-    return a.name.localeCompare(b.name)
-  })
-})
 
 const formatBalance = (balance: string, decimals: number): string => {
   const num = parseFloat(balance)
@@ -129,27 +144,6 @@ const formatValue = (value: number): string => {
 const getTokenUrl = (address: string): string => {
   if (address === '0x0000000000000000000000000000000000000000') return ''
   return `https://etherscan.io/token/${address}`
-}
-
-const loadPortfolio = async () => {
-  if (!account.value) return
-  
-  isLoading.value = true
-  try {
-    // In production, fetch from multiple sources:
-    // 1. Native ETH balance
-    // 2. ERC20 token balances via contract calls
-    // 3. NFT holdings
-    // 4. DeFi positions
-    
-    await new Promise(resolve => setTimeout(resolve, 500))
-    tokens.value = mockTokens
-    totalValue.value = tokens.value.reduce((sum, t) => sum + t.value, 0)
-  } catch (e) {
-    console.error('Failed to load portfolio:', e)
-  } finally {
-    isLoading.value = false
-  }
 }
 
 const getPercentage = (value: number): string => {

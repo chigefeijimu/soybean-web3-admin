@@ -1,312 +1,361 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useWeb3, ERC20_ABI, COMMON_TOKENS } from '@/composables/web3/useWeb3'
+import { ref, onMounted, computed, markRaw } from 'vue'
+import { useWeb3 } from '@/composables/web3/useWeb3'
+
+// Import all components
+import WalletConnect from '@/components/web3/WalletConnect.vue'
+import ContractCall from '@/components/web3/ContractCall.vue'
+import TransactionHistory from '@/components/web3/TransactionHistory.vue'
+import PortfolioDashboard from '@/components/web3/PortfolioDashboard.vue'
+import TokenSwap from '@/components/web3/TokenSwap.vue'
+import NFTGallery from '@/components/web3/NFTGallery.vue'
+import AddTokenModal from '@/components/web3/AddTokenModal.vue'
 
 const {
   isConnected,
   account,
   chainId,
   balance,
-  isConnecting,
   chainInfo,
   connectWallet,
   disconnectWallet,
   switchChain,
-  formatAddress,
   CHAIN_INFO,
-  updateBalance,
 } = useWeb3()
 
+// Tab management
 const activeTab = ref('dashboard')
 const error = ref('')
-const tokenBalance = ref('0')
-const selectedToken = ref('')
+const showAddToken = ref(false)
 
-// Connect wallet
-const handleConnect = async () => {
-  error.value = ''
-  try {
-    await connectWallet()
-  } catch (e: any) {
-    error.value = e.message || 'Failed to connect wallet'
+// Stats
+const stats = computed(() => ({
+  totalBalance: balance.value || '0',
+  walletAddress: account.value || '',
+  network: chainInfo.value?.name || 'Unknown',
+}))
+
+// Tab configuration with icons
+const tabs = [
+  { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+  { id: 'wallet', label: 'Wallet', icon: '💳' },
+  { id: 'swap', label: 'Swap', icon: '⇄' },
+  { id: 'tokens', label: 'Tokens', icon: '🪙' },
+  { id: 'nfts', label: 'NFTs', icon: '🖼️' },
+  { id: 'history', label: 'History', icon: '📜' },
+  { id: 'contracts', label: 'Contracts', icon: '📝' },
+]
+
+// Supported networks with logos
+const networks = Object.entries(CHAIN_INFO).map(([id, info]) => ({
+  id: parseInt(id),
+  name: info.name,
+  symbol: info.symbol,
+  logo: getNetworkLogo(parseInt(id)),
+}))
+
+function getNetworkLogo(chainId: number): string {
+  const logos: Record<number, string> = {
+    1: '🔷',
+    5: '🔷',
+    11155111: '🔷',
+    137: '🟣',
+    80001: '🟣',
+    42161: '🔵',
+    421613: '🔵',
+    56: '🟡',
+    97: '🟡',
+    10: '🟠',
+    69: '🟠',
+    8453: '⚫',
+    84531: '⚫',
   }
+  return logos[chainId] || '⚪'
 }
 
-// Switch network
-const handleSwitchChain = async (targetChainId: number) => {
+// Network switching
+const handleSwitchNetwork = async (chainId: number) => {
   error.value = ''
   try {
-    await switchChain(targetChainId)
+    await switchChain(chainId)
   } catch (e: any) {
     error.value = e.message || 'Failed to switch network'
   }
 }
 
-// Get token balance
-const getTokenBalance = async (tokenAddress: string) => {
-  if (!account.value || !(window.ethereum as any)) return
-  
-  try {
-    const response = await (window.ethereum as any).request({
-      method: 'eth_call',
-      params: [{
-        to: tokenAddress,
-        data: '0x70a08231' + account.value.slice(2).padStart(64, '0') // balanceOf(address)
-      }, 'latest']
-    })
-    
-    const balance = parseInt(response, 16) / 1e18
-    tokenBalance.value = balance.toFixed(4)
-    selectedToken.value = tokenAddress
-  } catch (e) {
-    console.error('Failed to get token balance:', e)
-    tokenBalance.value = '0'
-  }
-}
+// Quick actions
+const quickActions = [
+  { id: 'send', label: 'Send', icon: '↑', color: 'blue', action: () => activeTab.value = 'wallet' },
+  { id: 'receive', label: 'Receive', icon: '↓', color: 'green', action: () => activeTab.value = 'wallet' },
+  { id: 'swap', label: 'Swap', icon: '⇄', color: 'purple', action: () => activeTab.value = 'swap' },
+  { id: 'buy', label: 'Buy', icon: '💳', color: 'orange', action: () => {} },
+]
 
-// Send transaction (simplified)
-const sendTransaction = async () => {
-  error.value = ''
-  if (!account.value) {
-    error.value = 'Please connect wallet first'
-    return
-  }
-  
-  // For demo purposes, just show a message
-  error.value = 'Transaction simulation: This feature requires a recipient address'
-}
+// DeFi protocols
+const defiProtocols = [
+  { name: 'Uniswap', logo: '🦄', tvl: '$4.2B', apy: '3-15%' },
+  { name: 'Aave', logo: '👻', tvl: '$12B', apy: '2-8%' },
+  { name: 'Compound', logo: '🔷', tvl: '$2.1B', apy: '2-5%' },
+  { name: 'Curve', logo: '💚', tvl: '$3.8B', apy: '2-10%' },
+]
 
-const supportedChains = Object.entries(CHAIN_INFO).map(([id, info]) => ({
-  id: parseInt(id),
-  ...info,
-}))
+// Trending tokens
+const trendingTokens = [
+  { symbol: 'ETH', name: 'Ethereum', price: 2500, change: '+2.5%', logo: '🔷' },
+  { symbol: 'BTC', name: 'Bitcoin', price: 62500, change: '+1.8%', logo: '🟡' },
+  { symbol: 'SOL', name: 'Solana', price: 120, change: '+5.2%', logo: '🟣' },
+  { symbol: 'ARB', name: 'Arbitrum', price: 1.8, change: '+3.1%', logo: '🔵' },
+]
 
+// On mount
 onMounted(() => {
-  // Auto-connect if previously connected
-  if (window.ethereum && window.ethereum.selectedAddress) {
+  // Auto-connect check
+  if (window.ethereum?.selectedAddress) {
     connectWallet()
   }
 })
 </script>
 
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl font-bold mb-6">Web3 Dashboard</h1>
-    
-    <!-- Error Message -->
-    <div v-if="error" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-      {{ error }}
-      <button @click="error = ''" class="ml-2 text-red-500 hover:text-red-700">✕</button>
-    </div>
-    
-    <!-- Network Status Banner -->
-    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full" :class="isConnected ? 'bg-green-500' : 'bg-gray-400'"></span>
-          <span class="font-medium">
-            {{ isConnected ? 'Connected' : 'Not Connected' }}
-          </span>
-        </div>
-        <div v-if="isConnected" class="text-sm text-gray-600">
-          Chain: {{ chainInfo.name }} ({{ chainId }})
-        </div>
-      </div>
-    </div>
-    
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="bg-[var(--n-card-color)] rounded-lg p-4 shadow-sm border border-[var(--n-border-color)]">
-        <div class="text-[var(--n-text-color-3)] text-sm">Total Balance</div>
-        <div class="text-2xl font-bold mt-1">{{ balance }} {{ chainInfo.symbol }}</div>
-      </div>
-      <div class="bg-[var(--n-card-color)] rounded-lg p-4 shadow-sm border border-[var(--n-border-color)]">
-        <div class="text-[var(--n-text-color-3)] text-sm">Connected Wallet</div>
-        <div class="text-lg font-mono mt-1">{{ isConnected ? formatAddress(account) : '---' }}</div>
-      </div>
-      <div class="bg-[var(--n-card-color)] rounded-lg p-4 shadow-sm border border-[var(--n-border-color)]">
-        <div class="text-[var(--n-text-color-3)] text-sm">Network</div>
-        <div class="text-lg font-medium mt-1">{{ chainInfo.name }}</div>
-      </div>
-    </div>
-    
-    <!-- Tabs -->
-    <div class="mb-6 flex gap-2 border-b border-[var(--n-border-color)]">
-      <button 
-        v-for="tab in ['dashboard', 'wallet', 'tokens', 'transactions']" 
-        :key="tab"
-        @click="activeTab = tab"
-        class="px-4 py-2 font-medium transition-colors"
-        :class="activeTab === tab 
-          ? 'text-blue-500 border-b-2 border-blue-500' 
-          : 'text-[var(--n-text-color-3)] hover:text-[var(--n-text-color-1)]'"
-      >
-        {{ tab.charAt(0).toUpperCase() + tab.slice(1) }}
-      </button>
-    </div>
-    
-    <!-- Dashboard Tab -->
-    <div v-if="activeTab === 'dashboard'" class="space-y-4">
-      <div class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
-        <h2 class="text-lg font-semibold mb-4">Quick Actions</h2>
-        <div class="flex flex-wrap gap-3">
-          <button 
-            @click="handleConnect"
-            :disabled="isConnecting"
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
-          >
-            {{ isConnecting ? 'Connecting...' : (isConnected ? 'Reconnect Wallet' : 'Connect Wallet (MetaMask)') }}
-          </button>
-          
-          <button 
-            v-if="isConnected"
-            @click="disconnectWallet"
-            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-          >
-            Disconnect
-          </button>
-          
-          <button 
-            @click="activeTab = 'tokens'"
-            :disabled="!isConnected"
-            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50"
-          >
-            Add Token
-          </button>
-          
-          <button 
-            @click="activeTab = 'wallet'"
-            class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
-          >
-            View Portfolio
-          </button>
-          
-          <button 
-            @click="activeTab = 'transactions'"
-            :disabled="!isConnected"
-            class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50"
-          >
-            Transaction History
-          </button>
-        </div>
+  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-4 lg:p-6">
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6 gap-4">
+      <div>
+        <h1 class="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          Web3 Dashboard
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">Manage your crypto assets & DeFi</p>
       </div>
       
-      <div v-if="isConnected" class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
-        <h2 class="text-lg font-semibold mb-4">Switch Network</h2>
-        <div class="flex flex-wrap gap-2">
-          <button 
-            v-for="chain in supportedChains" 
-            :key="chain.id"
-            @click="handleSwitchChain(chain.id)"
-            :disabled="chainId === chain.id"
-            class="px-3 py-1 text-sm rounded border transition-colors"
-            :class="chainId === chain.id 
-              ? 'bg-blue-500 text-white border-blue-500' 
-              : 'bg-[var(--n-card-color)] text-[var(--n-text-color-2)] border-[var(--n-border-color)] hover:border-blue-400'"
-          >
-            {{ chain.name }}
-          </button>
-        </div>
+      <!-- Network Selector -->
+      <div class="flex items-center gap-3">
+        <select 
+          :value="chainId" 
+          @change="handleSwitchNetwork(Number(($event.target as HTMLSelectElement).value))"
+          class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+        >
+          <option v-for="network in networks" :key="network.id" :value="network.id">
+            {{ network.logo }} {{ network.name }}
+          </option>
+        </select>
       </div>
     </div>
-    
-    <!-- Wallet Tab -->
-    <div v-if="activeTab === 'wallet'" class="space-y-4">
-      <div class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
-        <h2 class="text-lg font-semibold mb-4">Wallet Details</h2>
-        
-        <div v-if="isConnected" class="space-y-3">
-          <div class="flex justify-between py-2 border-b border-[var(--n-border-color)]">
-            <span class="text-[var(--n-text-color-3)]">Address</span>
-            <span class="font-mono text-sm">{{ account }}</span>
-          </div>
-          <div class="flex justify-between py-2 border-b border-[var(--n-border-color)]">
-            <span class="text-[var(--n-text-color-3)]">Balance</span>
-            <span class="font-medium">{{ balance }} {{ chainInfo.symbol }}</span>
-          </div>
-          <div class="flex justify-between py-2 border-b border-[var(--n-border-color)]">
-            <span class="text-[var(--n-text-color-3)]">Chain ID</span>
-            <span class="font-medium">{{ chainId }} ({{ chainInfo.name }})</span>
-          </div>
-        </div>
-        
-        <div v-else class="text-center py-8">
-          <p class="text-[var(--n-text-color-3)] mb-4">Connect your wallet to see details</p>
-          <button 
-            @click="handleConnect"
-            class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          >
-            Connect Wallet
-          </button>
-        </div>
+
+    <!-- Error Alert -->
+    <div v-if="error" class="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg flex justify-between items-center">
+      <span class="text-red-300">{{ error }}</span>
+      <button @click="error = ''" class="text-red-400 hover:text-white">✕</button>
+    </div>
+
+    <!-- Quick Stats Banner -->
+    <div v-if="isConnected" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="bg-slate-800/50 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
+        <p class="text-slate-400 text-xs">Balance</p>
+        <p class="text-xl font-bold text-green-400">{{ parseFloat(stats.totalBalance).toFixed(4) }} ETH</p>
+      </div>
+      <div class="bg-slate-800/50 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
+        <p class="text-slate-400 text-xs">Network</p>
+        <p class="text-lg font-semibold">{{ stats.network }}</p>
+      </div>
+      <div class="bg-slate-800/50 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
+        <p class="text-slate-400 text-xs">Gas</p>
+        <p class="text-lg font-semibold text-yellow-400">15 Gwei</p>
+      </div>
+      <div class="bg-slate-800/50 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
+        <p class="text-slate-400 text-xs">Status</p>
+        <p class="text-lg font-semibold text-green-400">● Online</p>
       </div>
     </div>
-    
-    <!-- Tokens Tab -->
-    <div v-if="activeTab === 'tokens'" class="space-y-4">
-      <div class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
-        <h2 class="text-lg font-semibold mb-4">Token Balances</h2>
-        
-        <div v-if="isConnected && COMMON_TOKENS[chainId]" class="space-y-3">
-          <div 
-            v-for="token in COMMON_TOKENS[chainId]" 
-            :key="token.address"
-            class="flex justify-between items-center py-3 border-b border-[var(--n-border-color)]"
-          >
-            <div>
-              <div class="font-medium">{{ token.symbol }}</div>
-              <div class="text-sm text-[var(--n-text-color-3)]">{{ token.name }}</div>
+
+    <!-- Tab Navigation -->
+    <div class="flex gap-2 overflow-x-auto pb-4 mb-6">
+      <button 
+        v-for="tab in tabs" 
+        :key="tab.id"
+        @click="activeTab = tab.id"
+        :class="[
+          'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+          activeTab === tab.id 
+            ? 'bg-purple-500/20 text-purple-400 border border-purple-500/50' 
+            : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700/50'
+        ]"
+      >
+        <span class="mr-2">{{ tab.icon }}</span>
+        {{ tab.label }}
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Dashboard Tab -->
+        <div v-show="activeTab === 'dashboard'" class="space-y-6">
+          <!-- Quick Actions -->
+          <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <button 
+                v-for="action in quickActions" 
+                :key="action.id"
+                @click="action.action"
+                class="p-4 bg-slate-700/50 hover:bg-slate-700 rounded-xl transition-all hover:scale-105 flex flex-col items-center gap-2"
+              >
+                <span class="text-2xl">{{ action.icon }}</span>
+                <span class="text-sm">{{ action.label }}</span>
+              </button>
             </div>
+          </div>
+
+          <!-- Trending Tokens -->
+          <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+            <h2 class="text-xl font-semibold mb-4">🔥 Trending Tokens</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <div 
+                v-for="token in trendingTokens" 
+                :key="token.symbol"
+                class="p-3 bg-slate-900/50 rounded-xl"
+              >
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-xl">{{ token.logo }}</span>
+                  <span class="font-semibold">{{ token.symbol }}</span>
+                </div>
+                <p class="text-sm text-slate-400">{{ token.name }}</p>
+                <p class="font-semibold mt-1">${{ token.price.toLocaleString() }}</p>
+                <p class="text-xs text-green-400">{{ token.change }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- DeFi Protocols -->
+          <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+            <h2 class="text-xl font-semibold mb-4">🌊 DeFi Protocols</h2>
+            <div class="space-y-3">
+              <div 
+                v-for="protocol in defiProtocols" 
+                :key="protocol.name"
+                class="p-4 bg-slate-900/50 rounded-xl flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl">{{ protocol.logo }}</span>
+                  <div>
+                    <p class="font-semibold">{{ protocol.name }}</p>
+                    <p class="text-xs text-slate-400">TVL: {{ protocol.tvl }}</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm text-slate-400">APY</p>
+                  <p class="text-green-400 font-semibold">{{ protocol.apy }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Not Connected State -->
+          <div v-if="!isConnected" class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-12 border border-slate-700/50 text-center">
+            <div class="text-6xl mb-4">🔗</div>
+            <p class="text-slate-400 mb-6">Connect your wallet to access all features</p>
             <button 
-              @click="getTokenBalance(token.address)"
-              class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+              @click="connectWallet"
+              class="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-xl font-semibold transition-all hover:scale-105"
             >
-              Check Balance
+              Connect Wallet
             </button>
           </div>
-          
-          <div v-if="selectedToken" class="mt-4 p-3 bg-gray-100 dark:bg-gray-800 rounded">
-            Token Balance: {{ tokenBalance }}
-          </div>
         </div>
-        
-        <div v-else-if="!isConnected" class="text-center py-8">
-          <p class="text-[var(--n-text-color-3)]">Connect wallet to view tokens</p>
+
+        <!-- Wallet Tab -->
+        <div v-show="activeTab === 'wallet'">
+          <component :is="markRaw(WalletConnect)" />
         </div>
-        
-        <div v-else class="text-center py-8">
-          <p class="text-[var(--n-text-color-3)]">No tokens found for this network</p>
+
+        <!-- Swap Tab -->
+        <div v-show="activeTab === 'swap'">
+          <component :is="markRaw(TokenSwap)" />
+        </div>
+
+        <!-- Tokens Tab -->
+        <div v-show="activeTab === 'tokens'">
+          <component :is="markRaw(PortfolioDashboard)" />
+        </div>
+
+        <!-- NFTs Tab -->
+        <div v-show="activeTab === 'nfts'">
+          <component :is="markRaw(NFTGallery)" />
+        </div>
+
+        <!-- History Tab -->
+        <div v-show="activeTab === 'history'">
+          <component :is="markRaw(TransactionHistory)" />
+        </div>
+
+        <!-- Contracts Tab -->
+        <div v-show="activeTab === 'contracts'">
+          <component :is="markRaw(ContractCall)" />
         </div>
       </div>
-    </div>
-    
-    <!-- Transactions Tab -->
-    <div v-if="activeTab === 'transactions'" class="space-y-4">
-      <div class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
-        <h2 class="text-lg font-semibold mb-4">Transaction History</h2>
-        
-        <div v-if="isConnected" class="space-y-3">
-          <p class="text-[var(--n-text-color-3)] mb-4">
-            View your transaction history on 
-            <a 
-              :href="`${chainInfo.explorer}/address/${account}`" 
-              target="_blank"
-              class="text-blue-500 hover:underline"
-            >
-              {{ chainInfo.explorer }}
-            </a>
-          </p>
-          
-          <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <p class="text-sm text-[var(--n-text-color-3)]">
-              Transaction history requires an external explorer API or indexer. 
-              Click the link above to view on block explorer.
-            </p>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <!-- Gas Tracker -->
+        <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+          <h2 class="text-lg font-semibold mb-4">⛽ Gas Tracker</h2>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center p-3 bg-slate-900/50 rounded-lg">
+              <span class="text-slate-400">Slow</span>
+              <span class="text-green-400">5 Gwei</span>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-slate-900/50 rounded-lg">
+              <span class="text-slate-400">Normal</span>
+              <span class="text-yellow-400">15 Gwei</span>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-slate-900/50 rounded-lg">
+              <span class="text-slate-400">Fast</span>
+              <span class="text-red-400">30 Gwei</span>
+            </div>
           </div>
         </div>
-        
-        <div v-else class="text-center py-8">
-          <p class="text-[var(--n-text-color-3)]">Connect wallet to view transactions</p>
+
+        <!-- Market Stats -->
+        <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+          <h2 class="text-lg font-semibold mb-4">📈 Market</h2>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">ETH Price</span>
+              <span class="font-semibold">$2,500 (+2.5%)</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">BTC Price</span>
+              <span class="font-semibold">$62,500 (+1.8%)</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">Gas</span>
+              <span class="font-semibold">15 Gwei</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">TVL</span>
+              <span class="font-semibold">$45.2B</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+          <h2 class="text-lg font-semibold mb-4">🔗 Quick Links</h2>
+          <div class="space-y-2">
+            <a href="https://uniswap.org" target="_blank" class="block p-3 bg-slate-900/50 hover:bg-slate-700 rounded-lg transition-colors">
+              🦄 Uniswap
+            </a>
+            <a href="https://opensea.io" target="_blank" class="block p-3 bg-slate-900/50 hover:bg-slate-700 rounded-lg transition-colors">
+              🖼️ OpenSea
+            </a>
+            <a href="https://etherscan.io" target="_blank" class="block p-3 bg-slate-900/50 hover:bg-slate-700 rounded-lg transition-colors">
+              📄 Etherscan
+            </a>
+            <a href="https://arbiscan.io" target="_blank" class="block p-3 bg-slate-900/50 hover:bg-slate-700 rounded-lg transition-colors">
+              🔵 Arbitrum Scan
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -314,5 +363,14 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Using CSS variables that naive-ui provides */
+.bg-gradient-to-br {
+  background: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+.from-slate-900 { --tw-gradient-from: #0f172a; }
+.via-purple-900 { --tw-gradient-via: #581c87; }
+.to-slate-900 { --tw-gradient-to: #0f172a; }
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
 </style>
