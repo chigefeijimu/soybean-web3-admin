@@ -115,7 +115,7 @@ export function parseWeb3Error(error: any): {
 /**
  * Show error message with actions
  */
-export function showWeb3Error(error: any, message instance?: ReturnType<typeof useMessage>) {
+export function showWeb3Error(error: any, message?: ReturnType<typeof useMessage>) {
   const parsed = parseWeb3Error(error)
   message?.error(parsed.message)
   

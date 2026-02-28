@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Chain, Account } from 'wagmi'
+import type { Address } from 'viem'
+
+interface Web3Account {
+  address: Address
+  chainId: number
+  isConnected: boolean
+}
 
 interface Web3State {
   isConnected: boolean
@@ -20,7 +26,7 @@ export const useWeb3Store = defineStore('web3', () => {
     return `${address.value.slice(0, 6)}...${address.value.slice(-4)}`
   })
 
-  function setAccount(account: Account | null) {
+  function setAccount(account: Web3Account | null) {
     if (account) {
       isConnected.value = account.isConnected
       address.value = account.address

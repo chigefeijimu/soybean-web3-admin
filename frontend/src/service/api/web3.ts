@@ -1,4 +1,8 @@
-import { request } from '@sa/axios'
+import { createRequest } from '@sa/axios'
+
+const request = createRequest({
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api'
+})
 
 // Wallet APIs
 export async function verifyWallet(data: {

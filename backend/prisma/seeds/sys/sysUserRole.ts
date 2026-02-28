@@ -18,5 +18,11 @@ export const initSysUserRole = async () => {
     },
   ];
 
-  return prisma.sysUserRole.createMany({ data });
+  for (const ur of data) {
+    await prisma.sysUserRole.upsert({
+      where: { userId_roleId: { userId: ur.userId, roleId: ur.roleId } },
+      update: ur,
+      create: ur,
+    });
+  }
 };

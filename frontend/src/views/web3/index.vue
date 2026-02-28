@@ -1,184 +1,318 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { useAccount } from 'wagmi'
-import { NCard, NGrid, NGridItem, NTabs, NTabPane } from 'naive-ui'
-import ContractList from '@/views/web3/contract/index.vue'
-import ContractCall from '@/components/web3/ContractCall.vue'
-import TransactionHistory from '@/components/web3/TransactionHistory.vue'
-import WalletConnect from '@/components/web3/WalletConnect.vue'
-import { getContractList } from '@/service/api/web3'
+import { useWeb3, ERC20_ABI, COMMON_TOKENS } from '@/composables/web3/useWeb3'
 
-const { address, isConnected, chainId } = useAccount()
+const {
+  isConnected,
+  account,
+  chainId,
+  balance,
+  isConnecting,
+  chainInfo,
+  connectWallet,
+  disconnectWallet,
+  switchChain,
+  formatAddress,
+  CHAIN_INFO,
+  updateBalance,
+} = useWeb3()
 
-interface Contract {
-  id: string
-  name: string
-  contractAddress: string
-  chainId: number
-  abi: string | null
-  description: string | null
-}
+const activeTab = ref('dashboard')
+const error = ref('')
+const tokenBalance = ref('0')
+const selectedToken = ref('')
 
-const contracts = ref<Contract[]>([])
-const selectedContract = ref<Contract | null>(null)
-const activeTab = ref('contracts')
-
-const chainNames: Record<number, string> = {
-  1: 'Ethereum',
-  5: 'Goerli',
-  11155111: 'Sepolia',
-  56: 'BSC',
-  97: 'BSC Test',
-  137: 'Polygon'
-}
-
-const fetchContracts = async () => {
+// Connect wallet
+const handleConnect = async () => {
+  error.value = ''
   try {
-    const res = await getContractList()
-    contracts.value = res.data.data || []
-    if (contracts.value.length > 0 && !selectedContract.value) {
-      selectedContract.value = contracts.value[0]
-    }
-  } catch (error) {
-    console.error('Failed to fetch contracts:', error)
+    await connectWallet()
+  } catch (e: any) {
+    error.value = e.message || 'Failed to connect wallet'
   }
 }
 
-const selectContract = (contract: Contract) => {
-  selectedContract.value = contract
+// Switch network
+const handleSwitchChain = async (targetChainId: number) => {
+  error.value = ''
+  try {
+    await switchChain(targetChainId)
+  } catch (e: any) {
+    error.value = e.message || 'Failed to switch network'
+  }
 }
 
+// Get token balance
+const getTokenBalance = async (tokenAddress: string) => {
+  if (!account.value || !(window.ethereum as any)) return
+  
+  try {
+    const response = await (window.ethereum as any).request({
+      method: 'eth_call',
+      params: [{
+        to: tokenAddress,
+        data: '0x70a08231' + account.value.slice(2).padStart(64, '0') // balanceOf(address)
+      }, 'latest']
+    })
+    
+    const balance = parseInt(response, 16) / 1e18
+    tokenBalance.value = balance.toFixed(4)
+    selectedToken.value = tokenAddress
+  } catch (e) {
+    console.error('Failed to get token balance:', e)
+    tokenBalance.value = '0'
+  }
+}
+
+// Send transaction (simplified)
+const sendTransaction = async () => {
+  error.value = ''
+  if (!account.value) {
+    error.value = 'Please connect wallet first'
+    return
+  }
+  
+  // For demo purposes, just show a message
+  error.value = 'Transaction simulation: This feature requires a recipient address'
+}
+
+const supportedChains = Object.entries(CHAIN_INFO).map(([id, info]) => ({
+  id: parseInt(id),
+  ...info,
+}))
+
 onMounted(() => {
-  fetchContracts()
+  // Auto-connect if previously connected
+  if (window.ethereum && window.ethereum.selectedAddress) {
+    connectWallet()
+  }
 })
 </script>
 
 <template>
-  <div class="web3-page">
-    <NCard title="Web3 Management" :bordered="false">
-      <template #header-extra>
-        <WalletConnect />
-      </template>
-
-      <div v-if="isConnected" class="connected-info">
-        <span class="chain-badge">{{ chainNames[chainId!] || `Chain ${chainId}` }}</span>
+  <div class="p-6">
+    <h1 class="text-2xl font-bold mb-6">Web3 Dashboard</h1>
+    
+    <!-- Error Message -->
+    <div v-if="error" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+      {{ error }}
+      <button @click="error = ''" class="ml-2 text-red-500 hover:text-red-700">✕</button>
+    </div>
+    
+    <!-- Network Status Banner -->
+    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full" :class="isConnected ? 'bg-green-500' : 'bg-gray-400'"></span>
+          <span class="font-medium">
+            {{ isConnected ? 'Connected' : 'Not Connected' }}
+          </span>
+        </div>
+        <div v-if="isConnected" class="text-sm text-gray-600">
+          Chain: {{ chainInfo.name }} ({{ chainId }})
+        </div>
       </div>
-
-      <NTabs v-model:value="activeTab" type="line" animated>
-        <NTabPane name="contracts" tab="Contracts">
-          <ContractList @refresh="fetchContracts" />
-        </NTabPane>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-[var(--n-card-color)] rounded-lg p-4 shadow-sm border border-[var(--n-border-color)]">
+        <div class="text-[var(--n-text-color-3)] text-sm">Total Balance</div>
+        <div class="text-2xl font-bold mt-1">{{ balance }} {{ chainInfo.symbol }}</div>
+      </div>
+      <div class="bg-[var(--n-card-color)] rounded-lg p-4 shadow-sm border border-[var(--n-border-color)]">
+        <div class="text-[var(--n-text-color-3)] text-sm">Connected Wallet</div>
+        <div class="text-lg font-mono mt-1">{{ isConnected ? formatAddress(account) : '---' }}</div>
+      </div>
+      <div class="bg-[var(--n-card-color)] rounded-lg p-4 shadow-sm border border-[var(--n-border-color)]">
+        <div class="text-[var(--n-text-color-3)] text-sm">Network</div>
+        <div class="text-lg font-medium mt-1">{{ chainInfo.name }}</div>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="mb-6 flex gap-2 border-b border-[var(--n-border-color)]">
+      <button 
+        v-for="tab in ['dashboard', 'wallet', 'tokens', 'transactions']" 
+        :key="tab"
+        @click="activeTab = tab"
+        class="px-4 py-2 font-medium transition-colors"
+        :class="activeTab === tab 
+          ? 'text-blue-500 border-b-2 border-blue-500' 
+          : 'text-[var(--n-text-color-3)] hover:text-[var(--n-text-color-1)]'"
+      >
+        {{ tab.charAt(0).toUpperCase() + tab.slice(1) }}
+      </button>
+    </div>
+    
+    <!-- Dashboard Tab -->
+    <div v-if="activeTab === 'dashboard'" class="space-y-4">
+      <div class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
+        <h2 class="text-lg font-semibold mb-4">Quick Actions</h2>
+        <div class="flex flex-wrap gap-3">
+          <button 
+            @click="handleConnect"
+            :disabled="isConnecting"
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
+          >
+            {{ isConnecting ? 'Connecting...' : (isConnected ? 'Reconnect Wallet' : 'Connect Wallet (MetaMask)') }}
+          </button>
+          
+          <button 
+            v-if="isConnected"
+            @click="disconnectWallet"
+            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+          >
+            Disconnect
+          </button>
+          
+          <button 
+            @click="activeTab = 'tokens'"
+            :disabled="!isConnected"
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50"
+          >
+            Add Token
+          </button>
+          
+          <button 
+            @click="activeTab = 'wallet'"
+            class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+          >
+            View Portfolio
+          </button>
+          
+          <button 
+            @click="activeTab = 'transactions'"
+            :disabled="!isConnected"
+            class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50"
+          >
+            Transaction History
+          </button>
+        </div>
+      </div>
+      
+      <div v-if="isConnected" class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
+        <h2 class="text-lg font-semibold mb-4">Switch Network</h2>
+        <div class="flex flex-wrap gap-2">
+          <button 
+            v-for="chain in supportedChains" 
+            :key="chain.id"
+            @click="handleSwitchChain(chain.id)"
+            :disabled="chainId === chain.id"
+            class="px-3 py-1 text-sm rounded border transition-colors"
+            :class="chainId === chain.id 
+              ? 'bg-blue-500 text-white border-blue-500' 
+              : 'bg-[var(--n-card-color)] text-[var(--n-text-color-2)] border-[var(--n-border-color)] hover:border-blue-400'"
+          >
+            {{ chain.name }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Wallet Tab -->
+    <div v-if="activeTab === 'wallet'" class="space-y-4">
+      <div class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
+        <h2 class="text-lg font-semibold mb-4">Wallet Details</h2>
         
-        <NTabPane name="interact" tab="Interact">
-          <div v-if="!isConnected" class="connect-prompt">
-            Please connect your wallet first
+        <div v-if="isConnected" class="space-y-3">
+          <div class="flex justify-between py-2 border-b border-[var(--n-border-color)]">
+            <span class="text-[var(--n-text-color-3)]">Address</span>
+            <span class="font-mono text-sm">{{ account }}</span>
           </div>
-          <div v-else-if="contracts.length === 0" class="connect-prompt">
-            No contracts available. Please add a contract first.
+          <div class="flex justify-between py-2 border-b border-[var(--n-border-color)]">
+            <span class="text-[var(--n-text-color-3)]">Balance</span>
+            <span class="font-medium">{{ balance }} {{ chainInfo.symbol }}</span>
           </div>
-          <div v-else class="interact-area">
-            <div class="contract-selector">
-              <h4>Select Contract</h4>
-              <div class="contract-list">
-                <div 
-                  v-for="contract in contracts" 
-                  :key="contract.id"
-                  class="contract-item"
-                  :class="{ active: selectedContract?.id === contract.id }"
-                  @click="selectContract(contract)"
-                >
-                  <div class="contract-name">{{ contract.name }}</div>
-                  <div class="contract-address">
-                    {{ contract.contractAddress.slice(0, 10) }}...{{ contract.contractAddress.slice(-8) }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="contract-interact" v-if="selectedContract">
-              <ContractCall 
-                :contract="selectedContract" 
-                @success="fetchContracts" 
-              />
-            </div>
+          <div class="flex justify-between py-2 border-b border-[var(--n-border-color)]">
+            <span class="text-[var(--n-text-color-3)]">Chain ID</span>
+            <span class="font-medium">{{ chainId }} ({{ chainInfo.name }})</span>
           </div>
-        </NTabPane>
+        </div>
         
-        <NTabPane name="history" tab="History">
-          <TransactionHistory />
-        </NTabPane>
-      </NTabs>
-    </NCard>
+        <div v-else class="text-center py-8">
+          <p class="text-[var(--n-text-color-3)] mb-4">Connect your wallet to see details</p>
+          <button 
+            @click="handleConnect"
+            class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            Connect Wallet
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tokens Tab -->
+    <div v-if="activeTab === 'tokens'" class="space-y-4">
+      <div class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
+        <h2 class="text-lg font-semibold mb-4">Token Balances</h2>
+        
+        <div v-if="isConnected && COMMON_TOKENS[chainId]" class="space-y-3">
+          <div 
+            v-for="token in COMMON_TOKENS[chainId]" 
+            :key="token.address"
+            class="flex justify-between items-center py-3 border-b border-[var(--n-border-color)]"
+          >
+            <div>
+              <div class="font-medium">{{ token.symbol }}</div>
+              <div class="text-sm text-[var(--n-text-color-3)]">{{ token.name }}</div>
+            </div>
+            <button 
+              @click="getTokenBalance(token.address)"
+              class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Check Balance
+            </button>
+          </div>
+          
+          <div v-if="selectedToken" class="mt-4 p-3 bg-gray-100 dark:bg-gray-800 rounded">
+            Token Balance: {{ tokenBalance }}
+          </div>
+        </div>
+        
+        <div v-else-if="!isConnected" class="text-center py-8">
+          <p class="text-[var(--n-text-color-3)]">Connect wallet to view tokens</p>
+        </div>
+        
+        <div v-else class="text-center py-8">
+          <p class="text-[var(--n-text-color-3)]">No tokens found for this network</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Transactions Tab -->
+    <div v-if="activeTab === 'transactions'" class="space-y-4">
+      <div class="bg-[var(--n-card-color)] rounded-lg p-6 shadow-sm border border-[var(--n-border-color)]">
+        <h2 class="text-lg font-semibold mb-4">Transaction History</h2>
+        
+        <div v-if="isConnected" class="space-y-3">
+          <p class="text-[var(--n-text-color-3)] mb-4">
+            View your transaction history on 
+            <a 
+              :href="`${chainInfo.explorer}/address/${account}`" 
+              target="_blank"
+              class="text-blue-500 hover:underline"
+            >
+              {{ chainInfo.explorer }}
+            </a>
+          </p>
+          
+          <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p class="text-sm text-[var(--n-text-color-3)]">
+              Transaction history requires an external explorer API or indexer. 
+              Click the link above to view on block explorer.
+            </p>
+          </div>
+        </div>
+        
+        <div v-else class="text-center py-8">
+          <p class="text-[var(--n-text-color-3)]">Connect wallet to view transactions</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.web3-page {
-  padding: 16px;
-}
-
-.connected-info {
-  margin-bottom: 16px;
-}
-
-.chain-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  background: #52c41a;
-  color: white;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-.connect-prompt {
-  padding: 48px;
-  text-align: center;
-  color: #999;
-}
-
-.interact-area {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.contract-selector h4 {
-  margin: 0 0 12px 0;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.contract-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.contract-item {
-  padding: 12px;
-  border: 1px solid #e8e8e8;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.contract-item:hover {
-  border-color: #1890ff;
-}
-
-.contract-item.active {
-  border-color: #1890ff;
-  background: #e6f7ff;
-}
-
-.contract-name {
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.contract-address {
-  font-size: 12px;
-  color: #999;
-  font-family: monospace;
-}
+/* Using CSS variables that naive-ui provides */
 </style>

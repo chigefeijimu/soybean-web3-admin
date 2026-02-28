@@ -71,5 +71,11 @@ export const initSysRoleMenu = async () => {
     },
   ];
 
-  return prisma.sysRoleMenu.createMany({ data });
+  for (const rm of data) {
+    await prisma.sysRoleMenu.upsert({
+      where: { roleId_menuId_domain: { roleId: rm.roleId, menuId: rm.menuId, domain: rm.domain } },
+      update: rm,
+      create: rm,
+    });
+  }
 };

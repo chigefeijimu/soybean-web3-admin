@@ -370,5 +370,5 @@ export const initSysMenu = async () => {
     },
   ];
 
-  return prisma.sysMenu.createMany({ data });
+  for (const menu of data) { await prisma.sysMenu.upsert({ where: { id: menu.id }, update: menu, create: menu }); }
 };

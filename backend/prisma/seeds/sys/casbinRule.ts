@@ -78,5 +78,7 @@ export const initCasbinRule = async () => {
     },
   ];
 
+  // For casbin, we need to delete existing and recreate
+  await prisma.casbinRule.deleteMany({});
   return prisma.casbinRule.createMany({ data });
 };

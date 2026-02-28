@@ -39,5 +39,5 @@ export const initSysRole = async () => {
     },
   ];
 
-  return prisma.sysRole.createMany({ data });
+  for (const role of data) { await prisma.sysRole.upsert({ where: { id: role.id }, update: role, create: role }); }
 };

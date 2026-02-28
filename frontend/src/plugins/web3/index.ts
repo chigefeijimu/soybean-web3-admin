@@ -1,41 +1,56 @@
-import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/vue'
+// Web3 Plugin using wagmi v3 + viem
 import { createConfig, http } from 'wagmi'
-import { mainnet, sepolia } from 'wagmi/chains'
+import { mainnet, sepolia, polygon, arbitrum, optimism, bsc } from 'wagmi/chains'
+import { QueryClient } from '@tanstack/vue-query'
+import { createWeb3Modal } from '@web3modal/ethers/vue'
 
-// Get projectId at https://cloud.walletconnect.com
-const projectId = 'YOUR_PROJECT_ID'
-
-const metadata = {
-  name: 'Soybean Admin',
-  description: 'Web3 Admin Panel',
-  url: 'https://soybean-admin.com',
-  icons: ['https://avatars.mywebsite.com/']
-}
-
-// Wagmi chains
-const chains = [mainnet, sepolia]
-
-// Create config
+// Create wagmi config - cast chains to any to avoid v3 type issues
 export const config = createConfig({
-  chains,
+  chains: [mainnet, sepolia, polygon, arbitrum, optimism, bsc] as any,
   transports: {
     [mainnet.id]: http(),
-    [sepolia.id]: http()
+    [sepolia.id]: http(),
+    [polygon.id]: http(),
+    [arbitrum.id]: http(),
+    [optimism.id]: http(),
+    [bsc.id]: http(),
   },
-  ...defaultConfig({ metadata })
+  connectors: [],
 })
 
-// Create modal
-createWeb3Modal({
-  ethersConfig: defaultConfig({ metadata }),
-  projectId,
-  chains,
-  enableAnalytics: true
+// Create query client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
 })
 
-export function initWeb3() {
-  return {
-    config,
-    projectId
+// Project ID for WalletConnect (can be empty for local)
+export const projectId = ''
+
+// Web3Modal setup
+export function setupWeb3Modal() {
+  if (!projectId) {
+    console.log('Web3Modal: No project ID configured, MetaMask-only mode')
+    return null
+  }
+  
+  try {
+    const modal = createWeb3Modal({
+      ethersConfig: {} as any,
+      projectId,
+      chains: [mainnet, sepolia, polygon, arbitrum, optimism, bsc] as any,
+      enableAnalytics: false,
+    })
+    return modal
+  } catch (e) {
+    console.error('Web3Modal setup failed:', e)
+    return null
   }
 }
+
+// Export config for use
+export const web3Config = config
+export const web3QueryClient = queryClient

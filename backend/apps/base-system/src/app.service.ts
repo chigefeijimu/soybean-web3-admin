@@ -85,7 +85,7 @@ export class AppService {
     const info = await redisClient.info();
     const redisInfo: any = {};
     const lines = info.split('\r\n');
-    lines.forEach((line) => {
+    lines.forEach((line: any) => {
       if (line && !line.startsWith('#')) {
         const parts = line.split(':');
         if (parts.length > 1) {

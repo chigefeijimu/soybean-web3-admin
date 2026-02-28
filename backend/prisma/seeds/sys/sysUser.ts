@@ -52,5 +52,12 @@ export const initSysUser = async () => {
     },
   ];
 
-  return prisma.sysUser.createMany({ data });
+  // Use upsert to handle existing data
+  for (const user of data) {
+    await prisma.sysUser.upsert({
+      where: { id: user.id },
+      update: user,
+      create: user,
+    });
+  }
 };

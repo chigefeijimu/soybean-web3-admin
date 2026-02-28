@@ -16,5 +16,5 @@ export const initSysDomain = async () => {
     },
   ];
 
-  return prisma.sysDomain.createMany({ data });
+  for (const domain of data) { await prisma.sysDomain.upsert({ where: { id: domain.id }, update: domain, create: domain }); }
 };

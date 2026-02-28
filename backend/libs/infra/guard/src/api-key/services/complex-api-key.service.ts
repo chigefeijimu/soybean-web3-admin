@@ -36,7 +36,7 @@ export class ComplexApiKeyService implements OnModuleInit, IApiKeyService {
   async loadKeys() {
     const secrets = await this.redisService.hgetall(this.cacheKey);
     Object.entries(secrets).forEach(([key, value]) => {
-      this.apiSecrets.set(key, value);
+      this.apiSecrets.set(String(key), String(value));
     });
   }
 

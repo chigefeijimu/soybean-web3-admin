@@ -32,6 +32,7 @@ declare module "@elegant-router/types" {
     "manage_role": "/manage/role";
     "manage_user": "/manage/user";
     "manage_user-detail": "/manage/user-detail/:id";
+    "web3": "/web3";
   };
 
   /**
@@ -72,6 +73,7 @@ declare module "@elegant-router/types" {
     | "log"
     | "login"
     | "manage"
+    | "web3"
   >;
 
   /**
@@ -101,6 +103,7 @@ declare module "@elegant-router/types" {
     | "manage_role"
     | "manage_user-detail"
     | "manage_user"
+    | "web3"
   >;
 
   /**

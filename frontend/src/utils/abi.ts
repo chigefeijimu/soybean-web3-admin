@@ -63,12 +63,13 @@ export function formatFunctionForDisplay(abi: any): string {
  */
 export function formatFunctionWithMutability(abi: any): string {
   const mutability = abi.stateMutability || 'nonpayable'
-  const mutabilityIcon = {
+  const mutabilityMap: Record<string, string> = {
     view: '🔒',
     pure: '🔒',
     payable: '💰',
     nonpayable: '📝'
-  }[mutability] || '📝'
+  }
+  const mutabilityIcon = mutabilityMap[mutability] || '📝'
   
   return `${mutabilityIcon} ${abi.name} (${mutability})`
 }

@@ -1,6 +1,5 @@
 import { createApp } from 'vue';
-import { WagmiProvider } from 'wagmi';
-import { QueryClient, QueryClientProvider } from '@tanstack/vue-query';
+import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query';
 import { config as wagmiConfig } from './plugins/web3';
 import './plugins/assets';
 import { setupAppVersionNotification, setupDayjs, setupIconifyOffline, setupLoading, setupNProgress } from './plugins';
@@ -30,9 +29,14 @@ async function setupApp() {
 
   const app = createApp(App);
 
-  // Setup Wagmi Provider
-  app.use(WagmiProvider, { config: wagmiConfig });
-  app.use(QueryClientProvider, { client: queryClient });
+  // Setup Vue Query
+  app.use(VueQueryPlugin, { queryClient });
+
+  // Setup Wagmi Provider only if config is available
+  if (wagmiConfig) {
+    const { WagmiProvider } = await import('wagmi');
+    app.use(WagmiProvider, { config: wagmiConfig });
+  }
 
   setupStore(app);
 
