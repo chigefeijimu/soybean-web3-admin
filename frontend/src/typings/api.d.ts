@@ -107,12 +107,14 @@ declare namespace Api {
     type RoleMenu = {
       roleId: string;
       routeIds: number[];
+      domain: string;
     };
 
     /** role menu */
     type RolePermission = {
       roleId: string;
       permissions: string[];
+      domain: string;
     };
 
     /** role search params */

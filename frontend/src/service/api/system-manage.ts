@@ -140,12 +140,7 @@ export function fetchAssignRoutes(req: Api.SystemManage.RoleMenu) {
   return request<boolean>({
     url: '/authorization/assign-routes',
     method: 'post',
-    data: {
-      ...req,
-      // eslint-disable-next-line no-warning-comments
-      // TODO 超级管理员主动选择 domain管理员默认自身
-      domain: 'built-in'
-    }
+    data: req
   });
 }
 
@@ -159,12 +154,7 @@ export function fetchAssignPermission(req: Api.SystemManage.RolePermission) {
   return request<boolean>({
     url: '/authorization/assign-permission',
     method: 'post',
-    data: {
-      ...req,
-      // eslint-disable-next-line no-warning-comments
-      // TODO 超级管理员主动选择 domain管理员默认自身
-      domain: 'built-in'
-    }
+    data: req
   });
 }
 

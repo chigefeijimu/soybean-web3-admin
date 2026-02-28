@@ -35,7 +35,8 @@ const model: Api.SystemManage.RolePermission = reactive(createDefaultModel());
 function createDefaultModel(): Api.SystemManage.RolePermission {
   return {
     roleId: props.roleId,
-    permissions: []
+    permissions: [],
+    domain: 'built-in'
   };
 }
 
@@ -125,6 +126,9 @@ watch(visible, val => {
 
 <template>
   <NModal v-model:show="visible" :title="title" preset="card" class="w-480px">
+    <NFormItem label="Domain" path="domain">
+      <NInput v-model:value="model.domain" placeholder="请输入domain" />
+    </NFormItem>
     <NTree
       v-model:checked-keys="checks"
       :data="tree"
