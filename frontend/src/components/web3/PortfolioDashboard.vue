@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useWeb3 } from '@/composables/web3/useWeb3'
+import { getTokenBalances } from '@/service/api/web3'
 
 interface Token {
   address: string
@@ -12,63 +13,101 @@ interface Token {
   logo?: string
 }
 
-const { account, chainId } = useWeb3()
-
-const tokens = ref<Token[]>([])
-const isLoading = ref(false)
-const totalValue = ref(0)
-const sortBy = ref<'value' | 'balance' | 'name'>('value')
-
-// Mock portfolio data
-const mockTokens: Token[] = [
-  {
-    address: '0x0000000000000000000000000000000000000000',
-    name: 'Ethereum',
-    symbol: 'ETH',
-    decimals: 18,
-    balance: '2.5',
-    value: 6250,
-    logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.svg',
-  },
-  {
-    address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-    name: 'USD Coin',
-    symbol: 'USDC',
-    decimals: 6,
-    balance: '5000',
-    value: 5000,
-    logo: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.svg',
-  },
-  {
-    address: '0x6B175474E89094C44Da98b954Eebc90fE31f3a2a',
-    name: 'Dai Stablecoin',
-    symbol: 'DAI',
-    decimals: 18,
-    balance: '2500',
-    value: 2500,
-    logo: 'https://cryptologos.cc/logos/dai-dai-logo.svg',
-  },
-  {
-    address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
-    name: 'Wrapped Bitcoin',
-    symbol: 'WBTC',
-    decimals: 8,
-    balance: '0.1',
-    value: 6250,
-    logo: 'https://cryptologos.cc/logos/wrapped-bitcoin-wbtc-logo.svg',
-  },
-  {
-    address: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
-    name: 'Aave',
-    symbol: 'AAVE',
-    decimals: 18,
-    balance: '25',
-    value: 3750,
-    logo: 'https://cryptologos.cc/logos/aave-aave-logo.svg',
-  },
+// Common token addresses (ETH mainnet)
+const COMMON_TOKENS = [
+  { address: '0x0000000000000000000000000000000000000000', name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+  { address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', name: 'USD Coin', symbol: 'USDC', decimals: 6 },
+  { address: '0xdAC17F958D2ee523a2206206994597C13D831ec7', name: 'Tether USD', symbol: 'USDT', decimals: 6 },
+  { address: '0x6B175474E89094C44Da98b954Eebc90fE31f3a2a', name: 'Dai Stablecoin', symbol: 'DAI', decimals: 18 },
+  { address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', name: 'Wrapped Bitcoin', symbol: 'WBTC', decimals: 8 },
 ]
 
-const sortedTokens = computed(() => {
+const ethPrice = ref(2500) // Mock price, would fetch from oracle
+
+const loadPortfolio = async () => {
+  if (!account.value) return
+  
+  isLoading.value = true
+  try {
+    // Get token balances from backend
+    const tokenAddresses = COMMON_TOKENS.map(t => t.address)
+    
+    const response = await getTokenBalances({
+      ownerAddress: account.value,
+      tokenAddresses,
+      chainId: chainId.value || 1
+    })
+    
+    if (response.data?.success && response.data?.data?.balances) {
+      const balances = response.data.data.balances
+      
+      // Map to tokens with price data
+      tokens.value = balances.map((bal: any, index: number) => {
+        const tokenInfo = COMMON_TOKENS[index] || { name: 'Unknown', symbol: '???', decimals: 18 }
+        const balance = parseFloat(bal.formatted_balance || '0')
+        const value = tokenInfo.symbol === 'ETH' 
+          ? balance * ethPrice.value 
+          : balance * ethPrice.value * 0.001 // Mock non-ETH price
+        
+        return {
+          address: bal.token_address,
+          name: tokenInfo.name,
+          symbol: tokenInfo.symbol,
+          decimals: bal.decimals || tokenInfo.decimals,
+          balance: bal.formatted_balance || '0',
+          value,
+          logo: `https://cryptologos.cc/logos/${tokenInfo.symbol.toLowerCase()}-${tokenInfo.symbol.toLowerCase()}-logo.svg`
+        }
+      }).filter((t: Token) => t.value > 0) // Filter out zero balances
+      
+      totalValue.value = tokens.value.reduce((sum, t) => sum + t.value, 0)
+    } else {
+      // Fallback to mock data if API fails
+      console.warn('API call failed, using mock data')
+      tokens.value = getMockTokens()
+      totalValue.value = tokens.value.reduce((sum, t) => sum + t.value, 0)
+    }
+  } catch (e) {
+    console.error('Failed to load portfolio:', e)
+    // Fallback to mock data
+    tokens.value = getMockTokens()
+    totalValue.value = tokens.value.reduce((sum, t) => sum + t.value, 0)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+function getMockTokens(): Token[] {
+  return [
+    {
+      address: '0x0000000000000000000000000000000000000000',
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+      balance: '2.5',
+      value: 6250,
+      logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.svg',
+    },
+    {
+      address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      name: 'USD Coin',
+      symbol: 'USDC',
+      decimals: 6,
+      balance: '5000',
+      value: 5000,
+      logo: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.svg',
+    },
+    {
+      address: '0x6B175474E89094C44Da98b954Eebc90fE31f3a2a',
+      name: 'Dai Stablecoin',
+      symbol: 'DAI',
+      decimals: 18,
+      balance: '2500',
+      value: 2500,
+      logo: 'https://cryptologos.cc/logos/dai-dai-logo.svg',
+    },
+  ]
+}
   return [...tokens.value].sort((a, b) => {
     if (sortBy.value === 'value') return b.value - a.value
     if (sortBy.value === 'balance') return parseFloat(b.balance) - parseFloat(a.balance)
@@ -132,6 +171,16 @@ const getTokenColor = (index: number): string => {
 onMounted(() => {
   if (account.value) {
     loadPortfolio()
+  }
+})
+
+// Reload when account changes
+watch(account, (newAccount) => {
+  if (newAccount) {
+    loadPortfolio()
+  } else {
+    tokens.value = []
+    totalValue.value = 0
   }
 })
 </script>

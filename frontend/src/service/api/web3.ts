@@ -109,3 +109,16 @@ export async function getTransactionList(params?: { userId?: string }) {
     params
   })
 }
+
+// Token Balance APIs
+export async function getTokenBalances(data: {
+  ownerAddress: string
+  tokenAddresses: string[]
+  chainId?: number
+}) {
+  return request({
+    url: '/web3/contract/token-balances',
+    method: 'POST',
+    data
+  })
+}
