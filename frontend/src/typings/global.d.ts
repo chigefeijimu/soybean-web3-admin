@@ -14,6 +14,9 @@ declare global {
     $notification?: import('naive-ui').NotificationProviderInst;
   }
 
+  /** vue-i18n instance for template usage */
+  export const $t: (key: string) => string;
+
   /** Build time of the project */
   export const BUILD_TIME: string;
 }

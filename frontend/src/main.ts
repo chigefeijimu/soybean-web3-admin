@@ -32,11 +32,8 @@ async function setupApp() {
   // Setup Vue Query
   app.use(VueQueryPlugin, { queryClient });
 
-  // Setup Wagmi Provider only if config is available
-  if (wagmiConfig) {
-    const { WagmiProvider } = await import('wagmi');
-    app.use(WagmiProvider, { config: wagmiConfig });
-  }
+  // Setup Wagmi Provider only if config is available (wagmi v3 doesn't use provider)
+  // The config is now passed directly to hooks
 
   setupStore(app);
 

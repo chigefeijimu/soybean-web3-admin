@@ -19,7 +19,8 @@ export function setupI18n(app: App) {
   app.use(i18n);
 }
 
-export const $t = i18n.global.t as App.I18n.$T;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const $t = i18n.global.t as (key: string, options?: any) => string;
 
 export function setLocale(locale: App.I18n.LangType) {
   i18n.global.locale.value = locale;
