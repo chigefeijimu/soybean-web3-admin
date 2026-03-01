@@ -71,6 +71,7 @@ import WalletAnalyzer from '@/components/web3/WalletAnalyzer.vue';
 import FlashloanDetector from '@/components/web3/FlashloanDetector.vue';
 import TokenVesting from '@/components/web3/TokenVesting.vue';
 import AddressInteractionAnalyzer from '@/components/web3/AddressInteractionAnalyzer.vue';
+import ContractStorageViewer from '@/components/web3/ContractStorageViewer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -152,6 +153,7 @@ const tabs = [
   { id: 'wallet-analyzer', label: 'Wallet Analyzer', icon: '🔍' },
   { id: 'vesting', label: 'Vesting', icon: '🔐' },
   { id: 'address-interaction', label: 'Address Link', icon: '🔗' },
+  { id: 'contract-storage', label: 'Storage', icon: '📦' },
 ];
 
 // Supported networks with logos
@@ -709,6 +711,11 @@ onMounted(() => {
         <!-- Address Interaction Analyzer Tab -->
         <div v-show="activeTab === 'address-interaction'">
           <AddressInteractionAnalyzer />
+        </div>
+
+        <!-- Contract Storage Viewer Tab -->
+        <div v-show="activeTab === 'contract-storage'">
+          <ContractStorageViewer />
         </div>
       </div>
 
