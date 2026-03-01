@@ -1656,3 +1656,82 @@ export function calculateEarnings(principal: number, token: string, days?: numbe
     params: { principal, token, days }
   });
 }
+
+// ========== Portfolio Rebalancer ==========
+
+export interface RebalanceToken {
+  tokenAddress: string;
+  symbol: string;
+  name: string;
+  balance: string;
+  price: number;
+  value: number;
+  change24h: number;
+}
+
+export interface TargetAllocation {
+  symbol: string;
+  percentage: number;
+}
+
+export interface RebalanceTrade {
+  fromToken: string;
+  toToken: string;
+  fromAmount: number;
+  toAmount: number;
+  estimatedValue: number;
+  gasEstimate: number;
+  reason: string;
+}
+
+export interface RebalancePlan {
+  currentAllocation: { symbol: string; value: number; percentage: number }[];
+  targetAllocation: TargetAllocation[];
+  trades: RebalanceTrade[];
+  totalValue: number;
+  estimatedGasCost: number;
+  rebalanceRatio: number;
+}
+
+export interface PresetStrategy {
+  name: string;
+  description: string;
+  allocation: TargetAllocation[];
+}
+
+/**
+ * 获取钱包当前投资组合
+ */
+export function getPortfolioRebalancerPortfolio(address: string, chainId?: number) {
+  return request<{ tokens: RebalanceToken[]; totalValue: number }>({
+    url: '/portfolio-rebalancer/portfolio',
+    method: 'get',
+    params: { address, chainId }
+  });
+}
+
+/**
+ * 生成再平衡计划
+ */
+export function generateRebalancePlan(
+  address: string,
+  targetAllocation: TargetAllocation[],
+  chainId?: number,
+  slippageTolerance?: number
+) {
+  return request<RebalancePlan>({
+    url: '/portfolio-rebalancer/plan',
+    method: 'post',
+    data: { address, targetAllocation, chainId, slippageTolerance }
+  });
+}
+
+/**
+ * 获取预设策略
+ */
+export function getRebalanceStrategies() {
+  return request<PresetStrategy[]>({
+    url: '/portfolio-rebalancer/strategies',
+    method: 'get'
+  });
+}
