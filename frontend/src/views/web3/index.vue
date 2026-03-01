@@ -65,6 +65,7 @@ import DefiPortfolioTracker from '@/components/web3/DefiPortfolioTracker.vue';
 import FearGreedIndex from '@/components/web3/FearGreedIndex.vue';
 import StablecoinYield from '@/components/web3/StablecoinYield.vue';
 import TaxCalculator from '@/components/web3/TaxCalculator.vue';
+import TaxLossHarvester from '@/components/web3/TaxLossHarvester.vue';
 import LiquidationAlert from '@/components/web3/LiquidationAlert.vue';
 import StakingDashboard from '@/components/web3/StakingDashboard.vue';
 import WalletAnalyzer from '@/components/web3/WalletAnalyzer.vue';
@@ -158,6 +159,7 @@ const tabs = [
   { id: 'contract-storage', label: 'Storage', icon: '📦' },
   { id: 'dapp-browser', label: 'DApp Browser', icon: '🌐' },
   { id: 'gas-widget', label: 'Gas Widget', icon: '⛽' },
+  { id: 'tax-loss', label: 'Tax Loss', icon: '🌾' },
 ];
 
 // Supported networks with logos
@@ -730,6 +732,11 @@ onMounted(() => {
         <!-- Gas Widget Tab -->
         <div v-show="activeTab === 'gas-widget'">
           <GasPriceWidget />
+        </div>
+
+        <!-- Tax Loss Tab -->
+        <div v-show="activeTab === 'tax-loss'">
+          <TaxLossHarvester />
         </div>
       </div>
 
