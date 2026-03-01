@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AddressBook: typeof import('./../components/web3/AddressBook.vue')['default']
+    AddressInteractionAnalyzer: typeof import('./../components/web3/AddressInteractionAnalyzer.vue')['default']
     AddTokenModal: typeof import('./../components/web3/AddTokenModal.vue')['default']
     AirdropTracker: typeof import('./../components/web3/AirdropTracker.vue')['default']
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
