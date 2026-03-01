@@ -25,6 +25,7 @@ import WalletLookup from '@/components/web3/WalletLookup.vue';
 import DaoGovernance from '@/components/web3/DaoGovernance.vue';
 import SignatureVerifier from '@/components/web3/SignatureVerifier.vue';
 import TokenApprovalManager from '@/components/web3/TokenApprovalManager.vue';
+import WalletHealthAnalyzer from '@/components/web3/WalletHealthAnalyzer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -59,7 +60,8 @@ const tabs = [
   { id: 'explorer', label: 'Explorer', icon: '🔎' },
   { id: 'trading', label: 'Trading', icon: '📈' },
   { id: 'signature', label: 'Signature', icon: '🔏' },
-  { id: 'approvals', label: 'Approvals', icon: '🔐' }
+  { id: 'approvals', label: 'Approvals', icon: '🔐' },
+  { id: 'health', label: 'Health', icon: '🛡️' }
 ];
 
 // Supported networks with logos
@@ -388,6 +390,11 @@ onMounted(() => {
         <!-- Token Approval Manager Tab -->
         <div v-show="activeTab === 'approvals'">
           <TokenApprovalManager />
+        </div>
+
+        <!-- Wallet Health Tab -->
+        <div v-show="activeTab === 'health'">
+          <WalletHealthAnalyzer />
         </div>
       </div>
 

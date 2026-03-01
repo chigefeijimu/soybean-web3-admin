@@ -8,10 +8,12 @@ import { Web3MultisigController } from './web3-multisig.controller';
 import { Web3DaoController } from './web3-dao.controller';
 import { Web3GasController } from './web3-gas.controller';
 import { Web3GasService } from './web3-gas.service';
+import { Web3HealthController } from './web3-health.controller';
+import { Web3HealthService } from './web3-health.service';
 
 @Module({
   imports: [HttpModule],
-  controllers: [Web3PortfolioController, Web3PriceAlertController, Web3MultisigController, Web3DaoController, Web3GasController],
-  providers: [Web3PriceAlertService, Web3GasService],
+  controllers: [Web3PortfolioController, Web3PriceAlertController, Web3MultisigController, Web3DaoController, Web3GasController, Web3HealthController],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService],
 })
 export class Web3PortfolioModule {}
