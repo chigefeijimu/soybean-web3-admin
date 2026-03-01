@@ -896,3 +896,137 @@ export function getGasPricesAcrossChains() {
     method: 'get'
   });
 }
+
+// ============ Whale Tracker API ============
+
+export interface WhaleTransaction {
+  hash: string;
+  blockNumber: number;
+  timestamp: number;
+  from: string;
+  fromLabel: string;
+  to: string;
+  toLabel: string;
+  value: number;
+  valueUsd: number;
+  tokenSymbol: string;
+  tokenAddress?: string;
+  tokenDecimals: number;
+  gasUsed: number;
+  gasPrice: number;
+  isLargeTransfer: boolean;
+  isWhaleActivity: boolean;
+}
+
+export interface WhaleProfile {
+  address: string;
+  label: string;
+  type: 'exchange' | 'whale' | 'defi' | 'dao' | 'contract' | 'unknown';
+  totalReceived: number;
+  totalReceivedUsd: number;
+  totalSent: number;
+  totalSentUsd: number;
+  transactionCount: number;
+  firstSeen: number;
+  lastActive: number;
+  avgTransactionSize: number;
+  tokensHeld: number;
+  riskLevel: 'low' | 'medium' | 'high';
+}
+
+export interface WhaleAlert {
+  id: string;
+  type: 'large_transfer' | 'whale_movement' | 'exchange_flow' | 'defi_activity';
+  transaction: WhaleTransaction;
+  amount: number;
+  amountUsd: number;
+  timestamp: number;
+  chain: string;
+  read: boolean;
+}
+
+export interface WhaleStats {
+  totalWhaleTransactions24h: number;
+  totalVolume24h: number;
+  avgTransactionSize: number;
+  topNetworks: { chain: string; count: number; volume: number }[];
+  topTokens: { symbol: string; count: number; volume: number }[];
+  largestTransaction: WhaleTransaction | null;
+  recentAlerts: WhaleAlert[];
+}
+
+/** 获取鲸鱼交易列表 */
+export function getWhaleTransactions(limit?: number, address?: string) {
+  return request<WhaleTransaction[]>({
+    url: '/whale-tracker/transactions',
+    method: 'get',
+    params: { limit, address }
+  });
+}
+
+/** 获取鲸鱼统计 */
+export function getWhaleStats() {
+  return request<WhaleStats>({
+    url: '/whale-tracker/stats',
+    method: 'get'
+  });
+}
+
+/** 获取鲸鱼档案 */
+export function getWhaleProfiles() {
+  return request<WhaleProfile[]>({
+    url: '/whale-tracker/profiles',
+    method: 'get'
+  });
+}
+
+/** 获取鲸鱼告警 */
+export function getWhaleAlerts(limit?: number) {
+  return request<WhaleAlert[]>({
+    url: '/whale-tracker/alerts',
+    method: 'get',
+    params: { limit }
+  });
+}
+
+/** 搜索鲸鱼 */
+export function searchWhales(query: string) {
+  return request<WhaleTransaction[]>({
+    url: '/whale-tracker/search',
+    method: 'get',
+    params: { q: query }
+  });
+}
+
+/** 获取网络鲸鱼活动 */
+export function getNetworkWhaleActivity(chainId?: number) {
+  return request<{ time: string; volume: number; count: number }[]>({
+    url: '/whale-tracker/network-activity',
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/** 获取Top鲸鱼 */
+export function getTopWhales(limit?: number) {
+  return request<{ address: string; label: string; volume24h: number; txCount: number }[]>({
+    url: '/whale-tracker/top-whales',
+    method: 'get',
+    params: { limit }
+  });
+}
+
+/** 获取地址信息 */
+export function getAddressInfo(address: string) {
+  return request<{
+    address: string;
+    label: string;
+    type: string;
+    isKnown: boolean;
+    transactionCount: number;
+    recentTransactions: WhaleTransaction[];
+  }>({
+    url: `/whale-tracker/address/${address}`,
+    method: 'get'
+  });
+}
