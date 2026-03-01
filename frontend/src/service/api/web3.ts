@@ -244,3 +244,69 @@ export function scanBlocks(params: {
     params
   });
 }
+
+// ==================== 价格提醒 API ====================
+
+/** 价格提醒 */
+export interface PriceAlert {
+  id: string;
+  token: string;
+  symbol: string;
+  targetPrice: number;
+  condition: 'above' | 'below';
+  userId?: string;
+  createdAt: string;
+  triggered: boolean;
+  triggeredAt?: string;
+}
+
+/**
+ * 创建价格提醒
+ */
+export function createPriceAlert(params: {
+  token: string;
+  symbol: string;
+  targetPrice: number;
+  condition: 'above' | 'below';
+  userId?: string;
+}) {
+  return request<PriceAlert>({
+    url: '/web3/price-alerts',
+    method: 'post',
+    data: params
+  });
+}
+
+/**
+ * 获取价格提醒列表
+ */
+export function fetchPriceAlerts(userId?: string) {
+  return request<PriceAlert[]>({
+    url: '/web3/price-alerts',
+    method: 'get',
+    params: { userId }
+  });
+}
+
+/**
+ * 删除价格提醒
+ */
+export function deletePriceAlert(id: string) {
+  return request<{ success: boolean }>({
+    url: `/web3/price-alerts/${id}`,
+    method: 'delete'
+  });
+}
+
+/**
+ * 检查代币价格是否触发提醒
+ */
+export function checkPriceAlerts(token: string) {
+  return request<{
+    currentPrice: number;
+    triggeredAlerts: PriceAlert[];
+  }>({
+    url: `/web3/price-alerts/check/${token}`,
+    method: 'get'
+  });
+}
