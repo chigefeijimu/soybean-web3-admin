@@ -21,6 +21,8 @@ import GasTracker from '@/components/web3/GasTracker.vue';
 import BridgePanel from '@/components/web3/BridgePanel.vue';
 import PortfolioAnalytics from '@/components/web3/PortfolioAnalytics.vue';
 import WalletLookup from '@/components/web3/WalletLookup.vue';
+import DaoGovernance from '@/components/web3/DaoGovernance.vue';
+import SignatureVerifier from '@/components/web3/SignatureVerifier.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -41,6 +43,7 @@ const tabs = [
   { id: 'wallet', label: 'Wallet', icon: '💳' },
   { id: 'lookup', label: 'Lookup', icon: '🔍' },
   { id: 'swap', label: 'Swap', icon: '⇄' },
+  { id: 'dao', label: 'DAO', icon: '🏛️' },
   { id: 'market', label: 'Market', icon: '🔥' },
   { id: 'orderbook', label: 'Order Book', icon: '📋' },
   { id: 'whale', label: 'Whale', icon: '🐋' },
@@ -51,7 +54,8 @@ const tabs = [
   { id: 'history', label: 'History', icon: '📜' },
   { id: 'contracts', label: 'Contracts', icon: '📝' },
   { id: 'explorer', label: 'Explorer', icon: '🔎' },
-  { id: 'trading', label: 'Trading', icon: '📈' }
+  { id: 'trading', label: 'Trading', icon: '📈' },
+  { id: 'signature', label: 'Signature', icon: '🔏' }
 ];
 
 // Supported networks with logos
@@ -357,9 +361,19 @@ onMounted(() => {
           <BridgePanel />
         </div>
 
+        <!-- DAO Tab -->
+        <div v-show="activeTab === 'dao'">
+          <DaoGovernance />
+        </div>
+
         <!-- Analytics Tab -->
         <div v-show="activeTab === 'analytics'">
           <PortfolioAnalytics />
+        </div>
+
+        <!-- Signature Verifier Tab -->
+        <div v-show="activeTab === 'signature'">
+          <SignatureVerifier />
         </div>
       </div>
 
