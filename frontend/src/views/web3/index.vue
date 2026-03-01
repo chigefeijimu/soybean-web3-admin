@@ -63,6 +63,8 @@ import ChainlinkPriceTracker from '@/components/web3/ChainlinkPriceTracker.vue';
 import DefiPortfolioTracker from '@/components/web3/DefiPortfolioTracker.vue';
 import FearGreedIndex from '@/components/web3/FearGreedIndex.vue';
 import StablecoinYield from '@/components/web3/StablecoinYield.vue';
+import TaxCalculator from '@/components/web3/TaxCalculator.vue';
+import LiquidationAlert from '@/components/web3/LiquidationAlert.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -137,6 +139,7 @@ const tabs = [
   { id: 'defi-portfolio', label: 'DeFi Portfolio', icon: '💼' },
   { id: 'fear-greed', label: 'Sentiment', icon: '😱' },
   { id: 'stable-yield', label: 'Stable Yield', icon: '💰' },
+  { id: 'liquidation', label: 'Liquidation', icon: '⚠️' },
 ];
 
 // Supported networks with logos
@@ -659,6 +662,11 @@ onMounted(() => {
         <!-- Stablecoin Yield Tab -->
         <div v-show="activeTab === 'stable-yield'">
           <StablecoinYield />
+        </div>
+
+        <!-- Liquidation Alert Tab -->
+        <div v-show="activeTab === 'liquidation'">
+          <LiquidationAlert />
         </div>
       </div>
 
