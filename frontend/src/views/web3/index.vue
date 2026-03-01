@@ -67,6 +67,7 @@ import StablecoinYield from '@/components/web3/StablecoinYield.vue';
 import TaxCalculator from '@/components/web3/TaxCalculator.vue';
 import LiquidationAlert from '@/components/web3/LiquidationAlert.vue';
 import StakingDashboard from '@/components/web3/StakingDashboard.vue';
+import WalletAnalyzer from '@/components/web3/WalletAnalyzer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -144,6 +145,7 @@ const tabs = [
   { id: 'stable-yield', label: 'Stable Yield', icon: '💰' },
   { id: 'liquidation', label: 'Liquidation', icon: '⚠️' },
   { id: 'staking', label: 'Staking', icon: '🔒' },
+  { id: 'wallet-analyzer', label: 'Wallet Analyzer', icon: '🔍' },
 ];
 
 // Supported networks with logos
@@ -681,6 +683,11 @@ onMounted(() => {
         <!-- Staking Dashboard Tab -->
         <div v-show="activeTab === 'staking'">
           <StakingDashboard />
+        </div>
+
+        <!-- Wallet Analyzer Tab -->
+        <div v-show="activeTab === 'wallet-analyzer'">
+          <WalletAnalyzer />
         </div>
       </div>
 
