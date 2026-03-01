@@ -384,3 +384,185 @@ export function estimateGasFee(chainId: number, gasLimit: number) {
     params: { chainId, gasLimit }
   });
 }
+
+// ==================== Token Launch Calendar API ====================
+
+/** 代币发售 */
+export interface TokenLaunch {
+  id: string;
+  name: string;
+  symbol: string;
+  description: string;
+  logoUrl: string;
+  platform: string;
+  type: 'IDO' | 'IEO' | 'ICO' | 'Airdrop' | 'Fair Launch';
+  chain: string;
+  chainId: number;
+  startTime: string;
+  endTime: string;
+  price: number;
+  targetRaise: number;
+  raisedAmount: number;
+  participants: number;
+  links: {
+    website?: string;
+    twitter?: string;
+    telegram?: string;
+    whitepaper?: string;
+  };
+  status: 'upcoming' | 'active' | 'ended';
+  tier?: string;
+  requirements?: string[];
+}
+
+/** 空投信息 */
+export interface Airdrop {
+  id: string;
+  name: string;
+  symbol: string;
+  logoUrl: string;
+  description: string;
+  snapshotDate?: string;
+  claimDate?: string;
+  distributionMethod: string;
+  requirements: string[];
+  chain: string;
+  status: 'announced' | 'snapshot' | 'claimable' | 'ended';
+  links: {
+    website?: string;
+    twitter?: string;
+    telegram?: string;
+  };
+  estimatedValue?: number;
+}
+
+/** 发射平台 */
+export interface LaunchPlatform {
+  id: string;
+  name: string;
+  chain: string;
+}
+
+/** 日历项 */
+export interface CalendarItem {
+  id: string;
+  name: string;
+  symbol: string;
+  type: string;
+  platform: string;
+  startTime: string;
+  endTime: string;
+  chain: string;
+}
+
+/** 分页响应 */
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+/**
+ * 获取即将到来的代币发售列表
+ */
+export function fetchUpcomingLaunches(params?: {
+  page?: number;
+  limit?: number;
+  platform?: string;
+}) {
+  return request<PaginatedResponse<TokenLaunch>>({
+    url: '/web3/launch/upcoming',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * 获取空投列表
+ */
+export function fetchAirdrops(params?: {
+  page?: number;
+  limit?: number;
+}) {
+  return request<PaginatedResponse<Airdrop>>({
+    url: '/web3/launch/airdrops',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * 获取代币发售详情
+ */
+export function fetchLaunchDetail(id: string) {
+  return request<TokenLaunch | Airdrop>({
+    url: '/web3/launch/detail',
+    method: 'get',
+    params: { id }
+  });
+}
+
+/**
+ * 获取支持的发射平台
+ */
+export function fetchLaunchPlatforms() {
+  return request<LaunchPlatform[]>({
+    url: '/web3/launch/platforms',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取代币发售日历
+ */
+export function fetchLaunchCalendar(month: number, year: number) {
+  return request<CalendarItem[]>({
+    url: '/web3/launch/calendar',
+    method: 'get',
+    params: { month, year }
+  });
+}
+
+/**
+ * 获取热门即将发售代币
+ */
+export function fetchTrendingLaunches() {
+  return request<TokenLaunch[]>({
+    url: '/web3/launch/trending',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取用户追踪的发售
+ */
+export function fetchTrackedLaunches(address: string) {
+  return request<TokenLaunch[]>({
+    url: '/web3/launch/my-tracked',
+    method: 'get',
+    params: { address }
+  });
+}
+
+/**
+ * 追踪代币发售
+ */
+export function trackLaunch(address: string, launchId: string) {
+  return request<{ success: boolean; tracked: number }>({
+    url: '/web3/launch/track',
+    method: 'get',
+    params: { address, launchId }
+  });
+}
+
+/**
+ * 取消追踪代币发售
+ */
+export function untrackLaunch(address: string, launchId: string) {
+  return request<{ success: boolean; tracked: number }>({
+    url: '/web3/launch/untrack',
+    method: 'get',
+    params: { address, launchId }
+  });
+}
