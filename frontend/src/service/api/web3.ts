@@ -1030,3 +1030,174 @@ export function getAddressInfo(address: string) {
     method: 'get'
   });
 }
+
+// ==================== Smart Money Flow API ====================
+
+export interface ProtocolFlow {
+  name: string;
+  address: string;
+  chain: string;
+  inflow24h: number;
+  outflow24h: number;
+  netFlow: number;
+  tvl: number;
+  change24h: string;
+}
+
+export interface SmartMoneyTransaction {
+  hash: string;
+  from: string;
+  to: string;
+  value: number;
+  token: string;
+  timestamp: string;
+  type: 'IN' | 'OUT';
+  protocol: string;
+}
+
+export interface FlowSummary {
+  chain: string;
+  period: string;
+  totalInflow: number;
+  totalOutflow: number;
+  netFlow: number;
+  flowRatio: string;
+  topProtocols: { name: string; netFlow: number; txCount: number }[];
+  whaleActivity: {
+    activeWhales: number;
+    totalVolume: number;
+    avgTransactionSize: number;
+  };
+}
+
+export interface FlowAlert {
+  id: string;
+  type: string;
+  address: string;
+  token: string;
+  value: number;
+  protocol: string;
+  timestamp: string;
+  risk: 'HIGH' | 'NORMAL';
+}
+
+export interface FlowHistory {
+  date: string;
+  inflow: number;
+  outflow: number;
+  netFlow: number;
+  txCount: number;
+}
+
+export interface TokenFlow {
+  symbol: string;
+  inflow24h: number;
+  outflow24h: number;
+  netFlow: number;
+  holders: number;
+  volume24h: number;
+}
+
+export interface AddressFlow {
+  address: string;
+  isWhale: boolean;
+  totalInflow: number;
+  totalOutflow: number;
+  netFlow: number;
+  txCount: number;
+  lastActivity: string;
+  protocols: { name: string; txCount: number; volume: number }[];
+}
+
+/** 获取协议资金流 */
+export function getProtocolFlows(chain?: string) {
+  return request<{
+    success: boolean;
+    timestamp: string;
+    chain: string;
+    protocols: ProtocolFlow[];
+  }>({
+    url: '/smart-money/protocols',
+    method: 'get',
+    params: { chain }
+  });
+}
+
+/** 获取鲸鱼/聪明钱交易 */
+export function getSmartMoneyTransactions(address?: string, limit?: number) {
+  return request<{
+    success: boolean;
+    timestamp: string;
+    transactions: SmartMoneyTransaction[];
+  }>({
+    url: '/smart-money/transactions',
+    method: 'get',
+    params: { address, limit }
+  });
+}
+
+/** 获取资金流汇总 */
+export function getFlowSummary(chain?: string, period?: string) {
+  return request<{
+    success: boolean;
+    timestamp: string;
+  } & FlowSummary>({
+    url: '/smart-money/summary',
+    method: 'get',
+    params: { chain, period }
+  });
+}
+
+/** 获取资金流告警 */
+export function getFlowAlerts(limit?: number) {
+  return request<{
+    success: boolean;
+    timestamp: string;
+    alerts: FlowAlert[];
+  }>({
+    url: '/smart-money/alerts',
+    method: 'get',
+    params: { limit }
+  });
+}
+
+/** 获取历史资金流数据 */
+export function getHistoricalFlow(chain?: string, days?: number) {
+  return request<{
+    success: boolean;
+    timestamp: string;
+    chain: string;
+    days: number;
+    data: FlowHistory[];
+  }>({
+    url: '/smart-money/history',
+    method: 'get',
+    params: { chain, days }
+  });
+}
+
+/** 获取代币资金流 */
+export function getTokenFlows(token?: string, chain?: string) {
+  return request<{
+    success: boolean;
+    timestamp: string;
+    chain: string;
+    tokens: TokenFlow[];
+  }>({
+    url: '/smart-money/tokens',
+    method: 'get',
+    params: { token, chain }
+  });
+}
+
+/** 追踪特定地址 */
+export function trackAddressFlow(address: string) {
+  return request<{
+    success: boolean;
+    timestamp: string;
+  } & AddressFlow>({
+    url: '/smart-money/track',
+    method: 'post',
+    data: { address }
+  });
+}

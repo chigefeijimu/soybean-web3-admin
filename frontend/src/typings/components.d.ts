@@ -133,6 +133,7 @@ declare module 'vue' {
     RugPullDetector: typeof import('./../components/web3/RugPullDetector.vue')['default']
     SecurityScanner: typeof import('./../components/web3/SecurityScanner.vue')['default']
     SignatureVerifier: typeof import('./../components/web3/SignatureVerifier.vue')['default']
+    SmartMoneyFlow: typeof import('./../components/web3/SmartMoneyFlow.vue')['default']
     SoybeanAvatar: typeof import('./../components/custom/soybean-avatar.vue')['default']
     SvgIcon: typeof import('./../components/custom/svg-icon.vue')['default']
     SystemLogo: typeof import('./../components/common/system-logo.vue')['default']

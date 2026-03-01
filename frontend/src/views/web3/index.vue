@@ -16,6 +16,7 @@ import PriceTicker from '@/components/web3/PriceTicker.vue';
 import OrderBook from '@/components/web3/OrderBook.vue';
 import TokenSearch from '@/components/web3/TokenSearch.vue';
 import WhaleTracker from '@/components/web3/WhaleTracker.vue';
+import SmartMoneyFlow from '@/components/web3/SmartMoneyFlow.vue';
 import NotificationCenter from '@/components/web3/NotificationCenter.vue';
 import GasTracker from '@/components/web3/GasTracker.vue';
 import BridgePanel from '@/components/web3/BridgePanel.vue';
@@ -124,7 +125,8 @@ const tabs = [
   { id: 'heatmap', label: 'Heatmap', icon: '🔥' },
   { id: 'faucet', label: 'Faucet', icon: '⛽' },
   { id: 'dataviz', label: 'DataViz', icon: '📊' },
-  { id: 'rugpull', label: 'RugCheck', icon: '🚨' }
+  { id: 'rugpull', label: 'RugCheck', icon: '🚨' },
+  { id: 'smart-money', label: 'Smart $', icon: '🐟' },
 ];
 
 // Supported networks with logos
@@ -618,6 +620,9 @@ onMounted(() => {
         <!-- Rug Pull Detector Tab -->
         <div v-show="activeTab === 'rugpull'">
           <component :is="markRaw(RugPullDetector)" />
+        </div>
+        <div v-show="activeTab === 'smart-money'">
+          <SmartMoneyFlow />
         </div>
       </div>
 
