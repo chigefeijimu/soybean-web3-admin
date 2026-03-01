@@ -60,6 +60,7 @@ import DataVisualizer from '@/components/web3/DataVisualizer.vue';
 import RugPullDetector from '@/components/web3/RugPullDetector.vue';
 import VotingTracker from '@/components/web3/VotingTracker.vue';
 import ChainlinkPriceTracker from '@/components/web3/ChainlinkPriceTracker.vue';
+import DefiPortfolioTracker from '@/components/web3/DefiPortfolioTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -131,6 +132,7 @@ const tabs = [
   { id: 'voting', label: 'Voting', icon: '🗳️' },
   { id: 'smart-money', label: 'Smart $', icon: '🐟' },
   { id: 'chainlink', label: 'Oracle', icon: '⛓️' },
+  { id: 'defi-portfolio', label: 'DeFi Portfolio', icon: '💼' },
 ];
 
 // Supported networks with logos
@@ -638,6 +640,11 @@ onMounted(() => {
         <!-- Chainlink Price Tracker Tab -->
         <div v-show="activeTab === 'chainlink'">
           <ChainlinkPriceTracker />
+        </div>
+
+        <!-- DeFi Portfolio Tracker Tab -->
+        <div v-show="activeTab === 'defi-portfolio'">
+          <DefiPortfolioTracker />
         </div>
       </div>
 

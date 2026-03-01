@@ -36,6 +36,8 @@ import { WhaleTrackerController } from './whale-tracker.controller';
 import { WhaleTrackerService } from './whale-tracker.service';
 import { AirdropTrackerController } from './airdrop-tracker.controller';
 import { AirdropTrackerService } from './airdrop-tracker.service';
+import { DefiPortfolioController } from './defi-portfolio.controller';
+import { DefiPortfolioService } from './defi-portfolio.service';
 
 @Module({
   imports: [HttpModule],
@@ -62,7 +64,8 @@ import { AirdropTrackerService } from './airdrop-tracker.service';
     Web3RugpullController,
     WhaleTrackerController,
     AirdropTrackerController,
+    DefiPortfolioController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService],
 })
 export class Web3PortfolioModule {}
