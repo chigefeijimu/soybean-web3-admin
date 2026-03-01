@@ -16,6 +16,7 @@ import PriceTicker from '@/components/web3/PriceTicker.vue';
 import OrderBook from '@/components/web3/OrderBook.vue';
 import TokenSearch from '@/components/web3/TokenSearch.vue';
 import WhaleTracker from '@/components/web3/WhaleTracker.vue';
+import NotificationCenter from '@/components/web3/NotificationCenter.vue';
 import WalletLookup from '@/components/web3/WalletLookup.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
@@ -130,6 +131,9 @@ onMounted(() => {
         </h1>
         <p class="mt-1 text-sm text-slate-400">Manage your crypto assets & DeFi</p>
       </div>
+
+      <!-- Notification Center -->
+      <NotificationCenter />
 
       <!-- Network Selector -->
       <div class="flex items-center gap-3">
