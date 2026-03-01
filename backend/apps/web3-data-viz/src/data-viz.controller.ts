@@ -50,4 +50,15 @@ export class DataVizController {
   async getGasHistory(@Query('period') period?: string) {
     return this.dataVizService.getGasHistory(period || '24h');
   }
+
+  @Get('token-holders')
+  async getTokenHolderDistribution(
+    @Query('address') address: string,
+    @Query('chainId') chainId?: string
+  ) {
+    return this.dataVizService.getTokenHolderDistribution(
+      address,
+      chainId ? parseInt(chainId, 10) : 1
+    );
+  }
 }

@@ -60,6 +60,33 @@ export interface ChainData {
   health: number;
 }
 
+export interface TokenHolder {
+  rank: number;
+  address: string;
+  balance: number;
+  balanceFormatted: string;
+  percentage: number;
+  isContract: boolean;
+  label?: string;
+}
+
+export interface TokenHolderDistribution {
+  tokenAddress: string;
+  tokenSymbol: string;
+  tokenName: string;
+  totalSupply: number;
+  holdersCount: number;
+  holders: TokenHolder[];
+  top10Percentage: number;
+  top20Percentage: number;
+  top50Percentage: number;
+  contractBalance: number;
+  contractPercentage: number;
+  distribution: { range: string; count: number; percentage: number }[];
+  concentrationRisk: 'low' | 'medium' | 'high' | 'very-high';
+  lastUpdated: number;
+}
+
 @Injectable()
 export class DataVizService {
   private readonly mockExchanges = [
@@ -273,5 +300,146 @@ export class DataVizService {
       8453: 'Base'
     };
     return names[chainId] || `Chain ${chainId}`;
+  }
+
+  // Known contract addresses for labeling
+  private readonly knownContracts: Record<string, string> = {
+    '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': 'USDC',
+    '0xdac17f958d2ee523a2206206994597c13d831ec7': 'USDT',
+    '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599': 'WBTC',
+    '0xc00e94cb662c3520282e6f5717214004a7f26888': 'COMP',
+    '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9': 'AAVE',
+    '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984': 'UNI',
+    '0x514910771af9ca656af840dff83e8264ecf986ca': 'LINK'
+  };
+
+  async getTokenHolderDistribution(
+    tokenAddress: string,
+    chainId: number = 1
+  ): Promise<TokenHolderDistribution> {
+    // Generate realistic mock holder data
+    const holderCount = Math.floor(Math.random() * 5000) + 1000;
+    const holders: TokenHolder[] = [];
+    
+    // Generate top holders with realistic distribution (Pareto-like)
+    let cumulativeBalance = 0;
+    const totalSupply = Math.random() * 1000000000 + 1000000;
+    
+    for (let i = 0; i < Math.min(holderCount, 100); i++) {
+      // Power law distribution for more realistic holder amounts
+      const balance = (totalSupply / Math.pow(i + 1, 1.5)) * (0.8 + Math.random() * 0.4);
+      cumulativeBalance += balance;
+      
+      const address = `0x${Math.random().toString(16).slice(2, 42)}`;
+      const isContract = Math.random() < 0.02;
+      
+      // Check if it's a known contract
+      const shortAddr = address.toLowerCase().slice(0, 42);
+      let label: string | undefined;
+      for (const [knownAddr, knownName] of Object.entries(this.knownContracts)) {
+        if (shortAddr.includes(knownAddr.slice(-8))) {
+          label = knownName;
+          break;
+        }
+      }
+      
+      holders.push({
+        rank: i + 1,
+        address,
+        balance: Number(balance.toFixed(2)),
+        balanceFormatted: this.formatBalance(balance),
+        percentage: 0, // Will calculate after all generated
+        isContract,
+        label
+      });
+    }
+
+    // Calculate percentages
+    const total = holders.reduce((sum, h) => sum + h.balance, 0);
+    holders.forEach(h => {
+      h.percentage = Number(((h.balance / total) * 100).toFixed(4));
+    });
+
+    // Sort by balance descending
+    holders.sort((a, b) => b.balance - a.balance);
+    holders.forEach((h, i) => h.rank = i + 1);
+
+    // Calculate concentration metrics
+    const top10Balance = holders.slice(0, 10).reduce((sum, h) => sum + h.balance, 0);
+    const top20Balance = holders.slice(0, 20).reduce((sum, h) => sum + h.balance, 0);
+    const top50Balance = holders.slice(0, 50).reduce((sum, h) => sum + h.balance, 0);
+    const contractBalance = holders.filter(h => h.isContract).reduce((sum, h) => sum + h.balance, 0);
+
+    const top10Percentage = Number(((top10Balance / total) * 100).toFixed(2));
+    const top20Percentage = Number(((top20Balance / total) * 100).toFixed(2));
+    const top50Percentage = Number(((top50Balance / total) * 100).toFixed(2));
+    const contractPercentage = Number(((contractBalance / total) * 100).toFixed(2));
+
+    // Determine concentration risk
+    let concentrationRisk: TokenHolderDistribution['concentrationRisk'];
+    if (top10Percentage > 80) {
+      concentrationRisk = 'very-high';
+    } else if (top10Percentage > 60) {
+      concentrationRisk = 'high';
+    } else if (top10Percentage > 40) {
+      concentrationRisk = 'medium';
+    } else {
+      concentrationRisk = 'low';
+    }
+
+    // Distribution buckets
+    const distribution = [
+      { range: 'Top 10', count: 10, percentage: top10Percentage },
+      { range: 'Top 11-20', count: 10, percentage: Number(((top20Balance - top10Balance) / total * 100).toFixed(2)) },
+      { range: 'Top 21-50', count: 30, percentage: Number(((top50Balance - top20Balance) / total * 100).toFixed(2)) },
+      { range: 'Others', count: holderCount - 50, percentage: Number((((total - top50Balance) / total) * 100).toFixed(2)) }
+    ];
+
+    // Token info based on address
+    const tokenInfo = this.getTokenInfo(tokenAddress);
+
+    return {
+      tokenAddress: tokenAddress.toLowerCase(),
+      tokenSymbol: tokenInfo.symbol,
+      tokenName: tokenInfo.name,
+      totalSupply: Number(totalSupply.toFixed(2)),
+      holdersCount: holderCount,
+      holders: holders.slice(0, 50),
+      top10Percentage,
+      top20Percentage,
+      top50Percentage,
+      contractBalance: Number(contractBalance.toFixed(2)),
+      contractPercentage,
+      distribution,
+      concentrationRisk,
+      lastUpdated: Date.now()
+    };
+  }
+
+  private formatBalance(balance: number): string {
+    if (balance >= 1000000000) {
+      return `${(balance / 1000000000).toFixed(2)}B`;
+    } else if (balance >= 1000000) {
+      return `${(balance / 1000000).toFixed(2)}M`;
+    } else if (balance >= 1000) {
+      return `${(balance / 1000).toFixed(2)}K`;
+    }
+    return balance.toFixed(2);
+  }
+
+  private getTokenInfo(address: string): { symbol: string; name: string } {
+    const addr = address.toLowerCase();
+    const tokens: Record<string, { symbol: string; name: string }> = {
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': { symbol: 'USDC', name: 'USD Coin' },
+      '0xdac17f958d2ee523a2206206994597c13d831ec7': { symbol: 'USDT', name: 'Tether USD' },
+      '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599': { symbol: 'WBTC', name: 'Wrapped Bitcoin' },
+      '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9': { symbol: 'AAVE', name: 'Aave' },
+      '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984': { symbol: 'UNI', name: 'Uniswap' },
+      '0x514910771af9ca656af840dff83e8264ecf986ca': { symbol: 'LINK', name: 'Chainlink' },
+      '0xc00e94cb662c3520282e6f5717214004a7f26888': { symbol: 'COMP', name: 'Compound' },
+      '0x5f98805a4e8be255a32880fdec7f7368c6458c6': { symbol: 'LDO', name: 'Lido DAO' },
+      '0xbe1a001fe942f1e365f8d3f54536b8b75f8d3bd1': { symbol: 'NEAR', name: 'NEAR Protocol' }
+    };
+    return tokens[addr] || { symbol: 'UNKNOWN', name: 'Unknown Token' };
   }
 }
