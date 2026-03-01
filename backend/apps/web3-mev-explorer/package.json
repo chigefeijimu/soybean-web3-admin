@@ -1,0 +1,9 @@
+{
+  "name": "web3-mev-explorer",
+  "version": "1.0.0",
+  "description": "Web3 MEV Explorer Module",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "nest build web3-mev-explorer"
+  }
+}

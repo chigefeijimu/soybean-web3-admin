@@ -32,6 +32,8 @@ import { getConfigPath } from '@lib/utils/env';
 import { ApiModule } from './api/api.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MevExplorerController } from './api/web3/mev-explorer/mev-explorer.controller';
+import { MevExplorerService } from './api/web3/mev-explorer/mev-explorer.service';
 
 const strategies = [JwtStrategy];
 
@@ -157,9 +159,10 @@ class ThrottlerStorageAdapter implements ThrottlerStorage {
     ApiKeyModule,
     BootstrapModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, MevExplorerController],
   providers: [
     AppService,
+    MevExplorerService,
 
     ...strategies,
 

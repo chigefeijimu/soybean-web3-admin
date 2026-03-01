@@ -53,6 +53,7 @@ import NftFloorTracker from '@/components/web3/NftFloorTracker.vue';
 import TokenPriceChart from '@/components/web3/TokenPriceChart.vue';
 import BlockchainHeatmap from '@/components/web3/BlockchainHeatmap.vue';
 import GasFaucet from '@/components/web3/GasFaucet.vue';
+import MevExplorer from '@/components/web3/MevExplorer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -83,6 +84,7 @@ const tabs = [
   { id: 'gas', label: 'Gas', icon: '⏳' },
   { id: 'gas-optimizer', label: 'Gas Opt', icon: '🎯' },
   { id: 'mev', label: 'MEV', icon: '🛡️' },
+  { id: 'mev-explorer', label: 'MEV Explorer', icon: '🔍' },
   { id: 'safety', label: 'Safety', icon: '✅' },
   { id: 'saver', label: 'Saver', icon: '💰' },
   { id: 'ens', label: 'ENS', icon: '🔤' },
@@ -450,6 +452,11 @@ onMounted(() => {
         <!-- MEV Tab -->
         <div v-show="activeTab === 'mev'">
           <MevProtection />
+        </div>
+
+        <!-- MEV Explorer Tab -->
+        <div v-show="activeTab === 'mev-explorer'">
+          <MevExplorer />
         </div>
 
         <!-- Safety Tab -->
