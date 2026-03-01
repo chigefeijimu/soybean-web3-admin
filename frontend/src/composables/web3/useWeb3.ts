@@ -117,6 +117,36 @@ export function useWeb3() {
   // Get chain info
   const chainInfo = computed(() => CHAIN_INFO[chainId.value] || CHAIN_INFO[1]);
 
+  // Get event logs for a contract
+  const getLogs = async (
+    contractAddress: string,
+    eventSignature: string,
+    fromBlock: string = 'latest',
+    toBlock: string = 'latest'
+  ): Promise<any[]> => {
+    if (!window.ethereum) {
+      throw new Error('No Ethereum provider available');
+    }
+
+    try {
+      const filterOptions: any = {
+        address: contractAddress,
+        fromBlock: fromBlock === 'latest' ? 'latest' : fromBlock,
+        toBlock: toBlock === 'latest' ? 'latest' : toBlock,
+      };
+
+      const logs = await (window as any).ethereum.request({
+        method: 'eth_getLogs',
+        params: [filterOptions]
+      });
+
+      return logs || [];
+    } catch (error: any) {
+      console.error('Failed to get logs:', error);
+      throw new Error(`Failed to fetch logs: ${error.message}`);
+    }
+  };
+
   // Format address
   const formatAddress = (address: string) => {
     if (!address) return '';
@@ -137,6 +167,7 @@ export function useWeb3() {
     disconnectWallet,
     switchChain,
     updateBalance,
+    getLogs,
     formatAddress,
 
     // Constants
