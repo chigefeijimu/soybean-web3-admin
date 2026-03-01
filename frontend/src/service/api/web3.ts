@@ -220,3 +220,32 @@ export async function parseTransactionReceipt(data: {
     data
   })
 }
+
+// Block Scanner APIs
+export async function getBlock(blockNumber: number) {
+  return request({
+    url: `/web3/block/${blockNumber}`,
+    method: 'GET'
+  })
+}
+
+export async function getLatestBlock() {
+  return request({
+    url: '/web3/block/latest',
+    method: 'GET'
+  })
+}
+
+export async function getTransactionReceipt(txHash: string) {
+  return request({
+    url: `/web3/transaction/receipt/${txHash}`,
+    method: 'GET'
+  })
+}
+
+export async function scanBlocks(from: number, to: number) {
+  return request({
+    url: `/web3/scan/${from}/${to}`,
+    method: 'GET'
+  })
+}

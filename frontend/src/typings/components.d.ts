@@ -11,6 +11,7 @@ declare module 'vue' {
     AddTokenModal: typeof import('./../components/web3/AddTokenModal.vue')['default']
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
+    BlockExplorer: typeof import('./../components/web3/BlockExplorer.vue')['default']
     ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']
     ContractCall: typeof import('./../components/web3/ContractCall.vue')['default']
     CountTo: typeof import('./../components/custom/count-to.vue')['default']
