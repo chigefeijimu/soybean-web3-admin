@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useWeb3 } from '@/composables/web3/useWeb3'
 import { getTransactionList, parseTransactionReceipt } from '@/service/api/web3'
-import type { TransactionListItem, ParsedReceipt } from '@/typings/web3'
+import type { TransactionUIItem, ParsedReceipt } from '@/typings/web3'
 
 const props = defineProps<{
   address?: string
@@ -11,16 +11,16 @@ const props = defineProps<{
 
 const { account, chainInfo } = useWeb3()
 
-const transactions = ref<TransactionListItem[]>([])
+const transactions = ref<TransactionUIItem[]>([])
 const isLoading = ref(false)
 const error = ref('')
 const filter = ref<'all' | 'send' | 'receive'>('all')
-const selectedTx = ref<TransactionListItem | null>(null)
+const selectedTx = ref<TransactionUIItem | null>(null)
 const receiptData = ref<ParsedReceipt | null>(null)
 const isLoadingReceipt = ref(false)
 
 // Fallback mock data when API is unavailable
-const mockTransactions = [
+const mockTransactions: TransactionUIItem[] = [
   {
     hash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
     from: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1',
@@ -30,6 +30,7 @@ const mockTransactions = [
     timestamp: Date.now() - 3600000 * 2,
     status: 'confirmed',
     type: 'send',
+    chainId: 1,
   },
   {
     hash: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
@@ -40,6 +41,7 @@ const mockTransactions = [
     timestamp: Date.now() - 3600000 * 24,
     status: 'confirmed',
     type: 'receive',
+    chainId: 1,
   },
   {
     hash: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
@@ -50,6 +52,7 @@ const mockTransactions = [
     timestamp: Date.now() - 3600000 * 48,
     status: 'confirmed',
     type: 'swap',
+    chainId: 1,
   },
 ]
 
@@ -102,20 +105,25 @@ const loadTransactions = async () => {
     
     if (response.data && response.data.length > 0) {
       // Transform API response to UI format
-      transactions.value = response.data.map((tx: any) => ({
-        hash: tx.hash || tx.transaction_hash,
-        from: tx.from_address || tx.from,
-        to: tx.to_address || tx.to,
-        value: tx.value || '0',
-        token: tx.token_symbol || tx.token || 'ETH',
-        timestamp: tx.timestamp ? new Date(tx.timestamp).getTime() : Date.now() - 3600000,
-        status: tx.status || 'confirmed',
-        type: userId && tx.from_address?.toLowerCase() === userId.toLowerCase() ? 'send' : 
-              userId && tx.to_address?.toLowerCase() === userId.toLowerCase() ? 'receive' : 'swap',
-        chainId: tx.chain_id || tx.chainId,
-        gasUsed: tx.gas_used || tx.gasUsed,
-        blockNumber: tx.block_number || tx.blockNumber,
-      }))
+      transactions.value = response.data.map((tx: any): TransactionUIItem => {
+        const txType: 'send' | 'receive' | 'swap' = 
+          userId && tx.from_address?.toLowerCase() === userId.toLowerCase() ? 'send' : 
+          userId && tx.to_address?.toLowerCase() === userId.toLowerCase() ? 'receive' : 'swap'
+        
+        return {
+          hash: tx.hash || tx.transaction_hash,
+          from: tx.from_address || tx.from,
+          to: tx.to_address || tx.to,
+          value: tx.value || '0',
+          token: tx.token_symbol || tx.token || 'ETH',
+          timestamp: tx.timestamp ? new Date(tx.timestamp).getTime() : Date.now() - 3600000,
+          status: tx.status || 'confirmed',
+          type: txType,
+          chainId: tx.chain_id || tx.chainId,
+          gasUsed: tx.gas_used || tx.gasUsed,
+          blockNumber: tx.block_number || tx.blockNumber,
+        }
+      })
     } else {
       // Use mock data when no transactions found
       transactions.value = mockTransactions
@@ -131,7 +139,7 @@ const loadTransactions = async () => {
 }
 
 // Parse transaction receipt for detailed info
-const viewReceipt = async (tx: TransactionListItem) => {
+const viewReceipt = async (tx: TransactionUIItem) => {
   selectedTx.value = tx
   receiptData.value = null
   isLoadingReceipt.value = true
@@ -139,13 +147,22 @@ const viewReceipt = async (tx: TransactionListItem) => {
   try {
     const response = await parseTransactionReceipt({
       transactionHash: tx.hash,
-      chainId: tx.chain_id || chainInfo.value?.chainId
+      chainId: tx.chainId || chainInfo.value?.chainId
     })
     receiptData.value = response.data
   } catch (e: unknown) {
     const errorMessage = e instanceof Error ? e.message : 'Unknown error'
     console.error('Failed to parse receipt:', errorMessage)
-    receiptData.value = { error: errorMessage }
+    receiptData.value = { 
+      error: errorMessage,
+      transactionHash: tx.hash,
+      blockNumber: 0,
+      from: '',
+      status: false,
+      gasUsed: 0,
+      effectiveGasPrice: 0,
+      events: []
+    }
   } finally {
     isLoadingReceipt.value = false
   }

@@ -109,6 +109,12 @@ export interface ParsedReceipt {
   gasUsed: number
   effectiveGasPrice: number
   events: ParsedEvent[]
+  // Optional error for API failures
+  error?: string
+  // Optional gas info from API
+  gas_info?: GasInfo
+  // Optional contract name
+  contract?: string
 }
 
 export interface ParsedEvent {
@@ -117,6 +123,7 @@ export interface ParsedEvent {
   address: string
   params: EventParam[]
   logIndex: number
+  contract?: string
 }
 
 export interface EventParam {
@@ -187,7 +194,7 @@ export interface PaginatedResponse<T> {
   }
 }
 
-// Transaction List Item (from API)
+// Transaction List Item (from API - snake_case)
 export interface TransactionListItem {
   id: string
   user_id: string
@@ -207,4 +214,27 @@ export interface TransactionListItem {
   input_data?: string
   created_at: string
   updated_at: string
+}
+
+// Transaction UI Model (for frontend display - camelCase)
+export interface TransactionUIItem {
+  hash: string
+  from: string
+  to: string
+  value: string
+  token: string
+  timestamp: number
+  status: string
+  type: 'send' | 'receive' | 'swap'
+  chainId: number
+  gasUsed?: string
+  blockNumber?: number
+}
+
+// Gas Info from receipt
+export interface GasInfo {
+  gas_used: string
+  gas_price: string
+  effective_gas_price: string
+  cumulative_gas_used: string
 }
