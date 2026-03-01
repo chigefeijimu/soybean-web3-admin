@@ -282,3 +282,50 @@ export async function getNFTDetails(contract: string, tokenIds: string[], chainI
     data: { token_ids: tokenIds, chain_id: chainId }
   });
 }
+
+// K-Line (Candlestick) APIs
+export async function getKLine(base: string, quote: string, period: string, limit?: number) {
+  return request({
+    url: `/web3/kline/${base}/${quote}/${period}`,
+    method: 'GET',
+    params: { limit }
+  });
+}
+
+export async function getPrice(base: string, quote: string) {
+  return request({
+    url: `/web3/price/${base}/${quote}`,
+    method: 'GET'
+  });
+}
+
+export async function getIndicators(base: string, quote: string, period: string) {
+  return request({
+    url: `/web3/indicators/${base}/${quote}/${period}`,
+    method: 'GET'
+  });
+}
+
+// Real price from CoinGecko
+export async function getRealPrice(symbol: string) {
+  return request({
+    url: `/web3/price/real/${symbol}`,
+    method: 'GET'
+  });
+}
+
+export async function getTopCoins(limit?: number) {
+  return request({
+    url: '/web3/price/top',
+    method: 'GET',
+    params: { limit }
+  });
+}
+
+export async function searchCoins(query: string) {
+  return request({
+    url: '/web3/price/search',
+    method: 'GET',
+    params: { query }
+  });
+}

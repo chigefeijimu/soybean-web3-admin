@@ -9,6 +9,8 @@ import PortfolioDashboard from '@/components/web3/PortfolioDashboard.vue';
 import TokenSwap from '@/components/web3/TokenSwap.vue';
 import NFTGallery from '@/components/web3/NFTGallery.vue';
 import BlockExplorer from '@/components/web3/BlockExplorer.vue';
+import TradingChart from '@/components/web3/TradingChart.vue';
+import TradingPanel from '@/components/web3/TradingPanel.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -32,7 +34,8 @@ const tabs = [
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
   { id: 'contracts', label: 'Contracts', icon: '📝' },
-  { id: 'explorer', label: 'Explorer', icon: '🔍' }
+  { id: 'explorer', label: 'Explorer', icon: '🔍' },
+  { id: 'trading', label: 'Trading', icon: '📈' }
 ];
 
 // Supported networks with logos
@@ -290,6 +293,16 @@ onMounted(() => {
         <!-- Explorer Tab -->
         <div v-show="activeTab === 'explorer'">
           <component :is="markRaw(BlockExplorer)" />
+        </div>
+
+        <!-- Trading Tab -->
+        <div v-show="activeTab === 'trading'" class="grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <TradingChart />
+          </div>
+          <div>
+            <TradingPanel />
+          </div>
         </div>
       </div>
 
