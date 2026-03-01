@@ -120,6 +120,7 @@ declare module 'vue' {
     TokenApprovalManager: typeof import('./../components/web3/TokenApprovalManager.vue')['default']
     TokenSearch: typeof import('./../components/web3/TokenSearch.vue')['default']
     TokenSwap: typeof import('./../components/web3/TokenSwap.vue')['default']
+    TokenWatchlist: typeof import('./../components/web3/TokenWatchlist.vue')['default']
     TradingChart: typeof import('./../components/web3/TradingChart.vue')['default']
     TradingPanel: typeof import('./../components/web3/TradingPanel.vue')['default']
     TransactionHistory: typeof import('./../components/web3/TransactionHistory.vue')['default']

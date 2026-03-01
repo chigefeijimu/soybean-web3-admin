@@ -29,6 +29,7 @@ import WalletHealthAnalyzer from '@/components/web3/WalletHealthAnalyzer.vue';
 import YieldTracker from '@/components/web3/YieldTracker.vue';
 import NftRarityAnalyzer from '@/components/web3/NftRarityAnalyzer.vue';
 import OnChainAnalytics from '@/components/web3/OnChainAnalytics.vue';
+import TokenWatchlist from '@/components/web3/TokenWatchlist.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -67,7 +68,8 @@ const tabs = [
   { id: 'health', label: 'Health', icon: '🛡️' },
   { id: 'yield', label: 'Yield', icon: '🌾' },
   { id: 'rarity', label: 'Rarity', icon: '💎' },
-  { id: 'onchain', label: 'On-chain', icon: '🔗' }
+  { id: 'onchain', label: 'On-chain', icon: '🔗' },
+  { id: 'watchlist', label: 'Watchlist', icon: '👀' }
 ];
 
 // Supported networks with logos
@@ -416,6 +418,11 @@ onMounted(() => {
         <!-- On-chain Analytics Tab -->
         <div v-show="activeTab === 'onchain'">
           <OnChainAnalytics />
+        </div>
+
+        <!-- Watchlist Tab -->
+        <div v-show="activeTab === 'watchlist'">
+          <TokenWatchlist />
         </div>
       </div>
 
