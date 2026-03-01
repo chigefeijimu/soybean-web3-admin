@@ -46,10 +46,10 @@ importers:
         version: 13.0.0(vue@3.5.13(typescript@5.8.2))
       '@web3modal/ethers':
         specifier: ^5.1.11
-        version: 5.1.11(ethers@6.16.0)(react@19.2.4)(vue@3.5.13(typescript@5.8.2))
+        version: 5.1.11(@types/react@19.2.14)(ethers@6.16.0)(react@19.2.4)(vue@3.5.13(typescript@5.8.2))
       '@web3modal/ethers5':
         specifier: ^5.1.11
-        version: 5.1.11(ethers@6.16.0)(react@19.2.4)(vue@3.5.13(typescript@5.8.2))
+        version: 5.1.11(@types/react@19.2.14)(ethers@6.16.0)(react@19.2.4)(vue@3.5.13(typescript@5.8.2))
       clipboard:
         specifier: 2.0.11
         version: 2.0.11
@@ -97,7 +97,7 @@ importers:
         version: 4.5.0(vue@3.5.13(typescript@5.8.2))
       wagmi:
         specifier: ^3.5.0
-        version: 3.5.0(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@19.2.4))(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))
+        version: 3.5.0(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@19.2.4))(@types/react@19.2.14)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))
     devDependencies:
       '@elegant-router/vue':
         specifier: 0.3.8
@@ -120,6 +120,12 @@ importers:
       '@types/nprogress':
         specifier: 0.2.3
         version: 0.2.3
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.14)
       '@unocss/eslint-config':
         specifier: 66.0.0
         version: 66.0.0(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2)
@@ -1260,6 +1266,14 @@ packages:
   '@types/qs@6.9.18':
     resolution: {integrity: sha512-kK7dgTYDyGqS+e2Q4aK9X3D7q234CIZ1Bv0q/7Z5IwRDoADNU81xXJK/YVyLbLTZCoIwUoDoffFeF+p/eIklAA==}
 
+  '@types/react-dom@19.2.3':
+    resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
+    peerDependencies:
+      '@types/react': ^19.2.0
+
+  '@types/react@19.2.14':
+    resolution: {integrity: sha512-ilcTH/UniCkMdtexkoCN0bI7pMcJDvmQFPvuPvmEaYA/NSfFTAgdUSLAoVjaRJm7+6PvcM+q1zYOwS4wTYMF9w==}
+
   '@types/sortablejs@1.15.8':
     resolution: {integrity: sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==}
 
@@ -2152,6 +2166,9 @@ packages:
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
+
+  csstype@3.2.3:
+    resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
   data-view-buffer@1.0.2:
     resolution: {integrity: sha512-EmKO5V3OLXh1rtK2wgXRansaK1/mtVdTUEiEI0W8RkvgT05kfxaH29PliLnpLP73yYO6142Q72QNa8Wx/A5CqQ==}
@@ -6028,6 +6045,14 @@ snapshots:
 
   '@types/qs@6.9.18': {}
 
+  '@types/react-dom@19.2.3(@types/react@19.2.14)':
+    dependencies:
+      '@types/react': 19.2.14
+
+  '@types/react@19.2.14':
+    dependencies:
+      csstype: 3.2.3
+
   '@types/sortablejs@1.15.8': {}
 
   '@types/svgo@2.6.4':
@@ -6393,19 +6418,19 @@ snapshots:
     dependencies:
       vue: 3.5.13(typescript@5.8.2)
 
-  '@wagmi/connectors@7.2.1(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4)))(typescript@5.8.2)(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))':
+  '@wagmi/connectors@7.2.1(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.14)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4)))(typescript@5.8.2)(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))':
     dependencies:
-      '@wagmi/core': 3.4.0(@tanstack/query-core@5.90.20)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))
+      '@wagmi/core': 3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.14)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))
       viem: 2.46.3(typescript@5.8.2)(zod@3.22.4)
     optionalDependencies:
       typescript: 5.8.2
 
-  '@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))':
+  '@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.14)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))':
     dependencies:
       eventemitter3: 5.0.1
       mipd: 0.0.7(typescript@5.8.2)
       viem: 2.46.3(typescript@5.8.2)(zod@3.22.4)
-      zustand: 5.0.0(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4))
+      zustand: 5.0.0(@types/react@19.2.14)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4))
     optionalDependencies:
       '@tanstack/query-core': 5.90.20
       ox: 0.12.4(typescript@5.8.2)(zod@3.22.4)
@@ -6461,13 +6486,13 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/ethereum-provider@2.16.1(react@19.2.4)':
+  '@walletconnect/ethereum-provider@2.16.1(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
       '@walletconnect/jsonrpc-http-connection': 1.0.8
       '@walletconnect/jsonrpc-provider': 1.0.14
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/jsonrpc-utils': 1.0.8
-      '@walletconnect/modal': 2.6.2(react@19.2.4)
+      '@walletconnect/modal': 2.6.2(@types/react@19.2.14)(react@19.2.4)
       '@walletconnect/sign-client': 2.16.1
       '@walletconnect/types': 2.16.1
       '@walletconnect/universal-provider': 2.16.1
@@ -6576,16 +6601,16 @@ snapshots:
       '@walletconnect/safe-json': 1.0.2
       pino: 7.11.0
 
-  '@walletconnect/modal-core@2.6.2(react@19.2.4)':
+  '@walletconnect/modal-core@2.6.2(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
-      valtio: 1.11.2(react@19.2.4)
+      valtio: 1.11.2(@types/react@19.2.14)(react@19.2.4)
     transitivePeerDependencies:
       - '@types/react'
       - react
 
-  '@walletconnect/modal-ui@2.6.2(react@19.2.4)':
+  '@walletconnect/modal-ui@2.6.2(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
-      '@walletconnect/modal-core': 2.6.2(react@19.2.4)
+      '@walletconnect/modal-core': 2.6.2(@types/react@19.2.14)(react@19.2.4)
       lit: 2.8.0
       motion: 10.16.2
       qrcode: 1.5.3
@@ -6593,10 +6618,10 @@ snapshots:
       - '@types/react'
       - react
 
-  '@walletconnect/modal@2.6.2(react@19.2.4)':
+  '@walletconnect/modal@2.6.2(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
-      '@walletconnect/modal-core': 2.6.2(react@19.2.4)
-      '@walletconnect/modal-ui': 2.6.2(react@19.2.4)
+      '@walletconnect/modal-core': 2.6.2(@types/react@19.2.14)(react@19.2.4)
+      '@walletconnect/modal-ui': 2.6.2(@types/react@19.2.14)(react@19.2.4)
     transitivePeerDependencies:
       - '@types/react'
       - react
@@ -6768,15 +6793,15 @@ snapshots:
       '@walletconnect/window-getters': 1.0.1
       tslib: 1.14.1
 
-  '@web3modal/base@5.1.11(react@19.2.4)':
+  '@web3modal/base@5.1.11(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
       '@walletconnect/utils': 2.16.1
       '@web3modal/common': 5.1.11
-      '@web3modal/core': 5.1.11(react@19.2.4)
+      '@web3modal/core': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/polyfills': 5.1.11
-      '@web3modal/scaffold-ui': 5.1.11(react@19.2.4)
-      '@web3modal/scaffold-utils': 5.1.11(react@19.2.4)
-      '@web3modal/siwe': 5.1.11(react@19.2.4)
+      '@web3modal/scaffold-ui': 5.1.11(@types/react@19.2.14)(react@19.2.4)
+      '@web3modal/scaffold-utils': 5.1.11(@types/react@19.2.14)(react@19.2.4)
+      '@web3modal/siwe': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/ui': 5.1.11
       '@web3modal/wallet': 5.1.11
     optionalDependencies:
@@ -6810,28 +6835,28 @@ snapshots:
       bignumber.js: 9.1.2
       dayjs: 1.11.10
 
-  '@web3modal/core@5.1.11(react@19.2.4)':
+  '@web3modal/core@5.1.11(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
       '@web3modal/common': 5.1.11
       '@web3modal/wallet': 5.1.11
-      valtio: 1.11.2(react@19.2.4)
+      valtio: 1.11.2(@types/react@19.2.14)(react@19.2.4)
     transitivePeerDependencies:
       - '@types/react'
       - react
 
-  '@web3modal/ethers5@5.1.11(ethers@6.16.0)(react@19.2.4)(vue@3.5.13(typescript@5.8.2))':
+  '@web3modal/ethers5@5.1.11(@types/react@19.2.14)(ethers@6.16.0)(react@19.2.4)(vue@3.5.13(typescript@5.8.2))':
     dependencies:
       '@coinbase/wallet-sdk': 4.0.3
-      '@walletconnect/ethereum-provider': 2.16.1(react@19.2.4)
+      '@walletconnect/ethereum-provider': 2.16.1(@types/react@19.2.14)(react@19.2.4)
       '@walletconnect/utils': 2.16.1
-      '@web3modal/base': 5.1.11(react@19.2.4)
+      '@web3modal/base': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/common': 5.1.11
       '@web3modal/polyfills': 5.1.11
-      '@web3modal/scaffold-utils': 5.1.11(react@19.2.4)
-      '@web3modal/siwe': 5.1.11(react@19.2.4)
+      '@web3modal/scaffold-utils': 5.1.11(@types/react@19.2.14)(react@19.2.4)
+      '@web3modal/siwe': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/wallet': 5.1.11
       ethers: 6.16.0
-      valtio: 1.11.2(react@19.2.4)
+      valtio: 1.11.2(@types/react@19.2.14)(react@19.2.4)
     optionalDependencies:
       react: 19.2.4
       vue: 3.5.13(typescript@5.8.2)
@@ -6860,19 +6885,19 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@web3modal/ethers@5.1.11(ethers@6.16.0)(react@19.2.4)(vue@3.5.13(typescript@5.8.2))':
+  '@web3modal/ethers@5.1.11(@types/react@19.2.14)(ethers@6.16.0)(react@19.2.4)(vue@3.5.13(typescript@5.8.2))':
     dependencies:
       '@coinbase/wallet-sdk': 4.0.3
-      '@walletconnect/ethereum-provider': 2.16.1(react@19.2.4)
+      '@walletconnect/ethereum-provider': 2.16.1(@types/react@19.2.14)(react@19.2.4)
       '@walletconnect/utils': 2.16.1
-      '@web3modal/base': 5.1.11(react@19.2.4)
+      '@web3modal/base': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/common': 5.1.11
       '@web3modal/polyfills': 5.1.11
-      '@web3modal/scaffold-utils': 5.1.11(react@19.2.4)
-      '@web3modal/siwe': 5.1.11(react@19.2.4)
+      '@web3modal/scaffold-utils': 5.1.11(@types/react@19.2.14)(react@19.2.4)
+      '@web3modal/siwe': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/wallet': 5.1.11
       ethers: 6.16.0
-      valtio: 1.11.2(react@19.2.4)
+      valtio: 1.11.2(@types/react@19.2.14)(react@19.2.4)
     optionalDependencies:
       react: 19.2.4
       vue: 3.5.13(typescript@5.8.2)
@@ -6905,12 +6930,12 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@web3modal/scaffold-ui@5.1.11(react@19.2.4)':
+  '@web3modal/scaffold-ui@5.1.11(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
       '@web3modal/common': 5.1.11
-      '@web3modal/core': 5.1.11(react@19.2.4)
-      '@web3modal/scaffold-utils': 5.1.11(react@19.2.4)
-      '@web3modal/siwe': 5.1.11(react@19.2.4)
+      '@web3modal/core': 5.1.11(@types/react@19.2.14)(react@19.2.4)
+      '@web3modal/scaffold-utils': 5.1.11(@types/react@19.2.14)(react@19.2.4)
+      '@web3modal/siwe': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/ui': 5.1.11
       '@web3modal/wallet': 5.1.11
       lit: 3.1.0
@@ -6937,27 +6962,27 @@ snapshots:
       - react
       - uploadthing
 
-  '@web3modal/scaffold-utils@5.1.11(react@19.2.4)':
+  '@web3modal/scaffold-utils@5.1.11(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
       '@web3modal/common': 5.1.11
-      '@web3modal/core': 5.1.11(react@19.2.4)
+      '@web3modal/core': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/polyfills': 5.1.11
       '@web3modal/wallet': 5.1.11
-      valtio: 1.11.2(react@19.2.4)
+      valtio: 1.11.2(@types/react@19.2.14)(react@19.2.4)
     transitivePeerDependencies:
       - '@types/react'
       - react
 
-  '@web3modal/siwe@5.1.11(react@19.2.4)':
+  '@web3modal/siwe@5.1.11(@types/react@19.2.14)(react@19.2.4)':
     dependencies:
       '@walletconnect/utils': 2.16.1
       '@web3modal/common': 5.1.11
-      '@web3modal/core': 5.1.11(react@19.2.4)
-      '@web3modal/scaffold-utils': 5.1.11(react@19.2.4)
+      '@web3modal/core': 5.1.11(@types/react@19.2.14)(react@19.2.4)
+      '@web3modal/scaffold-utils': 5.1.11(@types/react@19.2.14)(react@19.2.4)
       '@web3modal/ui': 5.1.11
       '@web3modal/wallet': 5.1.11
       lit: 3.1.0
-      valtio: 1.11.2(react@19.2.4)
+      valtio: 1.11.2(@types/react@19.2.14)(react@19.2.4)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -7482,6 +7507,8 @@ snapshots:
   csstype@3.0.11: {}
 
   csstype@3.1.3: {}
+
+  csstype@3.2.3: {}
 
   data-view-buffer@1.0.2:
     dependencies:
@@ -10383,11 +10410,12 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  valtio@1.11.2(react@19.2.4):
+  valtio@1.11.2(@types/react@19.2.14)(react@19.2.4):
     dependencies:
       proxy-compare: 2.5.1
       use-sync-external-store: 1.2.0(react@19.2.4)
     optionalDependencies:
+      '@types/react': 19.2.14
       react: 19.2.4
 
   vary@1.1.2: {}
@@ -10574,11 +10602,11 @@ snapshots:
       vooks: 0.2.12(vue@3.5.13(typescript@5.8.2))
       vue: 3.5.13(typescript@5.8.2)
 
-  wagmi@3.5.0(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@19.2.4))(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(viem@2.46.3(typescript@5.8.2)(zod@3.22.4)):
+  wagmi@3.5.0(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@19.2.4))(@types/react@19.2.14)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(viem@2.46.3(typescript@5.8.2)(zod@3.22.4)):
     dependencies:
       '@tanstack/react-query': 5.90.21(react@19.2.4)
-      '@wagmi/connectors': 7.2.1(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4)))(typescript@5.8.2)(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))
-      '@wagmi/core': 3.4.0(@tanstack/query-core@5.90.20)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))
+      '@wagmi/connectors': 7.2.1(@wagmi/core@3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.14)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4)))(typescript@5.8.2)(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))
+      '@wagmi/core': 3.4.0(@tanstack/query-core@5.90.20)(@types/react@19.2.14)(ox@0.12.4(typescript@5.8.2)(zod@3.22.4))(react@19.2.4)(typescript@5.8.2)(use-sync-external-store@1.4.0(react@19.2.4))(viem@2.46.3(typescript@5.8.2)(zod@3.22.4))
       react: 19.2.4
       use-sync-external-store: 1.4.0(react@19.2.4)
       viem: 2.46.3(typescript@5.8.2)(zod@3.22.4)
@@ -10740,7 +10768,8 @@ snapshots:
     dependencies:
       tslib: 2.3.0
 
-  zustand@5.0.0(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4)):
+  zustand@5.0.0(@types/react@19.2.14)(react@19.2.4)(use-sync-external-store@1.4.0(react@19.2.4)):
     optionalDependencies:
+      '@types/react': 19.2.14
       react: 19.2.4
       use-sync-external-store: 1.4.0(react@19.2.4)
