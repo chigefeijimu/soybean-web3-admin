@@ -34,6 +34,7 @@ import OnChainAnalytics from '@/components/web3/OnChainAnalytics.vue';
 import TokenWatchlist from '@/components/web3/TokenWatchlist.vue';
 import TransactionSimulator from '@/components/web3/TransactionSimulator.vue';
 import CrossChainDashboard from '@/components/web3/CrossChainDashboard.vue';
+import ContractDeployer from '@/components/web3/ContractDeployer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -77,7 +78,8 @@ const tabs = [
   { id: 'onchain', label: 'On-chain', icon: '🔗' },
   { id: 'watchlist', label: 'Watchlist', icon: '👀' },
   { id: 'simulator', label: 'Simulator', icon: '🔮' },
-  { id: 'crosschain', label: 'Cross-Chain', icon: '🌐' }
+  { id: 'crosschain', label: 'Cross-Chain', icon: '🌐' },
+  { id: 'deployer', label: 'Deployer', icon: '🚀' }
 ];
 
 // Supported networks with logos
@@ -451,6 +453,11 @@ onMounted(() => {
         <!-- Cross-Chain Tab -->
         <div v-show="activeTab === 'crosschain'">
           <CrossChainDashboard />
+        </div>
+
+        <!-- Deployer Tab -->
+        <div v-show="activeTab === 'deployer'">
+          <ContractDeployer />
         </div>
       </div>
 

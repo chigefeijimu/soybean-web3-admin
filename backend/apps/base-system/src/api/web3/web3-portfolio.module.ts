@@ -16,6 +16,8 @@ import { Web3AnalyticsService } from './web3-analytics.service';
 import { Web3SimulatorController } from './web3-simulator.controller';
 import { Web3CrossChainController } from './web3-cross-chain.controller';
 import { Web3SecurityController } from './web3-security.controller';
+import { Web3ContractController } from './web3-contract.controller';
+import { Web3ContractService } from './web3-contract.service';
 
 @Module({
   imports: [HttpModule],
@@ -31,7 +33,8 @@ import { Web3SecurityController } from './web3-security.controller';
     Web3SimulatorController,
     Web3CrossChainController,
     Web3SecurityController,
+    Web3ContractController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService],
 })
 export class Web3PortfolioModule {}
