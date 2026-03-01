@@ -69,6 +69,7 @@ import LiquidationAlert from '@/components/web3/LiquidationAlert.vue';
 import StakingDashboard from '@/components/web3/StakingDashboard.vue';
 import WalletAnalyzer from '@/components/web3/WalletAnalyzer.vue';
 import FlashloanDetector from '@/components/web3/FlashloanDetector.vue';
+import TokenVesting from '@/components/web3/TokenVesting.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -148,6 +149,7 @@ const tabs = [
   { id: 'liquidation', label: 'Liquidation', icon: '⚠️' },
   { id: 'staking', label: 'Staking', icon: '🔒' },
   { id: 'wallet-analyzer', label: 'Wallet Analyzer', icon: '🔍' },
+  { id: 'vesting', label: 'Vesting', icon: '🔐' },
 ];
 
 // Supported networks with logos
@@ -695,6 +697,11 @@ onMounted(() => {
         <!-- Wallet Analyzer Tab -->
         <div v-show="activeTab === 'wallet-analyzer'">
           <WalletAnalyzer />
+        </div>
+
+        <!-- Token Vesting Tab -->
+        <div v-show="activeTab === 'vesting'">
+          <TokenVesting />
         </div>
       </div>
 
