@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddTokenModal: typeof import('./../components/web3/AddTokenModal.vue')['default']
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
+    BatchTransfer: typeof import('./../components/web3/BatchTransfer.vue')['default']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
     BlockExplorer: typeof import('./../components/web3/BlockExplorer.vue')['default']
     BridgePanel: typeof import('./../components/web3/BridgePanel.vue')['default']
@@ -26,6 +27,7 @@ declare module 'vue' {
     EventExplorer: typeof import('./../components/web3/EventExplorer.vue')['default']
     ExceptionBase: typeof import('./../components/common/exception-base.vue')['default']
     FullScreen: typeof import('./../components/common/full-screen.vue')['default']
+    GasAnalyzer: typeof import('./../components/web3/GasAnalyzer.vue')['default']
     GasOptimizer: typeof import('./../components/web3/GasOptimizer.vue')['default']
     GasPrediction: typeof import('./../components/web3/GasPrediction.vue')['default']
     GasSaver: typeof import('./../components/web3/GasSaver.vue')['default']
