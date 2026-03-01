@@ -51,6 +51,7 @@ import LiquidityPoolScanner from '@/components/web3/LiquidityPoolScanner.vue';
 import NftFloorTracker from '@/components/web3/NftFloorTracker.vue';
 import TokenPriceChart from '@/components/web3/TokenPriceChart.vue';
 import BlockchainHeatmap from '@/components/web3/BlockchainHeatmap.vue';
+import GasFaucet from '@/components/web3/GasFaucet.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -112,7 +113,8 @@ const tabs = [
   { id: 'liquidity', label: 'Liquidity', icon: '💧' },
   { id: 'floor', label: 'Floor', icon: '📉' },
   { id: 'pricechart', label: 'Price', icon: '📈' },
-  { id: 'heatmap', label: 'Heatmap', icon: '🔥' }
+  { id: 'heatmap', label: 'Heatmap', icon: '🔥' },
+  { id: 'faucet', label: 'Faucet', icon: '⛽' }
 ];
 
 // Supported networks with logos
@@ -576,6 +578,11 @@ onMounted(() => {
         <!-- Blockchain Heatmap Tab -->
         <div v-show="activeTab === 'heatmap'">
           <component :is="markRaw(BlockchainHeatmap)" />
+        </div>
+
+        <!-- Gas Faucet Tab -->
+        <div v-show="activeTab === 'faucet'">
+          <component :is="markRaw(GasFaucet)" />
         </div>
       </div>
 

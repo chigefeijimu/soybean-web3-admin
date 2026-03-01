@@ -32,6 +32,7 @@ declare module 'vue' {
     ExceptionBase: typeof import('./../components/common/exception-base.vue')['default']
     FullScreen: typeof import('./../components/common/full-screen.vue')['default']
     GasAnalyzer: typeof import('./../components/web3/GasAnalyzer.vue')['default']
+    GasFaucet: typeof import('./../components/web3/GasFaucet.vue')['default']
     GasOptimizer: typeof import('./../components/web3/GasOptimizer.vue')['default']
     GasPrediction: typeof import('./../components/web3/GasPrediction.vue')['default']
     GasSaver: typeof import('./../components/web3/GasSaver.vue')['default']
