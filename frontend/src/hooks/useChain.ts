@@ -1,5 +1,3 @@
-import { ref } from 'vue';
-
 /** Chain configuration for multi-chain support */
 export interface ChainConfig {
   id: number;

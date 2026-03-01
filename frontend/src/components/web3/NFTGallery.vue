@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useWeb3 } from '@/composables/web3/useWeb3';
 import { getNFTDetails, getNFTMetadata } from '@/service/api/web3';
+import { useWeb3 } from '@/composables/web3/useWeb3';
 
 interface NFT {
   id: string;
@@ -91,11 +91,14 @@ const loadNFTs = async () => {
   isLoading.value = true;
   try {
     // Try to fetch from backend API
-    const tokenIdList = tokenIds.value.split(',').map(t => t.trim()).filter(t => t);
-    
+    const tokenIdList = tokenIds.value
+      .split(',')
+      .map(t => t.trim())
+      .filter(t => t);
+
     if (contractAddress.value && tokenIdList.length > 0) {
       const response = await getNFTDetails(contractAddress.value, tokenIdList, nftChainId.value);
-      
+
       if (response.data?.success && response.data?.data?.nfts) {
         nfts.value = response.data.data.nfts.map((nft: any, index: number) => ({
           id: String(index + 1),
@@ -182,14 +185,14 @@ onMounted(() => {
     </div>
 
     <!-- NFT Config Form -->
-    <div class="mb-6 grid grid-cols-1 gap-4 rounded-xl bg-slate-900/50 p-4 md:grid-cols-3">
+    <div class="grid grid-cols-1 mb-6 gap-4 rounded-xl bg-slate-900/50 p-4 md:grid-cols-3">
       <div>
         <label class="mb-1 block text-xs text-slate-400">Contract Address</label>
         <input
           v-model="contractAddress"
           type="text"
           placeholder="0x..."
-          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
+          class="w-full border border-slate-700 rounded-lg bg-slate-800 px-3 py-2 text-sm"
         />
       </div>
       <div>
@@ -198,15 +201,12 @@ onMounted(() => {
           v-model="tokenIds"
           type="text"
           placeholder="1,2,3"
-          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
+          class="w-full border border-slate-700 rounded-lg bg-slate-800 px-3 py-2 text-sm"
         />
       </div>
       <div>
         <label class="mb-1 block text-xs text-slate-400">Chain ID</label>
-        <select
-          v-model="nftChainId"
-          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
-        >
+        <select v-model="nftChainId" class="w-full border border-slate-700 rounded-lg bg-slate-800 px-3 py-2 text-sm">
           <option :value="1">Ethereum</option>
           <option :value="5">Goerli</option>
           <option :value="11155111">Sepolia</option>

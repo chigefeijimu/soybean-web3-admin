@@ -111,7 +111,7 @@ export function showWeb3Error(error: any, message?: ReturnType<typeof useMessage
   const parsed = parseWeb3Error(error);
   message?.error(parsed.message);
 
-  console.error('[Web3 Error]', parsed.code, parsed.message);
+  console.error('[Web3 Error]', parsed.code, parsed.message); // eslint-disable-line no-console
 
   return parsed;
 }
@@ -142,7 +142,7 @@ export async function withRetry<T>(
 
   let lastError: any;
 
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+  const executeAttempt = async (attempt: number): Promise<T> => {
     try {
       return await fn();
     } catch (error: any) {
@@ -151,12 +151,16 @@ export async function withRetry<T>(
       if (attempt < maxRetries) {
         const waitTime = delay * 2 ** attempt;
         onRetry?.(attempt + 1, error);
-        await new Promise(resolve => setTimeout(resolve, waitTime));
+        await new Promise<void>(resolve => {
+          setTimeout(resolve, waitTime);
+        });
+        return executeAttempt(attempt + 1);
       }
+      throw lastError;
     }
-  }
+  };
 
-  throw lastError;
+  return executeAttempt(0);
 }
 
 /** Loading state manager */

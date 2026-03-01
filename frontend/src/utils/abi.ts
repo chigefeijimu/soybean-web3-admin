@@ -1,4 +1,3 @@
-import { ref } from 'vue';
 import { type Address, type Hex, formatEther, formatUnits, parseEther, parseUnits } from 'viem';
 
 /** Parse ABI JSON string to array */
@@ -66,7 +65,7 @@ export function parseParameter(value: string, type: string): any {
       return value as Address;
     }
     if (type.startsWith('uint') || type.startsWith('int')) {
-      const bits = Number.parseInt(type.replace(/[^0-9]/g, '')) || 256;
+      const bits = Number.parseInt(type.replace(/[^0-9]/g, ''), 10) || 256;
       if (type.startsWith('uint')) {
         return parseUnits(value, (bits / 8) * 2);
       }
@@ -94,7 +93,7 @@ export function formatReturnValue(value: any, type: string): string {
 
   try {
     if (type.startsWith('uint') || type.startsWith('int')) {
-      const bits = Number.parseInt(type.replace(/[^0-9]/g, '')) || 256;
+      const bits = Number.parseInt(type.replace(/[^0-9]/g, ''), 10) || 256;
       const decimals = (bits / 8) * 2;
       return formatUnits(value, decimals);
     }

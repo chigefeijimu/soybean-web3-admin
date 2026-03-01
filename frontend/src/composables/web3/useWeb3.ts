@@ -1,7 +1,5 @@
 // Web3 Composable - Wallet connection and chain management
 import { computed, ref } from 'vue';
-import { useAccount, useBalance, useChainId, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
-import { metaMask } from 'wagmi/connectors';
 
 // Global state
 const isConnected = ref(false);
@@ -21,6 +19,30 @@ const CHAIN_INFO: Record<number, { name: string; symbol: string; explorer: strin
 };
 
 export function useWeb3() {
+  // Update balance
+  const updateBalance = async () => {
+    if (!account.value || !window.ethereum) return;
+
+    try {
+      const balanceHex = await (window as any).ethereum.request({
+        method: 'eth_getBalance',
+        params: [account.value, 'latest']
+      });
+      // Convert from wei to ETH
+      balance.value = (Number.parseInt(balanceHex, 16) / 1e18).toFixed(4);
+    } catch (error) {
+      console.error('Failed to get balance:', error); // eslint-disable-line no-console
+    }
+  };
+
+  // Disconnect wallet
+  const disconnectWallet = () => {
+    account.value = '';
+    chainId.value = 1;
+    balance.value = '0';
+    isConnected.value = false;
+  };
+
   // Connect with MetaMask
   const connectWallet = async () => {
     if (typeof window === 'undefined') return;
@@ -66,34 +88,10 @@ export function useWeb3() {
         });
       }
     } catch (error: any) {
-      console.error('Failed to connect wallet:', error);
+      console.error('Failed to connect wallet:', error); // eslint-disable-line no-console
       throw error;
     } finally {
       isConnecting.value = false;
-    }
-  };
-
-  // Disconnect wallet
-  const disconnectWallet = () => {
-    account.value = '';
-    chainId.value = 1;
-    balance.value = '0';
-    isConnected.value = false;
-  };
-
-  // Update balance
-  const updateBalance = async () => {
-    if (!account.value || !window.ethereum) return;
-
-    try {
-      const balanceHex = await (window as any).ethereum.request({
-        method: 'eth_getBalance',
-        params: [account.value, 'latest']
-      });
-      // Convert from wei to ETH
-      balance.value = (Number.parseInt(balanceHex, 16) / 1e18).toFixed(4);
-    } catch (error) {
-      console.error('Failed to get balance:', error);
     }
   };
 
@@ -111,7 +109,7 @@ export function useWeb3() {
       chainId.value = targetChainId;
     } catch (error: any) {
       // Chain not added, user needs to add it
-      console.error('Failed to switch chain:', error);
+      console.error('Failed to switch chain:', error); // eslint-disable-line no-console
       throw error;
     }
   };

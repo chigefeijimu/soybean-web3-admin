@@ -8,7 +8,7 @@ interface Web3Account {
   isConnected: boolean;
 }
 
-interface Web3State {
+interface _Web3State {
   isConnected: boolean;
   address: string | null;
   chainId: number | null;

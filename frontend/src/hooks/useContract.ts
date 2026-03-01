@@ -1,6 +1,6 @@
-import { computed, ref, watch } from 'vue';
-import { useAccount, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
-import { type Address, type Hex, formatEther, parseEther } from 'viem';
+import { computed, ref } from 'vue';
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { type Address, parseEther } from 'viem';
 import { getChainConfig } from '@/hooks/useChain';
 
 interface UseContractOptions {
@@ -63,7 +63,7 @@ export function useContract(options: UseContractOptions): UseContractReturn {
   const isConfirmed = computed(() => Boolean(receipt));
 
   // Read function
-  const read = async (functionName: string, args: any[] = []): Promise<any> => {
+  const read = async (_functionName: string, _args: any[] = []): Promise<any> => {
     isReading.value = true;
     readError.value = null;
 
@@ -81,7 +81,7 @@ export function useContract(options: UseContractOptions): UseContractReturn {
   };
 
   // Write function
-  const write = async (functionName: string, args: any[] = [], value?: string): Promise<string | null> => {
+  const write = async (functionName: string, value: string | undefined, args: any[] = []): Promise<string | null> => {
     if (!isConnected) {
       writeError.value = new Error('Wallet not connected');
       return null;
@@ -143,7 +143,7 @@ export function useContract(options: UseContractOptions): UseContractReturn {
 }
 
 /** Hook for reading multiple contract values */
-export function useContractReads(contracts: { address: string; abi: any[]; functionName: string; args?: any[] }[]) {
+export function useContractReads(_contracts: { address: string; abi: any[]; functionName: string; args?: any[] }[]) {
   const results = ref<any[]>([]);
   const isLoading = ref(false);
   const error = ref<Error | null>(null);
