@@ -26,6 +26,7 @@ declare module 'vue' {
     ExceptionBase: typeof import('./../components/common/exception-base.vue')['default']
     FullScreen: typeof import('./../components/common/full-screen.vue')['default']
     GasPrediction: typeof import('./../components/web3/GasPrediction.vue')['default']
+    GasSaver: typeof import('./../components/web3/GasSaver.vue')['default']
     GasTracker: typeof import('./../components/web3/GasTracker.vue')['default']
     IconAntDesignEnterOutlined: typeof import('~icons/ant-design/enter-outlined')['default']
     IconAntDesignReloadOutlined: typeof import('~icons/ant-design/reload-outlined')['default']
