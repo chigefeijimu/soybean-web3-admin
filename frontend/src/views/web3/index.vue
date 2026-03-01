@@ -21,6 +21,7 @@ import GasTracker from '@/components/web3/GasTracker.vue';
 import BridgePanel from '@/components/web3/BridgePanel.vue';
 import PortfolioAnalytics from '@/components/web3/PortfolioAnalytics.vue';
 import TokenAnalyzer from '@/components/web3/TokenAnalyzer.vue';
+import GasPrediction from '@/components/web3/GasPrediction.vue';
 import WalletLookup from '@/components/web3/WalletLookup.vue';
 import DaoGovernance from '@/components/web3/DaoGovernance.vue';
 import SignatureVerifier from '@/components/web3/SignatureVerifier.vue';
@@ -57,6 +58,7 @@ const tabs = [
   { id: 'bridge', label: 'Bridge', icon: '🌉' },
   { id: 'analytics', label: 'Analytics', icon: '📊' },
   { id: 'analyzer', label: 'Analyzer', icon: '🔍' },
+  { id: 'gas', label: 'Gas', icon: '⏳' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -388,6 +390,11 @@ onMounted(() => {
         <!-- Analyzer Tab -->
         <div v-show="activeTab === 'analyzer'">
           <TokenAnalyzer />
+        </div>
+
+        <!-- Gas Prediction Tab -->
+        <div v-show="activeTab === 'gas'">
+          <GasPrediction />
         </div>
 
         <!-- Signature Verifier Tab -->
