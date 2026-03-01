@@ -17,6 +17,7 @@ import OrderBook from '@/components/web3/OrderBook.vue';
 import TokenSearch from '@/components/web3/TokenSearch.vue';
 import WhaleTracker from '@/components/web3/WhaleTracker.vue';
 import NotificationCenter from '@/components/web3/NotificationCenter.vue';
+import GasTracker from '@/components/web3/GasTracker.vue';
 import WalletLookup from '@/components/web3/WalletLookup.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
@@ -351,23 +352,7 @@ onMounted(() => {
       <!-- Sidebar -->
       <div class="space-y-6">
         <!-- Gas Tracker -->
-        <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
-          <h2 class="mb-4 text-lg font-semibold">⛽ Gas Tracker</h2>
-          <div class="space-y-3">
-            <div class="flex items-center justify-between rounded-lg bg-slate-900/50 p-3">
-              <span class="text-slate-400">Slow</span>
-              <span class="text-green-400">5 Gwei</span>
-            </div>
-            <div class="flex items-center justify-between rounded-lg bg-slate-900/50 p-3">
-              <span class="text-slate-400">Normal</span>
-              <span class="text-yellow-400">15 Gwei</span>
-            </div>
-            <div class="flex items-center justify-between rounded-lg bg-slate-900/50 p-3">
-              <span class="text-slate-400">Fast</span>
-              <span class="text-red-400">30 Gwei</span>
-            </div>
-          </div>
-        </div>
+        <GasTracker />
 
         <!-- Market Stats -->
         <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">

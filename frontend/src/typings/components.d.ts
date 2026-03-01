@@ -20,6 +20,7 @@ declare module 'vue' {
     EnsLookup: typeof import('./../components/web3/EnsLookup.vue')['default']
     ExceptionBase: typeof import('./../components/common/exception-base.vue')['default']
     FullScreen: typeof import('./../components/common/full-screen.vue')['default']
+    GasTracker: typeof import('./../components/web3/GasTracker.vue')['default']
     IconAntDesignEnterOutlined: typeof import('~icons/ant-design/enter-outlined')['default']
     IconAntDesignReloadOutlined: typeof import('~icons/ant-design/reload-outlined')['default']
     IconAntDesignSettingOutlined: typeof import('~icons/ant-design/setting-outlined')['default']
