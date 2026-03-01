@@ -130,6 +130,7 @@ declare module 'vue' {
     ReloadButton: typeof import('./../components/common/reload-button.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    RugPullDetector: typeof import('./../components/web3/RugPullDetector.vue')['default']
     SecurityScanner: typeof import('./../components/web3/SecurityScanner.vue')['default']
     SignatureVerifier: typeof import('./../components/web3/SignatureVerifier.vue')['default']
     SoybeanAvatar: typeof import('./../components/custom/soybean-avatar.vue')['default']

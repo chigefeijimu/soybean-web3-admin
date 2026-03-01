@@ -56,6 +56,7 @@ import BlockchainHeatmap from '@/components/web3/BlockchainHeatmap.vue';
 import GasFaucet from '@/components/web3/GasFaucet.vue';
 import MevExplorer from '@/components/web3/MevExplorer.vue';
 import DataVisualizer from '@/components/web3/DataVisualizer.vue';
+import RugPullDetector from '@/components/web3/RugPullDetector.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -122,7 +123,8 @@ const tabs = [
   { id: 'pricechart', label: 'Price', icon: '📈' },
   { id: 'heatmap', label: 'Heatmap', icon: '🔥' },
   { id: 'faucet', label: 'Faucet', icon: '⛽' },
-  { id: 'dataviz', label: 'DataViz', icon: '📊' }
+  { id: 'dataviz', label: 'DataViz', icon: '📊' },
+  { id: 'rugpull', label: 'RugCheck', icon: '🚨' }
 ];
 
 // Supported networks with logos
@@ -611,6 +613,11 @@ onMounted(() => {
         <!-- Data Visualizer Tab -->
         <div v-show="activeTab === 'dataviz'">
           <component :is="markRaw(DataVisualizer)" />
+        </div>
+
+        <!-- Rug Pull Detector Tab -->
+        <div v-show="activeTab === 'rugpull'">
+          <component :is="markRaw(RugPullDetector)" />
         </div>
       </div>
 
