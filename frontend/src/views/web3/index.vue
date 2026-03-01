@@ -58,6 +58,7 @@ import GasFaucet from '@/components/web3/GasFaucet.vue';
 import MevExplorer from '@/components/web3/MevExplorer.vue';
 import DataVisualizer from '@/components/web3/DataVisualizer.vue';
 import RugPullDetector from '@/components/web3/RugPullDetector.vue';
+import GasRebates from '@/components/web3/GasRebates.vue';
 import VotingTracker from '@/components/web3/VotingTracker.vue';
 import ChainlinkPriceTracker from '@/components/web3/ChainlinkPriceTracker.vue';
 import DefiPortfolioTracker from '@/components/web3/DefiPortfolioTracker.vue';
@@ -106,6 +107,7 @@ const tabs = [
   { id: 'news', label: 'News', icon: '📰' },
   { id: 'airdrop', label: 'Airdrop', icon: '🎁' },
   { id: 'fees', label: 'Fees', icon: '💸' },
+  { id: 'rebates', label: 'Rebates', icon: '💰' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -525,6 +527,11 @@ onMounted(() => {
         <!-- Fees Tab -->
         <div v-show="activeTab === 'fees'">
           <FeeTracker />
+        </div>
+
+        <!-- Rebates Tab -->
+        <div v-show="activeTab === 'rebates'">
+          <GasRebates />
         </div>
 
         <!-- Signature Verifier Tab -->
