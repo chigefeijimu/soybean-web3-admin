@@ -34,6 +34,8 @@ import { Web3RugpullController } from './web3-rugpull.controller';
 import { Web3RugpullService } from './web3-rugpull.service';
 import { WhaleTrackerController } from './whale-tracker.controller';
 import { WhaleTrackerService } from './whale-tracker.service';
+import { AirdropTrackerController } from './airdrop-tracker.controller';
+import { AirdropTrackerService } from './airdrop-tracker.service';
 
 @Module({
   imports: [HttpModule],
@@ -59,7 +61,8 @@ import { WhaleTrackerService } from './whale-tracker.service';
     DataVizController,
     Web3RugpullController,
     WhaleTrackerController,
+    AirdropTrackerController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService],
 })
 export class Web3PortfolioModule {}

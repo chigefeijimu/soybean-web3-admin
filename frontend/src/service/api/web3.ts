@@ -1363,3 +1363,122 @@ export function getVotingStats() {
     method: 'get'
   });
 }
+
+// ==================== Airdrop Tracker API ====================
+
+/** 空投项目 */
+export interface AirdropProject {
+  id: string;
+  name: string;
+  symbol: string;
+  chain: string;
+  contractAddress: string;
+  claimUrl: string;
+  snapshotDate: string;
+  expiryDate: string;
+  description: string;
+  logoUrl: string;
+  status: 'active' | 'expired' | 'upcoming';
+}
+
+/** 空投认领状态 */
+export interface AirdropClaim {
+  address: string;
+  projectId: string;
+  projectName: string;
+  symbol: string;
+  chain: string;
+  amount: string;
+  claimable: boolean;
+  claimed: boolean;
+  expiryDate: string;
+  transactionHash?: string;
+}
+
+/** 钱包空投状态 */
+export interface WalletAirdropStatus {
+  address: string;
+  totalAirdrops: number;
+  claimable: number;
+  claimed: number;
+  airdrops: AirdropClaim[];
+}
+
+/** 空投统计 */
+export interface AirdropStats {
+  totalProjects: number;
+  activeProjects: number;
+  expiredProjects: number;
+  upcomingProjects: number;
+  chains: string[];
+}
+
+/**
+ * 获取所有空投项目
+ */
+export function getAirdropProjects() {
+  return request<AirdropProject[]>({
+    url: '/airdrop-tracker/projects',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取活跃空投项目
+ */
+export function getActiveAirdrops() {
+  return request<AirdropProject[]>({
+    url: '/airdrop-tracker/projects/active',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取空投项目详情
+ */
+export function getAirdropProjectDetails(id: string) {
+  return request<AirdropProject>({
+    url: `/airdrop-tracker/projects/${id}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 按链获取空投
+ */
+export function getAirdropsByChain(chain: string) {
+  return request<AirdropProject[]>({
+    url: `/airdrop-tracker/projects/chain/${chain}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取即将到来的空投
+ */
+export function getUpcomingAirdrops() {
+  return request<AirdropProject[]>({
+    url: '/airdrop-tracker/upcoming',
+    method: 'get'
+  });
+}
+
+/**
+ * 检查钱包空投状态
+ */
+export function checkWalletAirdrops(address: string) {
+  return request<WalletAirdropStatus>({
+    url: `/airdrop-tracker/check/${address}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取空投统计数据
+ */
+export function getAirdropStats() {
+  return request<AirdropStats>({
+    url: '/airdrop-tracker/stats',
+    method: 'get'
+  });
+}
