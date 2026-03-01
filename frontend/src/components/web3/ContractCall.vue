@@ -6,8 +6,11 @@ import { useWeb3 } from '@/composables/web3/useWeb3';
 
 const props = defineProps<{
   contractAddress?: string;
+  // eslint-disable-next-line vue/no-unused-properties
   abi?: any[];
 }>();
+// Expose abi for parent components (reserved for future use)
+defineExpose({ abi: () => props.abi });
 
 const emit = defineEmits<{
   (e: 'success', data: any): void;
@@ -148,8 +151,7 @@ const encodeFunctionCall = (): Hex => {
       functionName: currentMethod.value.name,
       args: parsedParams
     });
-  } catch (e) {
-    console.error('Failed to encode function call:', e);
+  } catch {
     return '0x';
   }
 };
@@ -217,9 +219,8 @@ const executeRead = async () => {
         } else {
           result.value = String(decoded);
         }
-      } catch (e) {
+      } catch {
         // Fallback to manual parsing if decode fails
-        console.warn('Failed to decode result, using raw response:', e);
         if (currentMethod.value?.outputs?.[0]) {
           const outputType = currentMethod.value.outputs[0].type;
           if (outputType === 'uint256' || outputType.startsWith('uint')) {

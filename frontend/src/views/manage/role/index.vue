@@ -146,7 +146,6 @@ const roleCode = ref<string>('-1');
 
 async function handleBatchDelete() {
   // request
-  console.log(checkedRowKeys.value);
 
   onBatchDeleted();
 }

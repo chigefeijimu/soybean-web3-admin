@@ -42,8 +42,7 @@ const fetchPrices = async () => {
       // Get ETH price (could be in different formats)
       ethPrice.value = prices.ethereum?.usd || prices.ETH?.usd || prices.eth?.usd || 0;
     }
-  } catch (e) {
-    console.error('Failed to fetch prices:', e);
+  } catch {
     // Fallback to a default if API fails
     ethPrice.value = 2500;
   }
@@ -98,12 +97,10 @@ const loadPortfolio = async () => {
       totalValue.value = tokens.value.reduce((sum, t) => sum + t.value, 0);
     } else {
       // Fallback to mock data if API fails
-      console.warn('API call failed, using mock data');
       tokens.value = getMockTokens();
       totalValue.value = tokens.value.reduce((sum, t) => sum + t.value, 0);
     }
-  } catch (e) {
-    console.error('Failed to load portfolio:', e);
+  } catch {
     // Fallback to mock data
     tokens.value = getMockTokens();
     totalValue.value = tokens.value.reduce((sum, t) => sum + t.value, 0);

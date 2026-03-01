@@ -112,14 +112,12 @@ const loadNFTs = async () => {
         }));
       } else {
         // API call succeeded but no data, use mock
-        console.log('No NFT data from API, using mock data');
         nfts.value = mockNFTs;
       }
     } else {
       nfts.value = mockNFTs;
     }
-  } catch (e) {
-    console.error('Failed to load NFTs from API:', e);
+  } catch {
     // Fallback to mock data on error
     nfts.value = mockNFTs;
   } finally {

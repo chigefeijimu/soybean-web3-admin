@@ -138,10 +138,8 @@ const loadTransactions = async () => {
       // Use mock data when no transactions found
       transactions.value = mockTransactions;
     }
-  } catch (e: unknown) {
+  } catch {
     // Fallback to mock data on error
-    const errorMessage = e instanceof Error ? e.message : 'Unknown error';
-    console.warn('API error, using mock data:', errorMessage);
     transactions.value = mockTransactions;
   } finally {
     isLoading.value = false;
@@ -162,7 +160,6 @@ const viewReceipt = async (tx: TransactionUIItem) => {
     receiptData.value = response.data;
   } catch (e: unknown) {
     const errorMessage = e instanceof Error ? e.message : 'Unknown error';
-    console.error('Failed to parse receipt:', errorMessage);
     receiptData.value = {
       error: errorMessage,
       transactionHash: tx.hash,
