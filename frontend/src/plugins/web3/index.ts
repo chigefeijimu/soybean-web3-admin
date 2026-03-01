@@ -33,7 +33,7 @@ export const projectId = '';
 // Web3Modal setup
 export function setupWeb3Modal() {
   if (!projectId) {
-    console.log('Web3Modal: No project ID configured, MetaMask-only mode');
+    // No project ID configured, MetaMask-only mode
     return null;
   }
 
@@ -46,7 +46,7 @@ export function setupWeb3Modal() {
     });
     return modal;
   } catch (e) {
-    console.error('Web3Modal setup failed:', e);
+    // Web3Modal setup failed, falling back to MetaMask-only
     return null;
   }
 }
