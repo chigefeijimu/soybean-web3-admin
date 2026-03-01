@@ -110,6 +110,7 @@ declare module 'vue' {
     TradingPanel: typeof import('./../components/web3/TradingPanel.vue')['default']
     TransactionHistory: typeof import('./../components/web3/TransactionHistory.vue')['default']
     WalletConnect: typeof import('./../components/web3/WalletConnect.vue')['default']
+    WalletLookup: typeof import('./../components/web3/WalletLookup.vue')['default']
     WaveBg: typeof import('./../components/custom/wave-bg.vue')['default']
   }
 }

@@ -1,378 +1,246 @@
-import { createRequest } from '@sa/axios';
+import { request } from '../request';
 
-const request = createRequest({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api'
-});
-
-// Wallet APIs
-export async function verifyWallet(data: {
-  walletAddress: string;
-  signature: string;
-  message: string;
-  walletType?: string;
-  chainId?: number;
-}) {
-  return request({
-    url: '/web3/wallet/verify',
-    method: 'POST',
-    data
-  });
-}
-
-export async function getWalletList(params?: { userId?: string }) {
-  return request({
-    url: '/web3/wallet/list',
-    method: 'GET',
-    params
-  });
-}
-
-export async function deleteWallet(id: string) {
-  return request({
-    url: `/web3/wallet/${id}`,
-    method: 'DELETE'
-  });
-}
-
-// Contract APIs
-export async function getContractList() {
-  return request({
-    url: '/web3/contract/list',
-    method: 'GET'
-  });
-}
-
-export async function getContract(id: string) {
-  return request({
-    url: `/web3/contract/${id}`,
-    method: 'GET'
-  });
-}
-
-export async function createContract(data: {
+/** 代币信息 */
+export interface TokenInfo {
+  symbol: string;
   name: string;
+  decimals: number;
   contractAddress: string;
+  logo?: string;
+}
+
+/** 钱包持仓 */
+export interface WalletPortfolio {
+  address: string;
   chainId: number;
-  abi?: string;
-  description?: string;
-}) {
-  return request({
-    url: '/web3/contract',
-    method: 'POST',
-    data
+  ethBalance: string;
+  tokens: TokenBalance[];
+  totalUsdValue: string;
+}
+
+/** 代币余额 */
+export interface TokenBalance {
+  token: TokenInfo;
+  balance: string;
+  usdValue: string;
+  price: string;
+}
+
+/**
+ * 查询钱包持仓
+ * @param address 钱包地址
+ * @param chainId 链ID (默认1)
+ */
+export function fetchWalletPortfolio(address: string, chainId?: number) {
+  return request<WalletPortfolio>({
+    url: '/web3/portfolio',
+    method: 'get',
+    params: { address, chainId }
   });
 }
 
-export async function updateContract(data: {
-  id: string;
-  name?: string;
-  contractAddress?: string;
-  chainId?: number;
-  abi?: string;
-  description?: string;
-}) {
-  return request({
-    url: `/web3/contract/${data.id}`,
-    method: 'PUT',
-    data
+/**
+ * 获取支持的链列表
+ */
+export function fetchSupportedChains() {
+  return request<{ id: number; name: string; symbol: string }[]>({
+    url: '/web3/chains',
+    method: 'get'
   });
 }
 
-export async function deleteContract(id: string) {
-  return request({
-    url: `/web3/contract/${id}`,
-    method: 'DELETE'
-  });
-}
-
-export async function callContractMethod(
-  id: string,
-  data: {
-    methodName: string;
-    params?: string;
-    fromAddress?: string;
-    value?: string;
-  }
-) {
-  return request({
-    url: `/web3/contract/${id}/call`,
-    method: 'POST',
-    data
-  });
-}
-
-// Direct contract call by address (no contract ID needed)
-export async function callContractDirect(data: {
+/**
+ * 直接调用合约 (通过后端API)
+ */
+export function callContractDirect(params: {
   contractAddress: string;
+  abi: any[];
+  method: string;
+  args: any[];
   chainId?: number;
-  methodName: string;
-  params?: string;
-  fromAddress?: string;
 }) {
   return request({
-    url: '/web3/contract/call-direct',
-    method: 'POST',
-    data
+    url: '/web3/contract/call',
+    method: 'post',
+    data: params
   });
 }
 
-// Transaction APIs
-export async function getTransactionList(params?: { userId?: string }) {
+/**
+ * 获取交易列表
+ */
+export function getTransactionList(params: {
+  address: string;
+  chainId?: number;
+  page?: number;
+  limit?: number;
+}) {
   return request({
-    url: '/web3/transaction/list',
-    method: 'GET',
+    url: '/web3/transactions',
+    method: 'get',
     params
   });
 }
 
-// Token Balance APIs
-export async function getTokenBalances(data: { ownerAddress: string; tokenAddresses: string[]; chainId?: number }) {
+/**
+ * 解析交易收据
+ */
+export function parseTransactionReceipt(txHash: string) {
   return request({
-    url: '/web3/contract/token-balances',
-    method: 'POST',
-    data
+    url: `/web3/transaction/${txHash}/receipt`,
+    method: 'get'
   });
 }
 
-// Market Data APIs
-export async function getMarketOverview() {
+/**
+ * 获取代币余额
+ */
+export function getTokenBalances(address: string, chainId?: number) {
   return request({
-    url: '/web3/market/overview',
-    method: 'GET'
+    url: '/web3/tokens/balance',
+    method: 'get',
+    params: { address, chainId }
   });
 }
 
-export async function getTokenPrice(symbol: string) {
+/**
+ * 获取代币价格
+ */
+export function getTokenPrices(tokens: string[]) {
   return request({
-    url: `/web3/market/price/${symbol}`,
-    method: 'GET'
+    url: '/web3/tokens/prices',
+    method: 'get',
+    params: { tokens: tokens.join(',') }
   });
 }
 
-export async function getTokenPrices() {
+/**
+ * 获取K线数据
+ */
+export function getKLine(params: {
+  symbol: string;
+  interval?: string;
+  limit?: number;
+}) {
   return request({
-    url: '/web3/market/prices',
-    method: 'GET'
+    url: '/web3/market/kline',
+    method: 'get',
+    params
   });
 }
 
-export async function getGasPrice(chainId: string) {
+/**
+ * 获取价格
+ */
+export function getPrice(symbol: string) {
   return request({
-    url: `/web3/market/gas/${chainId}`,
-    method: 'GET'
+    url: '/web3/market/price',
+    method: 'get',
+    params: { symbol }
   });
 }
 
-export async function getDeFiProtocols() {
+/**
+ * 获取技术指标
+ */
+export function getIndicators(params: {
+  symbol: string;
+  interval?: string;
+}) {
   return request({
-    url: '/web3/market/defi',
-    method: 'GET'
+    url: '/web3/market/indicators',
+    method: 'get',
+    params
   });
 }
 
-export async function getPriceHistory(symbol: string, days: number = 7) {
+/**
+ * 获取NFT详情
+ */
+export function getNFTDetails(contractAddress: string, tokenId: string) {
   return request({
-    url: `/web3/market/history/${symbol}/${days}`,
-    method: 'GET'
+    url: '/web3/nft/details',
+    method: 'get',
+    params: { contractAddress, tokenId }
   });
 }
 
-export async function searchTokens(query: string) {
+/**
+ * 获取实时价格
+ */
+export function getRealPrice(symbols: string[]) {
   return request({
-    url: `/web3/market/search/${query}`,
-    method: 'GET'
+    url: '/web3/market/realtime',
+    method: 'get',
+    params: { symbols: symbols.join(',') }
   });
 }
 
-export async function getTrendingTokens() {
+/**
+ * 搜索币种
+ */
+export function searchCoins(query: string) {
   return request({
-    url: '/web3/market/trending',
-    method: 'GET'
+    url: '/web3/market/search',
+    method: 'get',
+    params: { q: query }
   });
 }
 
-export async function getTopGainers() {
+/**
+ * 获取热门币种
+ */
+export function getTopCoins() {
   return request({
-    url: '/web3/market/gainers',
-    method: 'GET'
+    url: '/web3/market/top',
+    method: 'get'
   });
 }
 
-export async function getTopLosers() {
+/**
+ * 获取区块信息
+ */
+export function getBlock(blockNumber: number, chainId?: number) {
   return request({
-    url: '/web3/market/losers',
-    method: 'GET'
+    url: '/web3/block',
+    method: 'get',
+    params: { blockNumber, chainId }
   });
 }
 
-// Transaction Receipt Parser APIs
-export async function parseTransactionReceipt(data: { transactionHash: string; chainId?: number }) {
-  return request({
-    url: '/web3/transaction/parse-receipt',
-    method: 'POST',
-    data
-  });
-}
-
-// Block Scanner APIs
-export async function getBlock(blockNumber: number) {
-  return request({
-    url: `/web3/block/${blockNumber}`,
-    method: 'GET'
-  });
-}
-
-export async function getLatestBlock() {
+/**
+ * 获取最新区块
+ */
+export function getLatestBlock(chainId?: number) {
   return request({
     url: '/web3/block/latest',
-    method: 'GET'
-  });
-}
-
-export async function getTransactionReceipt(txHash: string) {
-  return request({
-    url: `/web3/transaction/receipt/${txHash}`,
-    method: 'GET'
-  });
-}
-
-export async function scanBlocks(from: number, to: number) {
-  return request({
-    url: `/web3/scan/${from}/${to}`,
-    method: 'GET'
-  });
-}
-
-// NFT APIs
-export async function getNFTOwner(contract: string, tokenId: string, chainId?: number) {
-  return request({
-    url: `/web3/nft/${contract}/${tokenId}/owner`,
-    method: 'GET',
+    method: 'get',
     params: { chainId }
   });
 }
 
-export async function getNFTTokenURI(contract: string, tokenId: string, chainId?: number) {
+/**
+ * 获取交易收据
+ */
+export function getTransactionReceipt(txHash: string, chainId?: number) {
   return request({
-    url: `/web3/nft/${contract}/${tokenId}/token-uri`,
-    method: 'GET',
-    params: { chainId }
+    url: '/web3/transaction/receipt',
+    method: 'get',
+    params: { txHash, chainId }
   });
 }
 
-export async function getNFTMetadata(tokenUri: string) {
+/**
+ * 扫描区块
+ */
+export function scanBlocks(params: {
+  fromBlock: number;
+  toBlock: number;
+  chainId?: number;
+}) {
   return request({
-    url: `/web3/nft/metadata/${encodeURIComponent(tokenUri)}`,
-    method: 'GET'
-  });
-}
-
-export async function getNFTOwnersBatch(contract: string, tokenIds: string[], chainId?: number) {
-  return request({
-    url: `/web3/nft/${contract}/owners`,
-    method: 'POST',
-    data: { token_ids: tokenIds, chain_id: chainId }
-  });
-}
-
-export async function getNFTDetails(contract: string, tokenIds: string[], chainId?: number) {
-  return request({
-    url: `/web3/nft/${contract}/details`,
-    method: 'POST',
-    data: { token_ids: tokenIds, chain_id: chainId }
-  });
-}
-
-// K-Line (Candlestick) APIs
-interface KLineOptions {
-  base: string;
-  quote: string;
-  period: string;
-  limit?: number;
-}
-
-export async function getKLine(options: KLineOptions) {
-  const { base, quote, period, limit } = options;
-  return request({
-    url: `/web3/kline/${base}/${quote}/${period}`,
-    method: 'GET',
-    params: limit ? { limit } : {}
-  });
-}
-
-export async function getPrice(base: string, quote: string) {
-  return request({
-    url: `/web3/price/${base}/${quote}`,
-    method: 'GET'
-  });
-}
-
-export async function getIndicators(base: string, quote: string, period: string) {
-  return request({
-    url: `/web3/indicators/${base}/${quote}/${period}`,
-    method: 'GET'
-  });
-}
-
-// Real price from CoinGecko
-export async function getRealPrice(symbol: string) {
-  return request({
-    url: `/web3/price/real/${symbol}`,
-    method: 'GET'
-  });
-}
-
-export async function getTopCoins(limit?: number) {
-  return request({
-    url: '/web3/price/top',
-    method: 'GET',
-    params: { limit }
-  });
-}
-
-export async function searchCoins(query: string) {
-  return request({
-    url: '/web3/price/search',
-    method: 'GET',
-    params: { query }
-  });
-}
-
-// Swap APIs
-export async function getSwapTokens() {
-  return request({
-    url: '/web3/swap/tokens',
-    method: 'GET'
-  });
-}
-
-export async function getSwapQuote(from: string, to: string, amount: string) {
-  return request({
-    url: `/web3/swap/quote/${from}/${to}/${amount}`,
-    method: 'GET'
-  });
-}
-
-export async function getSwapRoutes(from: string, to: string) {
-  return request({
-    url: `/web3/swap/routes/${from}/${to}`,
-    method: 'GET'
-  });
-}
-
-export interface BuildSwapInput {
-  fromToken: string;
-  toToken: string;
-  fromAmount: string;
-  toAmountMin: string;
-  recipient: string;
-  slippage: number;
-}
-
-export async function buildSwapTransaction(data: BuildSwapInput) {
-  return request({
-    url: '/web3/swap/build',
-    method: 'POST',
-    data
+    url: '/web3/blocks/scan',
+    method: 'get',
+    params
   });
 }

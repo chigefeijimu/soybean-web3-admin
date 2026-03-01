@@ -15,6 +15,7 @@ import MarketOverview from '@/components/web3/MarketOverview.vue';
 import PriceTicker from '@/components/web3/PriceTicker.vue';
 import OrderBook from '@/components/web3/OrderBook.vue';
 import TokenSearch from '@/components/web3/TokenSearch.vue';
+import WalletLookup from '@/components/web3/WalletLookup.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -33,6 +34,7 @@ const stats = computed(() => ({
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: '📊' },
   { id: 'wallet', label: 'Wallet', icon: '💳' },
+  { id: 'lookup', label: 'Lookup', icon: '🔍' },
   { id: 'swap', label: 'Swap', icon: '⇄' },
   { id: 'market', label: 'Market', icon: '🔥' },
   { id: 'orderbook', label: 'Order Book', icon: '📋' },
@@ -40,7 +42,7 @@ const tabs = [
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
   { id: 'contracts', label: 'Contracts', icon: '📝' },
-  { id: 'explorer', label: 'Explorer', icon: '🔍' },
+  { id: 'explorer', label: 'Explorer', icon: '🔎' },
   { id: 'trading', label: 'Trading', icon: '📈' }
 ];
 
@@ -274,6 +276,11 @@ onMounted(() => {
         <!-- Wallet Tab -->
         <div v-show="activeTab === 'wallet'">
           <component :is="markRaw(WalletConnect)" />
+        </div>
+
+        <!-- Lookup Tab -->
+        <div v-show="activeTab === 'lookup'">
+          <component :is="markRaw(WalletLookup)" />
         </div>
 
         <!-- Swap Tab -->
