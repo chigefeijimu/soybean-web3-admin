@@ -79,6 +79,7 @@ const tabs = [
   { id: 'saver', label: 'Saver', icon: '💰' },
   { id: 'ens', label: 'ENS', icon: '🔤' },
   { id: 'grapher', label: 'Grapher', icon: '🕸️' },
+  { id: 'book', label: 'Book', icon: '📒' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -453,6 +454,11 @@ onMounted(() => {
         <!-- Grapher Tab -->
         <div v-show="activeTab === 'grapher'">
           <TokenGrapher />
+        </div>
+
+        <!-- Book Tab -->
+        <div v-show="activeTab === 'book'">
+          <AddressBook />
         </div>
 
         <!-- Signature Verifier Tab -->
