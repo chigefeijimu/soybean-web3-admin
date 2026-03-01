@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { getNFTDetails, getNFTMetadata } from '@/service/api/web3';
+import { getNFTDetails } from '@/service/api/web3';
 import { useWeb3 } from '@/composables/web3/useWeb3';
 
 interface NFT {
@@ -14,7 +14,7 @@ interface NFT {
   attributes?: Array<{ trait_type: string; value: string }>;
 }
 
-const { account, chainId } = useWeb3();
+const { account } = useWeb3();
 
 const nfts = ref<NFT[]>([]);
 const isLoading = ref(false);
@@ -130,7 +130,9 @@ const loadNFTs = async () => {
 // Also keep the mock load for quick testing
 const loadMockNFTs = async () => {
   isLoading.value = true;
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => {
+    setTimeout(resolve, 500);
+  });
   nfts.value = mockNFTs;
   isLoading.value = false;
 };
@@ -338,6 +340,7 @@ onMounted(() => {
             <a
               :href="`https://opensea.io/assets/${selectedNFT.contract}/${selectedNFT.tokenId}`"
               target="_blank"
+              rel="noopener noreferrer"
               class="flex-1 rounded-xl bg-blue-500 py-3 text-center font-medium transition-colors hover:bg-blue-600"
             >
               View on OpenSea
@@ -345,6 +348,7 @@ onMounted(() => {
             <a
               :href="`https://etherscan.io/token/${selectedNFT.contract}?a=${selectedNFT.tokenId}`"
               target="_blank"
+              rel="noopener noreferrer"
               class="flex-1 rounded-xl bg-slate-700 py-3 text-center font-medium transition-colors hover:bg-slate-600"
             >
               View on Etherscan

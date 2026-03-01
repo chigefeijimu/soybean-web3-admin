@@ -6,7 +6,7 @@ const isConnected = ref(false);
 const account = ref('');
 const chainId = ref<number>(1);
 const balance = ref('0');
-const isConnecting = ref(false);
+const isConnecting = ref(false); // eslint-disable-line @typescript-eslint/no-unused-vars
 
 // Chain information
 const CHAIN_INFO: Record<number, { name: string; symbol: string; explorer: string; chainId: number }> = {

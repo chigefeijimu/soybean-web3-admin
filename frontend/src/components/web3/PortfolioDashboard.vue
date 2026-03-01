@@ -156,6 +156,7 @@ function getMockTokens(): Token[] {
   ];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formatBalance = (balance: string, decimals: number): string => {
   const num = Number.parseFloat(balance);
   if (num >= 1000) return num.toLocaleString();
@@ -167,6 +168,7 @@ const formatValue = (value: number): string => {
   return `$${value.toLocaleString()}`;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getTokenUrl = (address: string): string => {
   if (address === '0x0000000000000000000000000000000000000000') return '';
   return `https://etherscan.io/token/${address}`;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useWeb3 } from '@/composables/web3/useWeb3';
 
 const {
@@ -7,17 +7,14 @@ const {
   account,
   chainId,
   balance,
-  isConnecting,
   chainInfo,
   connectWallet,
   disconnectWallet,
   switchChain,
   formatAddress,
-  CHAIN_INFO,
-  updateBalance
+  CHAIN_INFO
 } = useWeb3();
 
-const activeTab = ref('dashboard');
 const error = ref('');
 const isLoading = ref(false);
 
@@ -59,10 +56,10 @@ const handleDisconnect = async () => {
   await disconnectWallet();
 };
 
-const handleSwitchNetwork = async (chainId: number) => {
+const handleSwitchNetwork = async (newChainId: number) => {
   error.value = '';
   try {
-    await switchChain(chainId);
+    await switchChain(newChainId);
   } catch (e: any) {
     error.value = e.message;
   }

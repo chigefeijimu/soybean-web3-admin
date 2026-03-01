@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { getBlock, getLatestBlock, getTransactionReceipt, scanBlocks } from '@/service/api/web3';
 
 // State

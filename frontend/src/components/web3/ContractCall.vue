@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { type Address, type Hex, decodeFunctionResult, encodeFunctionData, formatEther, parseEther } from 'viem';
+import { type Address, type Hex, decodeFunctionResult, encodeFunctionData } from 'viem';
 import { callContractDirect } from '@/service/api/web3';
 import { useWeb3 } from '@/composables/web3/useWeb3';
 

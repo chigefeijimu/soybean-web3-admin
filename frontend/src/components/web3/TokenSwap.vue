@@ -10,7 +10,7 @@ interface Token {
   value: number;
 }
 
-const { account, chainId } = useWeb3();
+const { account } = useWeb3();
 
 const fromToken = ref<Token | null>(null);
 const toToken = ref<Token | null>(null);
@@ -94,7 +94,7 @@ watch([fromAmount, fromToken, toToken], () => {
   }
 
   const amount = Number.parseFloat(fromAmount.value);
-  if (isNaN(amount)) {
+  if (Number.isNaN(amount)) {
     toAmount.value = '';
     return;
   }
@@ -119,10 +119,15 @@ const handleSwap = async () => {
   try {
     // In production, integrate with Uniswap, Sushiswap, etc.
     // This is a simulation
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => {
+      setTimeout(resolve, 2000);
+    });
 
     // Would initiate the swap transaction here
-    alert(`Swap simulation: ${fromAmount.value} ${fromToken.value.symbol} → ${toAmount.value} ${toToken.value.symbol}`);
+    // eslint-disable-next-line no-alert
+    window.alert(
+      `Swap simulation: ${fromAmount.value} ${fromToken.value.symbol} → ${toAmount.value} ${toToken.value.symbol}`
+    );
   } catch (e: any) {
     error.value = e.message || 'Swap failed';
   } finally {

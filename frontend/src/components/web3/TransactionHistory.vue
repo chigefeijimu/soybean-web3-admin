@@ -6,7 +6,7 @@ import type { ParsedReceipt, TransactionUIItem } from '@/typings/web3';
 
 const props = defineProps<{
   address?: string;
-  limit?: number;
+  limit?: number; // Reserved for limiting displayed transactions
 }>();
 
 const { account, chainInfo } = useWeb3();
@@ -106,12 +106,12 @@ const loadTransactions = async () => {
     if (response.data && response.data.length > 0) {
       // Transform API response to UI format
       transactions.value = response.data.map((tx: any): TransactionUIItem => {
-        const txType: 'send' | 'receive' | 'swap' =
-          userId && tx.from_address?.toLowerCase() === userId.toLowerCase()
-            ? 'send'
-            : userId && tx.to_address?.toLowerCase() === userId.toLowerCase()
-              ? 'receive'
-              : 'swap';
+        let txType: 'send' | 'receive' | 'swap' = 'swap';
+        if (userId && tx.from_address?.toLowerCase() === userId.toLowerCase()) {
+          txType = 'send';
+        } else if (userId && tx.to_address?.toLowerCase() === userId.toLowerCase()) {
+          txType = 'receive';
+        }
 
         return {
           hash: tx.hash || tx.transaction_hash,
@@ -316,6 +316,7 @@ onMounted(() => {
             <a
               :href="getExplorerUrl(tx.hash)"
               target="_blank"
+              rel="noopener noreferrer"
               class="rounded-lg p-2 transition-colors hover:bg-slate-700"
               title="View in Explorer"
             >
@@ -438,6 +439,7 @@ onMounted(() => {
           <a
             :href="getExplorerUrl(selectedTx.hash)"
             target="_blank"
+            rel="noopener noreferrer"
             class="flex-1 rounded-lg bg-purple-500 px-4 py-2 text-center transition-colors hover:bg-purple-600"
           >
             View in Explorer 🔗
