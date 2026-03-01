@@ -18,6 +18,7 @@ import TokenSearch from '@/components/web3/TokenSearch.vue';
 import WhaleTracker from '@/components/web3/WhaleTracker.vue';
 import NotificationCenter from '@/components/web3/NotificationCenter.vue';
 import GasTracker from '@/components/web3/GasTracker.vue';
+import BridgePanel from '@/components/web3/BridgePanel.vue';
 import WalletLookup from '@/components/web3/WalletLookup.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
@@ -42,6 +43,7 @@ const tabs = [
   { id: 'market', label: 'Market', icon: '🔥' },
   { id: 'orderbook', label: 'Order Book', icon: '📋' },
   { id: 'whale', label: 'Whale', icon: '🐋' },
+  { id: 'bridge', label: 'Bridge', icon: '🌉' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -346,6 +348,11 @@ onMounted(() => {
         <!-- Whale Tab -->
         <div v-show="activeTab === 'whale'">
           <WhaleTracker />
+        </div>
+
+        <!-- Bridge Tab -->
+        <div v-show="activeTab === 'bridge'">
+          <BridgePanel />
         </div>
       </div>
 
