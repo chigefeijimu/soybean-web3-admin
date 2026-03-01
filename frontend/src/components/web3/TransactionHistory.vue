@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useWeb3 } from '@/composables/web3/useWeb3'
 import { getTransactionList, parseTransactionReceipt } from '@/service/api/web3'
+import type { TransactionListItem, ParsedReceipt } from '@/typings/web3'
 
 const props = defineProps<{
   address?: string
@@ -10,12 +11,12 @@ const props = defineProps<{
 
 const { account, chainInfo } = useWeb3()
 
-const transactions = ref<any[]>([])
+const transactions = ref<TransactionListItem[]>([])
 const isLoading = ref(false)
 const error = ref('')
 const filter = ref<'all' | 'send' | 'receive'>('all')
-const selectedTx = ref<any>(null)
-const receiptData = ref<any>(null)
+const selectedTx = ref<TransactionListItem | null>(null)
+const receiptData = ref<ParsedReceipt | null>(null)
 const isLoadingReceipt = ref(false)
 
 // Fallback mock data when API is unavailable
@@ -119,9 +120,10 @@ const loadTransactions = async () => {
       // Use mock data when no transactions found
       transactions.value = mockTransactions
     }
-  } catch (e: any) {
+  } catch (e: unknown) {
     // Fallback to mock data on error
-    console.warn('API error, using mock data:', e.message)
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error'
+    console.warn('API error, using mock data:', errorMessage)
     transactions.value = mockTransactions
   } finally {
     isLoading.value = false
@@ -129,7 +131,7 @@ const loadTransactions = async () => {
 }
 
 // Parse transaction receipt for detailed info
-const viewReceipt = async (tx: any) => {
+const viewReceipt = async (tx: TransactionListItem) => {
   selectedTx.value = tx
   receiptData.value = null
   isLoadingReceipt.value = true
@@ -137,12 +139,13 @@ const viewReceipt = async (tx: any) => {
   try {
     const response = await parseTransactionReceipt({
       transactionHash: tx.hash,
-      chainId: tx.chainId || chainInfo.value?.chainId
+      chainId: tx.chain_id || chainInfo.value?.chainId
     })
     receiptData.value = response.data
-  } catch (e: any) {
-    console.error('Failed to parse receipt:', e.message)
-    receiptData.value = { error: e.message }
+  } catch (e: unknown) {
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error'
+    console.error('Failed to parse receipt:', errorMessage)
+    receiptData.value = { error: errorMessage }
   } finally {
     isLoadingReceipt.value = false
   }
@@ -197,9 +200,9 @@ onMounted(() => {
     <!-- Filter Tabs -->
     <div class="flex gap-2 mb-6">
       <button 
-        v-for="f in ['all', 'send', 'receive']" 
+        v-for="f in (['all', 'send', 'receive'] as const)" 
         :key="f"
-        @click="filter = f as any"
+        @click="filter = f"
         :class="[
           'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
           filter === f 

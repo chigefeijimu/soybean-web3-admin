@@ -124,3 +124,87 @@ export interface EventParam {
   value: string
   indexed: boolean
 }
+
+// Block Explorer Types
+export interface BlockInfo {
+  number: number
+  hash: string
+  parentHash: string
+  timestamp: number
+  gasLimit: string
+  gasUsed: string
+  miner: string
+  difficulty: string
+  totalDifficulty: string
+  size: number
+  transactions: string[]
+  transactionsRoot: string
+  stateRoot: string
+  receiptsRoot: string
+  nonce: string
+  extraData: string
+}
+
+export interface TransactionReceipt {
+  transactionHash: string
+  blockNumber: number
+  blockHash: string
+  from: string
+  to: string
+  contractAddress?: string
+  status: string
+  cumulativeGasUsed: string
+  gasUsed: string
+  logs: Log[]
+  logsBloom: string
+  effectiveGasPrice: string
+}
+
+export interface Log {
+  address: string
+  topics: string[]
+  data: string
+  logIndex: number
+  transactionIndex: number
+  transactionHash: string
+  blockHash: string
+  blockNumber: number
+}
+
+// API Response Types
+export interface ApiResponse<T> {
+  code: number
+  message: string
+  data: T
+}
+
+export interface PaginatedResponse<T> {
+  list: T[]
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+  }
+}
+
+// Transaction List Item (from API)
+export interface TransactionListItem {
+  id: string
+  user_id: string
+  wallet_id: string
+  hash: string
+  from_address: string
+  to_address: string
+  value: string
+  gas_price: string
+  gas_used: string
+  nonce: number
+  chain_id: number
+  status: string
+  block_number?: number
+  block_hash?: string
+  transaction_index?: number
+  input_data?: string
+  created_at: string
+  updated_at: string
+}
