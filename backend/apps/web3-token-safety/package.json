@@ -1,0 +1,9 @@
+{
+  "name": "web3-token-safety",
+  "version": "1.0.0",
+  "description": "Web3 Token Safety Checker Module",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "nest build web3-token-safety"
+  }
+}

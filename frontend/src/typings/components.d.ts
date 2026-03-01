@@ -123,6 +123,7 @@ declare module 'vue' {
     ThemeSchemaSwitch: typeof import('./../components/common/theme-schema-switch.vue')['default']
     TokenAnalyzer: typeof import('./../components/web3/TokenAnalyzer.vue')['default']
     TokenApprovalManager: typeof import('./../components/web3/TokenApprovalManager.vue')['default']
+    TokenSafetyChecker: typeof import('./../components/web3/TokenSafetyChecker.vue')['default']
     TokenSearch: typeof import('./../components/web3/TokenSearch.vue')['default']
     TokenSwap: typeof import('./../components/web3/TokenSwap.vue')['default']
     TokenWatchlist: typeof import('./../components/web3/TokenWatchlist.vue')['default']
