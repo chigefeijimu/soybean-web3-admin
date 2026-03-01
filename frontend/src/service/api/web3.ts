@@ -329,3 +329,42 @@ export async function searchCoins(query: string) {
     params: { query }
   });
 }
+
+// Swap APIs
+export async function getSwapTokens() {
+  return request({
+    url: '/web3/swap/tokens',
+    method: 'GET'
+  });
+}
+
+export async function getSwapQuote(from: string, to: string, amount: string) {
+  return request({
+    url: `/web3/swap/quote/${from}/${to}/${amount}`,
+    method: 'GET'
+  });
+}
+
+export async function getSwapRoutes(from: string, to: string) {
+  return request({
+    url: `/web3/swap/routes/${from}/${to}`,
+    method: 'GET'
+  });
+}
+
+export interface BuildSwapInput {
+  fromToken: string;
+  toToken: string;
+  fromAmount: string;
+  toAmountMin: string;
+  recipient: string;
+  slippage: number;
+}
+
+export async function buildSwapTransaction(data: BuildSwapInput) {
+  return request({
+    url: '/web3/swap/build',
+    method: 'POST',
+    data
+  });
+}
