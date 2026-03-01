@@ -42,6 +42,7 @@ import EventExplorer from '@/components/web3/EventExplorer.vue';
 import GasOptimizer from '@/components/web3/GasOptimizer.vue';
 import BatchTransfer from '@/components/web3/BatchTransfer.vue';
 import TxDecoder from '@/components/web3/TxDecoder.vue';
+import DefiExplorer from '@/components/web3/DefiExplorer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -93,7 +94,8 @@ const tabs = [
   { id: 'deployer', label: 'Deployer', icon: '🚀' },
   { id: 'events', label: 'Events', icon: '📡' },
   { id: 'batch', label: 'Batch', icon: '📤' },
-  { id: 'decoder', label: 'Decoder', icon: '🔓' }
+  { id: 'decoder', label: 'Decoder', icon: '🔓' },
+  { id: 'defi', label: 'DeFi', icon: '🧪' }
 ];
 
 // Supported networks with logos
@@ -507,6 +509,11 @@ onMounted(() => {
         <!-- Decoder Tab -->
         <div v-show="activeTab === 'decoder'">
           <TxDecoder />
+        </div>
+
+        <!-- DeFi Tab -->
+        <div v-show="activeTab === 'defi'">
+          <component :is="markRaw(DefiExplorer)" />
         </div>
       </div>
 

@@ -749,3 +749,77 @@ export function getPopularEnsDomains(limit?: number) {
     params: { limit }
   });
 }
+
+// ==================== DeFi Protocol Explorer API ====================
+
+/** DeFi Protocol Info */
+export interface DefiProtocol {
+  id: string;
+  name: string;
+  logo: string;
+  description: string;
+  supportedActions: string[];
+  chains: number[];
+  contractAddress: string;
+}
+
+/** Get supported DeFi protocols */
+export function getDefiProtocols() {
+  return request<{ data: DefiProtocol[] }>({
+    url: '/web3/defi/protocols',
+    method: 'get'
+  });
+}
+
+/** Get Uniswap V3 positions */
+export function getUniswapPositions(address: string, chainId?: number) {
+  return request<{ data: any[] }>({
+    url: `/web3/defi/uniswap/positions/${address}`,
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/** Get Aave supply positions */
+export function getAaveSupply(address: string, chainId?: number) {
+  return request<{ data: any[] }>({
+    url: `/web3/defi/aave/supply/${address}`,
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/** Get Compound positions */
+export function getCompoundPositions(address: string, chainId?: number) {
+  return request<{ data: any[] }>({
+    url: `/web3/defi/compound/positions/${address}`,
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/** Get Curve pools */
+export function getCurvePools(chainId?: number) {
+  return request<{ data: any[] }>({
+    url: '/web3/defi/curve/pools',
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/** Get protocol APR */
+export function getProtocolApr(protocol: string, chainId?: number) {
+  return request<{ data: Record<string, string> }>({
+    url: `/web3/defi/apr/${protocol}`,
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/** Get DeFi stats */
+export function getDefiStats() {
+  return request<{ data: any }>({
+    url: '/web3/defi/stats',
+    method: 'get'
+  });
+}

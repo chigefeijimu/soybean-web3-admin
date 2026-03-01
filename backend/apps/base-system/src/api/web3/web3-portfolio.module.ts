@@ -25,6 +25,7 @@ import { Web3GasOptimizerService } from './web3-gas-optimizer.service';
 import { Web3EnsController } from './web3-ens.controller';
 import { Web3EnsService } from './web3-ens.service';
 import { Web3TxDecoderController } from './web3-tx-decoder.controller';
+import { Web3DefiController } from './web3-defi.controller';
 
 @Module({
   imports: [HttpModule],
@@ -45,6 +46,7 @@ import { Web3TxDecoderController } from './web3-tx-decoder.controller';
     Web3GasOptimizerController,
     Web3EnsController,
     Web3TxDecoderController,
+    Web3DefiController,
   ],
   providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService],
 })
