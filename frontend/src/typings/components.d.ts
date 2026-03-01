@@ -137,6 +137,7 @@ declare module 'vue' {
     PinToggler: typeof import('./../components/common/pin-toggler.vue')['default']
     PortfolioAnalytics: typeof import('./../components/web3/PortfolioAnalytics.vue')['default']
     PortfolioDashboard: typeof import('./../components/web3/PortfolioDashboard.vue')['default']
+    PortfolioPerformance: typeof import('./../components/web3/PortfolioPerformance.vue')['default']
     PriceTicker: typeof import('./../components/web3/PriceTicker.vue')['default']
     ReloadButton: typeof import('./../components/common/reload-button.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
