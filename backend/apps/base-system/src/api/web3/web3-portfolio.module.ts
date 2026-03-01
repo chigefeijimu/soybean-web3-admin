@@ -28,6 +28,8 @@ import { Web3TxDecoderController } from './web3-tx-decoder.controller';
 import { Web3DefiController } from './web3-defi.controller';
 import { TokenPriceController } from './web3-token-price.controller';
 import { TokenPriceService } from './web3-token-price.service';
+import { DataVizController } from './web3-data-viz.controller';
+import { DataVizService } from './web3-data-viz.service';
 
 @Module({
   imports: [HttpModule],
@@ -50,7 +52,8 @@ import { TokenPriceService } from './web3-token-price.service';
     Web3TxDecoderController,
     Web3DefiController,
     TokenPriceController,
+    DataVizController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService],
 })
 export class Web3PortfolioModule {}

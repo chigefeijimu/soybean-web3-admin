@@ -54,6 +54,7 @@ import TokenPriceChart from '@/components/web3/TokenPriceChart.vue';
 import BlockchainHeatmap from '@/components/web3/BlockchainHeatmap.vue';
 import GasFaucet from '@/components/web3/GasFaucet.vue';
 import MevExplorer from '@/components/web3/MevExplorer.vue';
+import DataVisualizer from '@/components/web3/DataVisualizer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -118,7 +119,8 @@ const tabs = [
   { id: 'floor', label: 'Floor', icon: '📉' },
   { id: 'pricechart', label: 'Price', icon: '📈' },
   { id: 'heatmap', label: 'Heatmap', icon: '🔥' },
-  { id: 'faucet', label: 'Faucet', icon: '⛽' }
+  { id: 'faucet', label: 'Faucet', icon: '⛽' },
+  { id: 'dataviz', label: 'DataViz', icon: '📊' }
 ];
 
 // Supported networks with logos
@@ -597,6 +599,11 @@ onMounted(() => {
         <!-- Gas Faucet Tab -->
         <div v-show="activeTab === 'faucet'">
           <component :is="markRaw(GasFaucet)" />
+        </div>
+
+        <!-- Data Visualizer Tab -->
+        <div v-show="activeTab === 'dataviz'">
+          <component :is="markRaw(DataVisualizer)" />
         </div>
       </div>
 
