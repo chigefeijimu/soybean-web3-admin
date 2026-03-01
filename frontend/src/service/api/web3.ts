@@ -1201,3 +1201,165 @@ export function trackAddressFlow(address: string) {
     data: { address }
   });
 }
+
+// ==================== Voting Tracker API ====================
+
+/** 提案 */
+export interface Proposal {
+  id: string;
+  title: string;
+  description: string;
+  status: 'active' | 'passed' | 'rejected' | 'executed' | 'cancelled';
+  proposer: string;
+  network: string;
+  contractAddress: string;
+  votesFor: string;
+  votesAgainst: string;
+  votesAbstain: string;
+  totalVotes: string;
+  quorum: string;
+  startBlock: number;
+  endBlock: number;
+  startTime: number;
+  endTime: number;
+  createdAt: number;
+}
+
+/** 投票 */
+export interface Vote {
+  id: string;
+  proposalId: string;
+  voter: string;
+  support: 'for' | 'against' | 'abstain';
+  weight: string;
+  reason?: string;
+  timestamp: number;
+  txHash: string;
+}
+
+/** 委托信息 */
+export interface DelegateInfo {
+  address: string;
+  delegatedVotes: string;
+  tokenBalance: string;
+  numberOfDelegators: number;
+  votingPower: string;
+}
+
+/** DAO信息 */
+export interface DaoInfo {
+  name: string;
+  symbol: string;
+  network: string;
+  contractAddress: string;
+  activeProposals: number;
+  totalProposals: number;
+  totalVotes: string;
+  logo: string;
+}
+
+/** 投票统计 */
+export interface VotingStats {
+  totalProposals: number;
+  activeProposals: number;
+  passedProposals: number;
+  rejectedProposals: number;
+  totalVotes: string;
+  averageParticipation: string;
+}
+
+/** 投票历史（含提案信息） */
+export interface VotingHistory {
+  id: string;
+  proposalId: string;
+  voter: string;
+  support: 'for' | 'against' | 'abstain';
+  weight: string;
+  reason?: string;
+  timestamp: number;
+  txHash: string;
+  proposalTitle: string;
+  proposalStatus: string;
+}
+
+/**
+ * 获取提案列表
+ */
+export function getProposals(params?: {
+  network?: string;
+  status?: string;
+  limit?: number;
+  offset?: number;
+}) {
+  return request<{
+    proposals: Proposal[];
+    total: number;
+    offset: number;
+    limit: number;
+  }>({
+    url: '/web3/voting/proposals',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * 获取单个提案详情
+ */
+export function getProposal(id: string) {
+  return request<Proposal>({
+    url: `/web3/voting/proposals/${id}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取提案的投票列表
+ */
+export function getProposalVotes(id: string, support?: string) {
+  return request<Vote[]>({
+    url: `/web3/voting/proposals/${id}/votes`,
+    method: 'get',
+    params: { support }
+  });
+}
+
+/**
+ * 获取地址的投票历史
+ */
+export function getVotingHistory(address: string) {
+  return request<VotingHistory[]>({
+    url: `/web3/voting/votes/${address}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取委托信息
+ */
+export function getDelegateInfo(address: string) {
+  return request<DelegateInfo>({
+    url: `/web3/voting/delegate/${address}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取DAO列表
+ */
+export function getDaos() {
+  return request<DaoInfo[]>({
+    url: '/web3/voting/daos',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取投票统计
+ */
+export function getVotingStats() {
+  return request<VotingStats>({
+    url: '/web3/voting/stats',
+    method: 'get'
+  });
+}

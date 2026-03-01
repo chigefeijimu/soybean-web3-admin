@@ -156,6 +156,7 @@ declare module 'vue' {
     TransactionHistory: typeof import('./../components/web3/TransactionHistory.vue')['default']
     TransactionSimulator: typeof import('./../components/web3/TransactionSimulator.vue')['default']
     TxDecoder: typeof import('./../components/web3/TxDecoder.vue')['default']
+    VotingTracker: typeof import('./../components/web3/VotingTracker.vue')['default']
     WalletConnect: typeof import('./../components/web3/WalletConnect.vue')['default']
     WalletHealthAnalyzer: typeof import('./../components/web3/WalletHealthAnalyzer.vue')['default']
     WalletLookup: typeof import('./../components/web3/WalletLookup.vue')['default']

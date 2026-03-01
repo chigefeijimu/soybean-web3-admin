@@ -58,6 +58,7 @@ import GasFaucet from '@/components/web3/GasFaucet.vue';
 import MevExplorer from '@/components/web3/MevExplorer.vue';
 import DataVisualizer from '@/components/web3/DataVisualizer.vue';
 import RugPullDetector from '@/components/web3/RugPullDetector.vue';
+import VotingTracker from '@/components/web3/VotingTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -126,6 +127,7 @@ const tabs = [
   { id: 'faucet', label: 'Faucet', icon: '⛽' },
   { id: 'dataviz', label: 'DataViz', icon: '📊' },
   { id: 'rugpull', label: 'RugCheck', icon: '🚨' },
+  { id: 'voting', label: 'Voting', icon: '🗳️' },
   { id: 'smart-money', label: 'Smart $', icon: '🐟' },
 ];
 
@@ -621,6 +623,12 @@ onMounted(() => {
         <div v-show="activeTab === 'rugpull'">
           <component :is="markRaw(RugPullDetector)" />
         </div>
+        
+        <!-- Voting Tracker Tab -->
+        <div v-show="activeTab === 'voting'">
+          <VotingTracker />
+        </div>
+
         <div v-show="activeTab === 'smart-money'">
           <SmartMoneyFlow />
         </div>
