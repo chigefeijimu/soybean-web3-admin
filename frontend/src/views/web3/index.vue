@@ -14,6 +14,7 @@ import TradingPanel from '@/components/web3/TradingPanel.vue';
 import MarketOverview from '@/components/web3/MarketOverview.vue';
 import PriceTicker from '@/components/web3/PriceTicker.vue';
 import OrderBook from '@/components/web3/OrderBook.vue';
+import TokenSearch from '@/components/web3/TokenSearch.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -167,6 +168,11 @@ onMounted(() => {
         <p class="text-xs text-slate-400">Status</p>
         <p class="text-lg text-green-400 font-semibold">● Online</p>
       </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="mb-4">
+      <TokenSearch />
     </div>
 
     <!-- Tab Navigation -->

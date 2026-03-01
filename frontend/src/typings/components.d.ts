@@ -104,6 +104,7 @@ declare module 'vue' {
     TableColumnSetting: typeof import('./../components/advanced/table-column-setting.vue')['default']
     TableHeaderOperation: typeof import('./../components/advanced/table-header-operation.vue')['default']
     ThemeSchemaSwitch: typeof import('./../components/common/theme-schema-switch.vue')['default']
+    TokenSearch: typeof import('./../components/web3/TokenSearch.vue')['default']
     TokenSwap: typeof import('./../components/web3/TokenSwap.vue')['default']
     TradingChart: typeof import('./../components/web3/TradingChart.vue')['default']
     TradingPanel: typeof import('./../components/web3/TradingPanel.vue')['default']
