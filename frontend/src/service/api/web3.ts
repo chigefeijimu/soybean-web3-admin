@@ -310,3 +310,77 @@ export function checkPriceAlerts(token: string) {
     method: 'get'
   });
 }
+
+// ==================== Gas Price API ====================
+
+/** Gas价格 */
+export interface GasPrice {
+  chain: string;
+  chainId: number;
+  slow: number;
+  normal: number;
+  fast: number;
+  unit: string;
+  lastUpdated: string;
+}
+
+/** Gas历史记录 */
+export interface GasHistory {
+  timestamp: string;
+  slow: number;
+  normal: number;
+  fast: number;
+}
+
+/** 费用估算 */
+export interface FeeEstimate {
+  chainId: number;
+  gasLimit: number;
+  slow: string;
+  normal: string;
+  fast: string;
+  currency: string;
+}
+
+/**
+ * 获取所有链的Gas价格
+ */
+export function fetchGasPrices() {
+  return request<GasPrice[]>({
+    url: '/web3/gas/prices',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取指定链的Gas价格
+ */
+export function fetchGasPrice(chainId: number) {
+  return request<GasPrice>({
+    url: '/web3/gas/prices',
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/**
+ * 获取Gas价格历史
+ */
+export function fetchGasHistory(chainId: number, hours?: number) {
+  return request<GasHistory[]>({
+    url: '/web3/gas/history',
+    method: 'get',
+    params: { chainId, hours }
+  });
+}
+
+/**
+ * 估算交易Gas费用
+ */
+export function estimateGasFee(chainId: number, gasLimit: number) {
+  return request<FeeEstimate>({
+    url: '/web3/gas/estimate',
+    method: 'get',
+    params: { chainId, gasLimit }
+  });
+}

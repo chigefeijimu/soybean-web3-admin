@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { fetchGasPrices, type GasPrice } from '@/service/api/web3'
 
-interface GasPrice {
+interface GasPriceData {
   chain: string
   chainId: number
   slow: number
@@ -10,7 +11,7 @@ interface GasPrice {
   unit: string
 }
 
-const gasPrices = ref<GasPrice[]>([
+const gasPrices = ref<GasPriceData[]>([
   { chain: 'Ethereum', chainId: 1, slow: 15, normal: 25, fast: 45, unit: 'Gwei' },
   { chain: 'Polygon', chainId: 137, slow: 50, normal: 80, fast: 150, unit: 'Gwei' },
   { chain: 'Arbitrum', chainId: 42161, slow: 0.1, normal: 0.15, fast: 0.25, unit: 'Gwei' },
@@ -20,8 +21,10 @@ const gasPrices = ref<GasPrice[]>([
 
 const selectedChain = ref<number>(1)
 const loading = ref(false)
+const error = ref('')
+const lastUpdated = ref<Date | null>(null)
 
-const currentGas = () => gasPrices.value.find(g => g.chainId === selectedChain.value) || gasPrices.value[0]
+const currentGas = computed(() => gasPrices.value.find(g => g.chainId === selectedChain.value) || gasPrices.value[0])
 
 const formatGas = (value: number, unit: string) => {
   if (value < 1) return value.toFixed(3) + ' ' + unit
@@ -29,17 +32,16 @@ const formatGas = (value: number, unit: string) => {
 }
 
 const getGasColor = (speed: 'slow' | 'normal' | 'fast') => {
-  const gas = currentGas()
+  const gas = currentGas.value
   const value = gas[speed]
   if (value < gas.slow * 1.2) return 'text-green-400'
   if (value < gas.normal * 1.2) return 'text-yellow-400'
   return 'text-red-400'
 }
 
-const getEstimatedFee = (gas: number) => {
+const getEstimatedFee = (gas: number, unit: string) => {
   // ETH transfer: 21000 gas
-  // Token transfer: 65000 gas
-  const ethPrice = 2500 // Mock
+  const ethPrice = 3000
   const fee = (gas * 21000 / 1e9) * ethPrice
   return '$' + fee.toFixed(2)
 }
@@ -52,21 +54,67 @@ const estimateTime = (speed: 'slow' | 'normal' | 'fast') => {
   }
 }
 
+const loadGasPrices = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    const data = await fetchGasPrices()
+    if (data && data.length > 0) {
+      gasPrices.value = data.map((g: GasPrice) => ({
+        chain: g.chain,
+        chainId: g.chainId,
+        slow: g.slow,
+        normal: g.normal,
+        fast: g.fast,
+        unit: g.unit
+      }))
+      lastUpdated.value = new Date()
+    }
+  } catch (e: any) {
+    console.error('Failed to fetch gas prices:', e)
+    error.value = 'Failed to load gas data'
+  } finally {
+    loading.value = false
+  }
+}
+
 let interval: number
+let refreshInterval: number
+
 onMounted(() => {
-  // Simulate real-time updates
+  // Load initial data
+  loadGasPrices()
+  
+  // Refresh every 30 seconds
+  refreshInterval = window.setInterval(() => {
+    loadGasPrices()
+  }, 30000)
+  
+  // Fallback: simulate updates when API fails
   interval = window.setInterval(() => {
-    gasPrices.value = gasPrices.value.map(g => ({
-      ...g,
-      slow: g.slow * (0.9 + Math.random() * 0.2),
-      normal: g.normal * (0.9 + Math.random() * 0.2),
-      fast: g.fast * (0.9 + Math.random() * 0.2),
-    }))
+    if (error.value) {
+      gasPrices.value = gasPrices.value.map(g => ({
+        ...g,
+        slow: g.slow * (0.9 + Math.random() * 0.2),
+        normal: g.normal * (0.9 + Math.random() * 0.2),
+        fast: g.fast * (0.9 + Math.random() * 0.2),
+      }))
+    }
   }, 10000)
 })
 
 onUnmounted(() => {
   clearInterval(interval)
+  clearInterval(refreshInterval)
+})
+
+const formatLastUpdated = computed(() => {
+  if (!lastUpdated.value) return 'Never'
+  const now = new Date()
+  const diff = Math.floor((now.getTime() - lastUpdated.value.getTime()) / 1000)
+  if (diff < 60) return 'Just now'
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
+  return lastUpdated.value.toLocaleTimeString()
 })
 </script>
 
@@ -87,8 +135,24 @@ onUnmounted(() => {
       </div>
     </div>
 
+    <!-- Loading/Error State -->
+    <div v-if="loading" class="p-4 text-center">
+      <div class="animate-spin w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full mx-auto"></div>
+      <p class="text-sm text-slate-400 mt-2">Loading gas prices...</p>
+    </div>
+    
+    <div v-else-if="error" class="p-4 text-center">
+      <p class="text-red-400 text-sm">{{ error }}</p>
+      <button 
+        class="mt-2 text-sm text-purple-400 hover:text-purple-300"
+        @click="loadGasPrices"
+      >
+        Retry
+      </button>
+    </div>
+
     <!-- Gas Prices -->
-    <div class="p-4 space-y-3">
+    <div v-else class="p-4 space-y-3">
       <!-- Slow -->
       <div class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl">
         <div class="flex items-center gap-3">
@@ -102,9 +166,9 @@ onUnmounted(() => {
         </div>
         <div class="text-right">
           <p :class="['font-semibold', getGasColor('slow')]">
-            {{ formatGas(currentGas().slow, currentGas().unit) }}
+            {{ formatGas(currentGas.slow, currentGas.unit) }}
           </p>
-          <p class="text-xs text-slate-500">{{ getEstimatedFee(currentGas().slow) }}</p>
+          <p class="text-xs text-slate-500">{{ getEstimatedFee(currentGas.slow, currentGas.unit) }}</p>
         </div>
       </div>
 
@@ -121,9 +185,9 @@ onUnmounted(() => {
         </div>
         <div class="text-right">
           <p :class="['font-semibold', getGasColor('normal')]">
-            {{ formatGas(currentGas().normal, currentGas().unit) }}
+            {{ formatGas(currentGas.normal, currentGas.unit) }}
           </p>
-          <p class="text-xs text-slate-500">{{ getEstimatedFee(currentGas().normal) }}</p>
+          <p class="text-xs text-slate-500">{{ getEstimatedFee(currentGas.normal, currentGas.unit) }}</p>
         </div>
       </div>
 
@@ -140,9 +204,9 @@ onUnmounted(() => {
         </div>
         <div class="text-right">
           <p :class="['font-semibold', getGasColor('fast')]">
-            {{ formatGas(currentGas().fast, currentGas().unit) }}
+            {{ formatGas(currentGas.fast, currentGas.unit) }}
           </p>
-          <p class="text-xs text-slate-500">{{ getEstimatedFee(currentGas().fast) }}</p>
+          <p class="text-xs text-slate-500">{{ getEstimatedFee(currentGas.fast, currentGas.unit) }}</p>
         </div>
       </div>
     </div>
@@ -152,11 +216,13 @@ onUnmounted(() => {
       <div class="grid grid-cols-2 gap-4 text-sm">
         <div>
           <p class="text-slate-500">Network Congestion</p>
-          <p class="font-medium">Medium</p>
+          <p class="font-medium" :class="currentGas.normal > 30 ? 'text-red-400' : currentGas.normal > 15 ? 'text-yellow-400' : 'text-green-400'">
+            {{ currentGas.normal > 30 ? 'High' : currentGas.normal > 15 ? 'Medium' : 'Low' }}
+          </p>
         </div>
         <div>
           <p class="text-slate-500">Last Updated</p>
-          <p class="font-medium">Just now</p>
+          <p class="font-medium">{{ formatLastUpdated }}</p>
         </div>
       </div>
     </div>
