@@ -62,6 +62,7 @@ import VotingTracker from '@/components/web3/VotingTracker.vue';
 import ChainlinkPriceTracker from '@/components/web3/ChainlinkPriceTracker.vue';
 import DefiPortfolioTracker from '@/components/web3/DefiPortfolioTracker.vue';
 import FearGreedIndex from '@/components/web3/FearGreedIndex.vue';
+import StablecoinYield from '@/components/web3/StablecoinYield.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -135,6 +136,7 @@ const tabs = [
   { id: 'chainlink', label: 'Oracle', icon: '⛓️' },
   { id: 'defi-portfolio', label: 'DeFi Portfolio', icon: '💼' },
   { id: 'fear-greed', label: 'Sentiment', icon: '😱' },
+  { id: 'stable-yield', label: 'Stable Yield', icon: '💰' },
 ];
 
 // Supported networks with logos
@@ -652,6 +654,11 @@ onMounted(() => {
         <!-- Fear & Greed Index Tab -->
         <div v-show="activeTab === 'fear-greed'">
           <FearGreedIndex />
+        </div>
+
+        <!-- Stablecoin Yield Tab -->
+        <div v-show="activeTab === 'stable-yield'">
+          <StablecoinYield />
         </div>
       </div>
 

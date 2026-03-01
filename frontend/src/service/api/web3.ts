@@ -1539,3 +1539,120 @@ export function getFearGreedByDateRange(start: number, end: number) {
     params: { start, end }
   });
 }
+
+// ==================== Stablecoin Yield API ====================
+
+/** 协议收益 */
+export interface ProtocolYield {
+  protocol: string;
+  logo: string;
+  token: string;
+  apy: number;
+  tvl: number;
+  chain: string;
+}
+
+/** 稳定币数据 */
+export interface StablecoinData {
+  symbol: string;
+  name: string;
+  price: number;
+  change24h: number;
+}
+
+/** 收益对比 */
+export interface YieldComparison {
+  stablecoin: StablecoinData;
+  yields: ProtocolYield[];
+  bestYield: ProtocolYield | null;
+  averageApy: number;
+}
+
+/** 收益计算结果 */
+export interface EarningsResult {
+  earnings: number;
+  finalAmount: number;
+  apy: number;
+}
+
+/**
+ * 获取综合收益对比
+ */
+export function getYieldComparison() {
+  return request<YieldComparison[]>({
+    url: '/web3/stablecoin-yield/comparison',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取特定代币的收益
+ */
+export function getYieldsByToken(symbol: string) {
+  return request<ProtocolYield[]>({
+    url: `/web3/stablecoin-yield/token/${symbol}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取特定链的收益
+ */
+export function getYieldsByChain(chain: string) {
+  return request<ProtocolYield[]>({
+    url: `/web3/stablecoin-yield/chain/${chain}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取最高收益排行
+ */
+export function getTopYields(limit?: number) {
+  return request<ProtocolYield[]>({
+    url: '/web3/stablecoin-yield/top',
+    method: 'get',
+    params: limit ? { limit } : {}
+  });
+}
+
+/**
+ * 获取特定协议的收益
+ */
+export function getProtocolYields(protocol: string) {
+  return request<ProtocolYield[]>({
+    url: `/web3/stablecoin-yield/protocol/${protocol}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取支持的链列表
+ */
+export function getSupportedYieldChains() {
+  return request<string[]>({
+    url: '/web3/stablecoin-yield/chains',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取支持的协议列表
+ */
+export function getSupportedProtocols() {
+  return request<string[]>({
+    url: '/web3/stablecoin-yield/protocols',
+    method: 'get'
+  });
+}
+
+/**
+ * 计算潜在收益
+ */
+export function calculateEarnings(principal: number, token: string, days?: number) {
+  return request<EarningsResult>({
+    url: '/web3/stablecoin-yield/earnings',
+    method: 'get',
+    params: { principal, token, days }
+  });
+}
