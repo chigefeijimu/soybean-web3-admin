@@ -566,3 +566,186 @@ export function untrackLaunch(address: string, launchId: string) {
     params: { address, launchId }
   });
 }
+
+// ==================== ENS Domain Service API ====================
+
+/** ENS解析结果 */
+export interface EnsResolveResult {
+  name: string;
+  address: string | null;
+  resolved: boolean;
+  chainId?: number;
+  error?: string;
+}
+
+/** ENS反向解析结果 */
+export interface EnsReverseResult {
+  address: string;
+  name: string | null;
+  reverseResolved: boolean;
+  error?: string;
+}
+
+/** ENS域名详情 */
+export interface EnsDetails {
+  name: string;
+  owner: string | null;
+  resolvedAddress: string | null;
+  avatar: string | null;
+  expiryDate: string | null;
+  registrationDate: string | null;
+  isExpired: boolean | null;
+  is2LD: boolean;
+  error?: string;
+}
+
+/** ENS头像 */
+export interface EnsAvatar {
+  name: string;
+  avatar: string | null;
+}
+
+/** ENS记录 */
+export interface EnsRecords {
+  name: string;
+  records: any;
+  error?: string;
+}
+
+/** ENS历史事件 */
+export interface EnsHistory {
+  name: string;
+  events: any[];
+  error?: string;
+}
+
+/** ENS搜索结果 */
+export interface EnsSearchResult {
+  query: string;
+  totalSupply?: number;
+  floorPrice?: number;
+  description?: string;
+  imageUrl?: string;
+  results?: any[];
+  error?: string;
+}
+
+/** 批量解析结果 */
+export interface EnsBatchResult {
+  total: number;
+  resolved: number;
+  results: EnsResolveResult[];
+}
+
+/**
+ * ENS正向解析 - 域名解析为地址
+ * @param name ENS域名 (如 vitalik.eth)
+ * @param chainId 链ID (默认1)
+ */
+export function resolveEnsName(name: string, chainId?: number) {
+  return request<EnsResolveResult>({
+    url: '/web3/ens/resolve',
+    method: 'get',
+    params: { name, chainId }
+  });
+}
+
+/**
+ * ENS反向解析 - 地址解析为域名
+ * @param address ETH地址
+ */
+export function reverseResolveEns(address: string) {
+  return request<EnsReverseResult>({
+    url: '/web3/ens/reverse',
+    method: 'get',
+    params: { address }
+  });
+}
+
+/**
+ * 获取ENS域名详细信息
+ * @param name ENS域名
+ */
+export function getEnsDetails(name: string) {
+  return request<EnsDetails>({
+    url: '/web3/ens/details',
+    method: 'get',
+    params: { name }
+  });
+}
+
+/**
+ * 批量查询ENS域名
+ * @param names 逗号分隔的域名列表
+ */
+export function batchResolveEns(names: string) {
+  return request<EnsBatchResult>({
+    url: '/web3/ens/batch',
+    method: 'get',
+    params: { names }
+  });
+}
+
+/**
+ * 获取ENS域名头像URL
+ * @param name ENS域名
+ */
+export function getEnsAvatar(name: string) {
+  return request<EnsAvatar>({
+    url: '/web3/ens/avatar',
+    method: 'get',
+    params: { name }
+  });
+}
+
+/**
+ * 获取ENS域名所有记录
+ * @param name ENS域名
+ */
+export function getEnsRecords(name: string) {
+  return request<EnsRecords>({
+    url: '/web3/ens/records',
+    method: 'get',
+    params: { name }
+  });
+}
+
+/**
+ * 获取ENS域名交易历史
+ * @param name ENS域名
+ */
+export function getEnsHistory(name: string) {
+  return request<EnsHistory>({
+    url: '/web3/ens/history',
+    method: 'get',
+    params: { name }
+  });
+}
+
+/**
+ * 搜索ENS域名
+ * @param query 搜索关键词
+ * @param limit 返回数量限制
+ */
+export function searchEnsDomains(query: string, limit?: number) {
+  return request<EnsSearchResult>({
+    url: '/web3/ens/search',
+    method: 'get',
+    params: { query, limit }
+  });
+}
+
+/**
+ * 获取热门ENS域名
+ * @param limit 返回数量限制
+ */
+export function getPopularEnsDomains(limit?: number) {
+  return request<{
+    total: number;
+    results: EnsDetails[];
+  }>({
+    url: '/web3/ens/popular',
+    method: 'get',
+    params: { limit }
+  });
+}

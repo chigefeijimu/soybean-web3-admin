@@ -22,6 +22,8 @@ import { Web3LaunchController } from './web3-launch.controller';
 import { Web3LaunchService } from './web3-launch.service';
 import { Web3GasOptimizerController } from './web3-gas-optimizer.controller';
 import { Web3GasOptimizerService } from './web3-gas-optimizer.service';
+import { Web3EnsController } from './web3-ens.controller';
+import { Web3EnsService } from './web3-ens.service';
 
 @Module({
   imports: [HttpModule],
@@ -40,7 +42,8 @@ import { Web3GasOptimizerService } from './web3-gas-optimizer.service';
     Web3ContractController,
     Web3LaunchController,
     Web3GasOptimizerController,
+    Web3EnsController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService],
 })
 export class Web3PortfolioModule {}
