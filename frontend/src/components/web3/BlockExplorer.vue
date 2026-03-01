@@ -1,143 +1,131 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { getBlock, getLatestBlock, getTransactionReceipt, scanBlocks } from '@/service/api/web3'
+import { computed, ref } from 'vue';
+import { getBlock, getLatestBlock, getTransactionReceipt, scanBlocks } from '@/service/api/web3';
 
 // State
-const activeTab = ref<'block' | 'receipt' | 'scan'>('block')
-const blockNumber = ref<number>(0)
-const latestBlockNumber = ref<number | null>(null)
-const txHash = ref<string>('')
-const scanFrom = ref<number>(0)
-const scanTo = ref<number>(0)
+const activeTab = ref<'block' | 'receipt' | 'scan'>('block');
+const blockNumber = ref<number>(0);
+const latestBlockNumber = ref<number | null>(null);
+const txHash = ref<string>('');
+const scanFrom = ref<number>(0);
+const scanTo = ref<number>(0);
 
 // Data
-const blockInfo = ref<any>(null)
-const txReceipt = ref<any>(null)
-const scanResults = ref<any[]>([])
-const loading = ref(false)
-const error = ref<string>('')
+const blockInfo = ref<any>(null);
+const txReceipt = ref<any>(null);
+const scanResults = ref<any[]>([]);
+const loading = ref(false);
+const error = ref<string>('');
 
 // Fetch latest block number
 const fetchLatestBlock = async () => {
-  loading.value = true
-  error.value = ''
+  loading.value = true;
+  error.value = '';
   try {
-    const res = await getLatestBlock()
-    latestBlockNumber.value = res.data?.blockNumber || res.blockNumber
+    const res = await getLatestBlock();
+    latestBlockNumber.value = res.data?.blockNumber || res.blockNumber;
   } catch (e: any) {
-    error.value = e.message || 'Failed to fetch latest block'
+    error.value = e.message || 'Failed to fetch latest block';
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // Get block by number
 const fetchBlock = async () => {
   if (!blockNumber.value) {
-    error.value = 'Please enter a block number'
-    return
+    error.value = 'Please enter a block number';
+    return;
   }
-  loading.value = true
-  error.value = ''
-  blockInfo.value = null
+  loading.value = true;
+  error.value = '';
+  blockInfo.value = null;
   try {
-    const res = await getBlock(blockNumber.value)
-    blockInfo.value = res.data || res
+    const res = await getBlock(blockNumber.value);
+    blockInfo.value = res.data || res;
   } catch (e: any) {
-    error.value = e.message || 'Failed to fetch block'
+    error.value = e.message || 'Failed to fetch block';
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // Get transaction receipt
 const fetchReceipt = async () => {
   if (!txHash.value) {
-    error.value = 'Please enter a transaction hash'
-    return
+    error.value = 'Please enter a transaction hash';
+    return;
   }
-  loading.value = true
-  error.value = ''
-  txReceipt.value = null
+  loading.value = true;
+  error.value = '';
+  txReceipt.value = null;
   try {
-    const res = await getTransactionReceipt(txHash.value)
-    txReceipt.value = res.data || res
+    const res = await getTransactionReceipt(txHash.value);
+    txReceipt.value = res.data || res;
   } catch (e: any) {
-    error.value = e.message || 'Failed to fetch receipt'
+    error.value = e.message || 'Failed to fetch receipt';
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // Scan block range
 const fetchScanResults = async () => {
   if (!scanFrom.value || !scanTo.value) {
-    error.value = 'Please enter block range'
-    return
+    error.value = 'Please enter block range';
+    return;
   }
   if (scanTo.value - scanFrom.value > 100) {
-    error.value = 'Maximum range is 100 blocks'
-    return
+    error.value = 'Maximum range is 100 blocks';
+    return;
   }
-  loading.value = true
-  error.value = ''
-  scanResults.value = []
+  loading.value = true;
+  error.value = '';
+  scanResults.value = [];
   try {
-    const res = await scanBlocks(scanFrom.value, scanTo.value)
-    scanResults.value = res.data || res.results || res || []
+    const res = await scanBlocks(scanFrom.value, scanTo.value);
+    scanResults.value = res.data || res.results || res || [];
   } catch (e: any) {
-    error.value = e.message || 'Failed to scan blocks'
+    error.value = e.message || 'Failed to scan blocks';
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // Format address
 const formatAddress = (addr: string) => {
-  if (!addr) return '-'
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
-}
+  if (!addr) return '-';
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+};
 
 // Format timestamp
 const formatTime = (timestamp: number) => {
-  if (!timestamp) return '-'
-  return new Date(timestamp * 1000).toLocaleString()
-}
+  if (!timestamp) return '-';
+  return new Date(timestamp * 1000).toLocaleString();
+};
 
 // Initialize
-fetchLatestBlock()
+fetchLatestBlock();
 </script>
 
 <template>
   <div class="block-explorer">
     <div class="header">
       <h2>🔍 Block Explorer</h2>
-      <div class="latest-block" v-if="latestBlockNumber">
-        Latest Block: <span class="highlight">{{ latestBlockNumber }}</span>
-        <button @click="fetchLatestBlock" class="btn-refresh">↻</button>
+      <div v-if="latestBlockNumber" class="latest-block">
+        Latest Block:
+        <span class="highlight">{{ latestBlockNumber }}</span>
+        <button class="btn-refresh" @click="fetchLatestBlock">↻</button>
       </div>
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
-      <button 
-        :class="['tab', { active: activeTab === 'block' }]" 
-        @click="activeTab = 'block'"
-      >
-        Block Info
-      </button>
-      <button 
-        :class="['tab', { active: activeTab === 'receipt' }]" 
-        @click="activeTab = 'receipt'"
-      >
+      <button class="tab" :class="[{ active: activeTab === 'block' }]" @click="activeTab = 'block'">Block Info</button>
+      <button class="tab" :class="[{ active: activeTab === 'receipt' }]" @click="activeTab = 'receipt'">
         Transaction Receipt
       </button>
-      <button 
-        :class="['tab', { active: activeTab === 'scan' }]" 
-        @click="activeTab = 'scan'"
-      >
-        Block Scan
-      </button>
+      <button class="tab" :class="[{ active: activeTab === 'scan' }]" @click="activeTab = 'scan'">Block Scan</button>
     </div>
 
     <!-- Error Message -->
@@ -146,13 +134,8 @@ fetchLatestBlock()
     <!-- Block Info Tab -->
     <div v-if="activeTab === 'block'" class="tab-content">
       <div class="input-group">
-        <input 
-          v-model.number="blockNumber" 
-          type="number" 
-          placeholder="Enter block number"
-          @keyup.enter="fetchBlock"
-        />
-        <button @click="fetchBlock" :disabled="loading" class="btn-primary">
+        <input v-model.number="blockNumber" type="number" placeholder="Enter block number" @keyup.enter="fetchBlock" />
+        <button :disabled="loading" class="btn-primary" @click="fetchBlock">
           {{ loading ? 'Loading...' : 'Get Block' }}
         </button>
       </div>
@@ -191,13 +174,8 @@ fetchLatestBlock()
     <!-- Transaction Receipt Tab -->
     <div v-if="activeTab === 'receipt'" class="tab-content">
       <div class="input-group">
-        <input 
-          v-model="txHash" 
-          type="text" 
-          placeholder="Enter transaction hash (0x...)"
-          @keyup.enter="fetchReceipt"
-        />
-        <button @click="fetchReceipt" :disabled="loading" class="btn-primary">
+        <input v-model="txHash" type="text" placeholder="Enter transaction hash (0x...)" @keyup.enter="fetchReceipt" />
+        <button :disabled="loading" class="btn-primary" @click="fetchReceipt">
           {{ loading ? 'Loading...' : 'Get Receipt' }}
         </button>
       </div>
@@ -215,7 +193,7 @@ fetchLatestBlock()
           </div>
           <div class="info-item">
             <label>Status</label>
-            <span :class="['status', txReceipt.status === '0x1' || txReceipt.status === 1 ? 'success' : 'failed']">
+            <span class="status" :class="[txReceipt.status === '0x1' || txReceipt.status === 1 ? 'success' : 'failed']">
               {{ txReceipt.status === '0x1' || txReceipt.status === 1 ? 'Success' : 'Failed' }}
             </span>
           </div>
@@ -246,18 +224,10 @@ fetchLatestBlock()
     <!-- Block Scan Tab -->
     <div v-if="activeTab === 'scan'" class="tab-content">
       <div class="input-group range">
-        <input 
-          v-model.number="scanFrom" 
-          type="number" 
-          placeholder="From block"
-        />
+        <input v-model.number="scanFrom" type="number" placeholder="From block" />
         <span class="separator">→</span>
-        <input 
-          v-model.number="scanTo" 
-          type="number" 
-          placeholder="To block"
-        />
-        <button @click="fetchScanResults" :disabled="loading" class="btn-primary">
+        <input v-model.number="scanTo" type="number" placeholder="To block" />
+        <button :disabled="loading" class="btn-primary" @click="fetchScanResults">
           {{ loading ? 'Scanning...' : 'Scan' }}
         </button>
       </div>
@@ -268,13 +238,11 @@ fetchLatestBlock()
             <span class="block-num">#{{ block.number }}</span>
             <span class="tx-count">{{ block.transactionCount || block.transactions?.length || 0 }} txs</span>
           </div>
-          <div class="block-hash mono">{{ block.hash }}</div>
+          <div class="mono block-hash">{{ block.hash }}</div>
           <div class="block-time">{{ formatTime(block.timestamp) }}</div>
         </div>
       </div>
-      <div v-else-if="!loading && !error" class="empty">
-        Enter a block range (max 100) and click Scan
-      </div>
+      <div v-else-if="!loading && !error" class="empty">Enter a block range (max 100) and click Scan</div>
     </div>
   </div>
 </template>

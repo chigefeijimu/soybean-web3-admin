@@ -1,40 +1,27 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, markRaw } from 'vue'
-import { useWeb3 } from '@/composables/web3/useWeb3'
-
+import { computed, markRaw, onMounted, ref } from 'vue';
+import { useWeb3 } from '@/composables/web3/useWeb3';
 // Import all components
-import WalletConnect from '@/components/web3/WalletConnect.vue'
-import ContractCall from '@/components/web3/ContractCall.vue'
-import TransactionHistory from '@/components/web3/TransactionHistory.vue'
-import PortfolioDashboard from '@/components/web3/PortfolioDashboard.vue'
-import TokenSwap from '@/components/web3/TokenSwap.vue'
-import NFTGallery from '@/components/web3/NFTGallery.vue'
-import AddTokenModal from '@/components/web3/AddTokenModal.vue'
-import BlockExplorer from '@/components/web3/BlockExplorer.vue'
+import WalletConnect from '@/components/web3/WalletConnect.vue';
+import ContractCall from '@/components/web3/ContractCall.vue';
+import TransactionHistory from '@/components/web3/TransactionHistory.vue';
+import PortfolioDashboard from '@/components/web3/PortfolioDashboard.vue';
+import TokenSwap from '@/components/web3/TokenSwap.vue';
+import NFTGallery from '@/components/web3/NFTGallery.vue';
+import BlockExplorer from '@/components/web3/BlockExplorer.vue';
 
-const {
-  isConnected,
-  account,
-  chainId,
-  balance,
-  chainInfo,
-  connectWallet,
-  disconnectWallet,
-  switchChain,
-  CHAIN_INFO,
-} = useWeb3()
+const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
 // Tab management
-const activeTab = ref('dashboard')
-const error = ref('')
-const showAddToken = ref(false)
+const activeTab = ref('dashboard');
+const error = ref('');
 
 // Stats
 const stats = computed(() => ({
   totalBalance: balance.value || '0',
   walletAddress: account.value || '',
-  network: chainInfo.value?.name || 'Unknown',
-}))
+  network: chainInfo.value?.name || 'Unknown'
+}));
 
 // Tab configuration with icons
 const tabs = [
@@ -45,18 +32,18 @@ const tabs = [
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
   { id: 'contracts', label: 'Contracts', icon: '📝' },
-  { id: 'explorer', label: 'Explorer', icon: '🔍' },
-]
+  { id: 'explorer', label: 'Explorer', icon: '🔍' }
+];
 
 // Supported networks with logos
 const networks = Object.entries(CHAIN_INFO).map(([id, info]) => ({
-  id: parseInt(id),
+  id: Number.parseInt(id, 10),
   name: info.name,
   symbol: info.symbol,
-  logo: getNetworkLogo(parseInt(id)),
-}))
+  logo: getNetworkLogo(Number.parseInt(id, 10))
+}));
 
-function getNetworkLogo(chainId: number): string {
+function getNetworkLogo(networkChainId: number): string {
   const logos: Record<number, string> = {
     1: '🔷',
     5: '🔷',
@@ -70,71 +57,73 @@ function getNetworkLogo(chainId: number): string {
     10: '🟠',
     69: '🟠',
     8453: '⚫',
-    84531: '⚫',
-  }
-  return logos[chainId] || '⚪'
+    84531: '⚫'
+  };
+  return logos[networkChainId] || '⚪';
 }
 
 // Network switching
-const handleSwitchNetwork = async (chainId: number) => {
-  error.value = ''
+const handleSwitchNetwork = async (newChainId: number) => {
+  error.value = '';
   try {
-    await switchChain(chainId)
+    await switchChain(newChainId);
   } catch (e: any) {
-    error.value = e.message || 'Failed to switch network'
+    error.value = e.message || 'Failed to switch network';
   }
-}
+};
 
 // Quick actions
 const quickActions = [
-  { id: 'send', label: 'Send', icon: '↑', color: 'blue', action: () => activeTab.value = 'wallet' },
-  { id: 'receive', label: 'Receive', icon: '↓', color: 'green', action: () => activeTab.value = 'wallet' },
-  { id: 'swap', label: 'Swap', icon: '⇄', color: 'purple', action: () => activeTab.value = 'swap' },
-  { id: 'buy', label: 'Buy', icon: '💳', color: 'orange', action: () => {} },
-]
+  { id: 'send', label: 'Send', icon: '↑', color: 'blue', action: () => (activeTab.value = 'wallet') },
+  { id: 'receive', label: 'Receive', icon: '↓', color: 'green', action: () => (activeTab.value = 'wallet') },
+  { id: 'swap', label: 'Swap', icon: '⇄', color: 'purple', action: () => (activeTab.value = 'swap') },
+  { id: 'buy', label: 'Buy', icon: '💳', color: 'orange', action: () => {} }
+];
 
 // DeFi protocols
 const defiProtocols = [
   { name: 'Uniswap', logo: '🦄', tvl: '$4.2B', apy: '3-15%' },
   { name: 'Aave', logo: '👻', tvl: '$12B', apy: '2-8%' },
   { name: 'Compound', logo: '🔷', tvl: '$2.1B', apy: '2-5%' },
-  { name: 'Curve', logo: '💚', tvl: '$3.8B', apy: '2-10%' },
-]
+  { name: 'Curve', logo: '💚', tvl: '$3.8B', apy: '2-10%' }
+];
 
 // Trending tokens
 const trendingTokens = [
   { symbol: 'ETH', name: 'Ethereum', price: 2500, change: '+2.5%', logo: '🔷' },
   { symbol: 'BTC', name: 'Bitcoin', price: 62500, change: '+1.8%', logo: '🟡' },
   { symbol: 'SOL', name: 'Solana', price: 120, change: '+5.2%', logo: '🟣' },
-  { symbol: 'ARB', name: 'Arbitrum', price: 1.8, change: '+3.1%', logo: '🔵' },
-]
+  { symbol: 'ARB', name: 'Arbitrum', price: 1.8, change: '+3.1%', logo: '🔵' }
+];
 
 // On mount
 onMounted(() => {
   // Auto-connect check
   if (window.ethereum?.selectedAddress) {
-    connectWallet()
+    connectWallet();
   }
-})
+});
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-4 lg:p-6">
+  <div class="min-h-screen from-slate-900 via-purple-900 to-slate-900 bg-gradient-to-br p-4 text-white lg:p-6">
     <!-- Header -->
-    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6 gap-4">
+    <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <div>
-        <h1 class="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+        <h1
+          class="from-blue-400 to-purple-400 bg-gradient-to-r bg-clip-text text-2xl text-transparent font-bold lg:text-3xl"
+        >
           Web3 Dashboard
         </h1>
-        <p class="text-slate-400 text-sm mt-1">Manage your crypto assets & DeFi</p>
+        <p class="mt-1 text-sm text-slate-400">Manage your crypto assets & DeFi</p>
       </div>
-      
+
       <!-- Network Selector -->
       <div class="flex items-center gap-3">
-        <select 
-          :value="chainId" 
+        <select
+          :value="chainId"
+          class="border border-slate-700 rounded-lg bg-slate-800 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
           @change="handleSwitchNetwork(Number(($event.target as HTMLSelectElement).value))"
-          class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
         >
           <option v-for="network in networks" :key="network.id" :value="network.id">
             {{ network.logo }} {{ network.name }}
@@ -144,43 +133,46 @@ onMounted(() => {
     </div>
 
     <!-- Error Alert -->
-    <div v-if="error" class="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg flex justify-between items-center">
+    <div
+      v-if="error"
+      class="mb-6 flex items-center justify-between border border-red-500/50 rounded-lg bg-red-500/20 p-4"
+    >
       <span class="text-red-300">{{ error }}</span>
-      <button @click="error = ''" class="text-red-400 hover:text-white">✕</button>
+      <button class="text-red-400 hover:text-white" @click="error = ''">✕</button>
     </div>
 
     <!-- Quick Stats Banner -->
-    <div v-if="isConnected" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <div class="bg-slate-800/50 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
-        <p class="text-slate-400 text-xs">Balance</p>
-        <p class="text-xl font-bold text-green-400">{{ parseFloat(stats.totalBalance).toFixed(4) }} ETH</p>
+    <div v-if="isConnected" class="grid grid-cols-2 mb-6 gap-4 lg:grid-cols-4">
+      <div class="border border-slate-700/50 rounded-xl bg-slate-800/50 p-4 backdrop-blur-xl">
+        <p class="text-xs text-slate-400">Balance</p>
+        <p class="text-xl text-green-400 font-bold">{{ parseFloat(stats.totalBalance).toFixed(4) }} ETH</p>
       </div>
-      <div class="bg-slate-800/50 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
-        <p class="text-slate-400 text-xs">Network</p>
+      <div class="border border-slate-700/50 rounded-xl bg-slate-800/50 p-4 backdrop-blur-xl">
+        <p class="text-xs text-slate-400">Network</p>
         <p class="text-lg font-semibold">{{ stats.network }}</p>
       </div>
-      <div class="bg-slate-800/50 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
-        <p class="text-slate-400 text-xs">Gas</p>
-        <p class="text-lg font-semibold text-yellow-400">15 Gwei</p>
+      <div class="border border-slate-700/50 rounded-xl bg-slate-800/50 p-4 backdrop-blur-xl">
+        <p class="text-xs text-slate-400">Gas</p>
+        <p class="text-lg text-yellow-400 font-semibold">15 Gwei</p>
       </div>
-      <div class="bg-slate-800/50 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
-        <p class="text-slate-400 text-xs">Status</p>
-        <p class="text-lg font-semibold text-green-400">● Online</p>
+      <div class="border border-slate-700/50 rounded-xl bg-slate-800/50 p-4 backdrop-blur-xl">
+        <p class="text-xs text-slate-400">Status</p>
+        <p class="text-lg text-green-400 font-semibold">● Online</p>
       </div>
     </div>
 
     <!-- Tab Navigation -->
-    <div class="flex gap-2 overflow-x-auto pb-4 mb-6">
-      <button 
-        v-for="tab in tabs" 
+    <div class="mb-6 flex gap-2 overflow-x-auto pb-4">
+      <button
+        v-for="tab in tabs"
         :key="tab.id"
-        @click="activeTab = tab.id"
+        class="whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all"
         :class="[
-          'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
-          activeTab === tab.id 
-            ? 'bg-purple-500/20 text-purple-400 border border-purple-500/50' 
+          activeTab === tab.id
+            ? 'bg-purple-500/20 text-purple-400 border border-purple-500/50'
             : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700/50'
         ]"
+        @click="activeTab = tab.id"
       >
         <span class="mr-2">{{ tab.icon }}</span>
         {{ tab.label }}
@@ -188,20 +180,20 @@ onMounted(() => {
     </div>
 
     <!-- Tab Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <!-- Main Content -->
       <div class="lg:col-span-2 space-y-6">
         <!-- Dashboard Tab -->
         <div v-show="activeTab === 'dashboard'" class="space-y-6">
           <!-- Quick Actions -->
-          <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
-            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              <button 
-                v-for="action in quickActions" 
+          <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
+            <h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
+            <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+              <button
+                v-for="action in quickActions"
                 :key="action.id"
+                class="flex flex-col items-center gap-2 rounded-xl bg-slate-700/50 p-4 transition-all hover:scale-105 hover:bg-slate-700"
                 @click="action.action"
-                class="p-4 bg-slate-700/50 hover:bg-slate-700 rounded-xl transition-all hover:scale-105 flex flex-col items-center gap-2"
               >
                 <span class="text-2xl">{{ action.icon }}</span>
                 <span class="text-sm">{{ action.label }}</span>
@@ -210,33 +202,29 @@ onMounted(() => {
           </div>
 
           <!-- Trending Tokens -->
-          <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
-            <h2 class="text-xl font-semibold mb-4">🔥 Trending Tokens</h2>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              <div 
-                v-for="token in trendingTokens" 
-                :key="token.symbol"
-                class="p-3 bg-slate-900/50 rounded-xl"
-              >
-                <div class="flex items-center gap-2 mb-2">
+          <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
+            <h2 class="mb-4 text-xl font-semibold">🔥 Trending Tokens</h2>
+            <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+              <div v-for="token in trendingTokens" :key="token.symbol" class="rounded-xl bg-slate-900/50 p-3">
+                <div class="mb-2 flex items-center gap-2">
                   <span class="text-xl">{{ token.logo }}</span>
                   <span class="font-semibold">{{ token.symbol }}</span>
                 </div>
                 <p class="text-sm text-slate-400">{{ token.name }}</p>
-                <p class="font-semibold mt-1">${{ token.price.toLocaleString() }}</p>
+                <p class="mt-1 font-semibold">${{ token.price.toLocaleString() }}</p>
                 <p class="text-xs text-green-400">{{ token.change }}</p>
               </div>
             </div>
           </div>
 
           <!-- DeFi Protocols -->
-          <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
-            <h2 class="text-xl font-semibold mb-4">🌊 DeFi Protocols</h2>
+          <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
+            <h2 class="mb-4 text-xl font-semibold">🌊 DeFi Protocols</h2>
             <div class="space-y-3">
-              <div 
-                v-for="protocol in defiProtocols" 
+              <div
+                v-for="protocol in defiProtocols"
                 :key="protocol.name"
-                class="p-4 bg-slate-900/50 rounded-xl flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer"
+                class="flex cursor-pointer items-center justify-between rounded-xl bg-slate-900/50 p-4 transition-colors hover:bg-slate-800/50"
               >
                 <div class="flex items-center gap-3">
                   <span class="text-2xl">{{ protocol.logo }}</span>
@@ -254,12 +242,15 @@ onMounted(() => {
           </div>
 
           <!-- Not Connected State -->
-          <div v-if="!isConnected" class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-12 border border-slate-700/50 text-center">
-            <div class="text-6xl mb-4">🔗</div>
-            <p class="text-slate-400 mb-6">Connect your wallet to access all features</p>
-            <button 
+          <div
+            v-if="!isConnected"
+            class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-12 text-center backdrop-blur-xl"
+          >
+            <div class="mb-4 text-6xl">🔗</div>
+            <p class="mb-6 text-slate-400">Connect your wallet to access all features</p>
+            <button
+              class="rounded-xl from-blue-500 to-purple-500 bg-gradient-to-r px-8 py-3 font-semibold transition-all hover:scale-105 hover:from-blue-600 hover:to-purple-600"
               @click="connectWallet"
-              class="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-xl font-semibold transition-all hover:scale-105"
             >
               Connect Wallet
             </button>
@@ -305,18 +296,18 @@ onMounted(() => {
       <!-- Sidebar -->
       <div class="space-y-6">
         <!-- Gas Tracker -->
-        <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
-          <h2 class="text-lg font-semibold mb-4">⛽ Gas Tracker</h2>
+        <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
+          <h2 class="mb-4 text-lg font-semibold">⛽ Gas Tracker</h2>
           <div class="space-y-3">
-            <div class="flex justify-between items-center p-3 bg-slate-900/50 rounded-lg">
+            <div class="flex items-center justify-between rounded-lg bg-slate-900/50 p-3">
               <span class="text-slate-400">Slow</span>
               <span class="text-green-400">5 Gwei</span>
             </div>
-            <div class="flex justify-between items-center p-3 bg-slate-900/50 rounded-lg">
+            <div class="flex items-center justify-between rounded-lg bg-slate-900/50 p-3">
               <span class="text-slate-400">Normal</span>
               <span class="text-yellow-400">15 Gwei</span>
             </div>
-            <div class="flex justify-between items-center p-3 bg-slate-900/50 rounded-lg">
+            <div class="flex items-center justify-between rounded-lg bg-slate-900/50 p-3">
               <span class="text-slate-400">Fast</span>
               <span class="text-red-400">30 Gwei</span>
             </div>
@@ -324,22 +315,22 @@ onMounted(() => {
         </div>
 
         <!-- Market Stats -->
-        <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
-          <h2 class="text-lg font-semibold mb-4">📈 Market</h2>
+        <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
+          <h2 class="mb-4 text-lg font-semibold">📈 Market</h2>
           <div class="space-y-3">
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
               <span class="text-slate-400">ETH Price</span>
               <span class="font-semibold">$2,500 (+2.5%)</span>
             </div>
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
               <span class="text-slate-400">BTC Price</span>
               <span class="font-semibold">$62,500 (+1.8%)</span>
             </div>
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
               <span class="text-slate-400">Gas</span>
               <span class="font-semibold">15 Gwei</span>
             </div>
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
               <span class="text-slate-400">TVL</span>
               <span class="font-semibold">$45.2B</span>
             </div>
@@ -347,19 +338,39 @@ onMounted(() => {
         </div>
 
         <!-- Quick Links -->
-        <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
-          <h2 class="text-lg font-semibold mb-4">🔗 Quick Links</h2>
+        <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
+          <h2 class="mb-4 text-lg font-semibold">🔗 Quick Links</h2>
           <div class="space-y-2">
-            <a href="https://uniswap.org" target="_blank" class="block p-3 bg-slate-900/50 hover:bg-slate-700 rounded-lg transition-colors">
+            <a
+              href="https://uniswap.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block rounded-lg bg-slate-900/50 p-3 transition-colors hover:bg-slate-700"
+            >
               🦄 Uniswap
             </a>
-            <a href="https://opensea.io" target="_blank" class="block p-3 bg-slate-900/50 hover:bg-slate-700 rounded-lg transition-colors">
+            <a
+              href="https://opensea.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block rounded-lg bg-slate-900/50 p-3 transition-colors hover:bg-slate-700"
+            >
               🖼️ OpenSea
             </a>
-            <a href="https://etherscan.io" target="_blank" class="block p-3 bg-slate-900/50 hover:bg-slate-700 rounded-lg transition-colors">
+            <a
+              href="https://etherscan.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block rounded-lg bg-slate-900/50 p-3 transition-colors hover:bg-slate-700"
+            >
               📄 Etherscan
             </a>
-            <a href="https://arbiscan.io" target="_blank" class="block p-3 bg-slate-900/50 hover:bg-slate-700 rounded-lg transition-colors">
+            <a
+              href="https://arbiscan.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block rounded-lg bg-slate-900/50 p-3 transition-colors hover:bg-slate-700"
+            >
               🔵 Arbitrum Scan
             </a>
           </div>
@@ -373,9 +384,15 @@ onMounted(() => {
 .bg-gradient-to-br {
   background: linear-gradient(to bottom right, var(--tw-gradient-stops));
 }
-.from-slate-900 { --tw-gradient-from: #0f172a; }
-.via-purple-900 { --tw-gradient-via: #581c87; }
-.to-slate-900 { --tw-gradient-to: #0f172a; }
+.from-slate-900 {
+  --tw-gradient-from: #0f172a;
+}
+.via-purple-900 {
+  --tw-gradient-via: #581c87;
+}
+.to-slate-900 {
+  --tw-gradient-to: #0f172a;
+}
 .bg-clip-text {
   -webkit-background-clip: text;
   background-clip: text;

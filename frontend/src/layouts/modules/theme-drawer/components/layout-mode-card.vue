@@ -72,7 +72,7 @@ function handleChangeMode(mode: UnionKey.ThemeLayoutMode) {
     <div
       v-for="(item, key) in layoutConfig"
       :key="key"
-      class="flex cursor-pointer border-2px rounded-6px hover:border-primary"
+      class="hover:border-primary flex cursor-pointer border-2px rounded-6px"
       :class="[mode === key ? 'border-primary' : 'border-transparent']"
       @click="handleChangeMode(key)"
     >

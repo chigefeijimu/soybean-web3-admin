@@ -1,21 +1,17 @@
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-/**
- * Chain configuration for multi-chain support
- */
+/** Chain configuration for multi-chain support */
 export interface ChainConfig {
-  id: number
-  name: string
-  shortName: string
-  symbol: string
-  rpcUrl: string
-  explorer: string
-  color: string
+  id: number;
+  name: string;
+  shortName: string;
+  symbol: string;
+  rpcUrl: string;
+  explorer: string;
+  color: string;
 }
 
-/**
- * Supported chains
- */
+/** Supported chains */
 export const SUPPORTED_CHAINS: Record<number, ChainConfig> = {
   1: {
     id: 1,
@@ -80,57 +76,43 @@ export const SUPPORTED_CHAINS: Record<number, ChainConfig> = {
     explorer: 'https://mumbai.polygonscan.com',
     color: '#8247E5'
   }
-}
+};
 
-/**
- * Get chain config by chain ID
- */
+/** Get chain config by chain ID */
 export function getChainConfig(chainId: number): ChainConfig | undefined {
-  return SUPPORTED_CHAINS[chainId]
+  return SUPPORTED_CHAINS[chainId];
 }
 
-/**
- * Get chain name by chain ID
- */
+/** Get chain name by chain ID */
 export function getChainName(chainId: number): string {
-  return SUPPORTED_CHAINS[chainId]?.name || `Chain ${chainId}`
+  return SUPPORTED_CHAINS[chainId]?.name || `Chain ${chainId}`;
 }
 
-/**
- * Get chain short name by chain ID
- */
+/** Get chain short name by chain ID */
 export function getChainShortName(chainId: number): string {
-  return SUPPORTED_CHAINS[chainId]?.shortName || `${chainId}`
+  return SUPPORTED_CHAINS[chainId]?.shortName || `${chainId}`;
 }
 
-/**
- * Get explorer URL for transaction
- */
+/** Get explorer URL for transaction */
 export function getExplorerTxUrl(chainId: number, txHash: string): string {
-  const explorer = SUPPORTED_CHAINS[chainId]?.explorer
-  return explorer ? `${explorer}/tx/${txHash}` : `#`
+  const explorer = SUPPORTED_CHAINS[chainId]?.explorer;
+  return explorer ? `${explorer}/tx/${txHash}` : `#`;
 }
 
-/**
- * Get explorer URL for address
- */
+/** Get explorer URL for address */
 export function getExplorerAddressUrl(chainId: number, address: string): string {
-  const explorer = SUPPORTED_CHAINS[chainId]?.explorer
-  return explorer ? `${explorer}/address/${address}` : `#`
+  const explorer = SUPPORTED_CHAINS[chainId]?.explorer;
+  return explorer ? `${explorer}/address/${address}` : `#`;
 }
 
-/**
- * Format address for display
- */
+/** Format address for display */
 export function formatAddress(address: string, startChars = 6, endChars = 4): string {
-  if (!address) return ''
-  if (address.length <= startChars + endChars) return address
-  return `${address.slice(0, startChars)}...${address.slice(-endChars)}`
+  if (!address) return '';
+  if (address.length <= startChars + endChars) return address;
+  return `${address.slice(0, startChars)}...${address.slice(-endChars)}`;
 }
 
-/**
- * Format transaction hash for display
- */
+/** Format transaction hash for display */
 export function formatTxHash(txHash: string): string {
-  return formatAddress(txHash, 10, 8)
+  return formatAddress(txHash, 10, 8);
 }

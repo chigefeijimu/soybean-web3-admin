@@ -1,8 +1,8 @@
 // Web3 Plugin using wagmi v3 + viem
-import { createConfig, http } from 'wagmi'
-import { mainnet, sepolia, polygon, arbitrum, optimism, bsc } from 'wagmi/chains'
-import { QueryClient } from '@tanstack/vue-query'
-import { createWeb3Modal } from '@web3modal/ethers/vue'
+import { QueryClient } from '@tanstack/vue-query';
+import { createConfig, http } from 'wagmi';
+import { arbitrum, bsc, mainnet, optimism, polygon, sepolia } from 'wagmi/chains';
+import { createWeb3Modal } from '@web3modal/ethers/vue';
 
 // Create wagmi config - cast chains to any to avoid v3 type issues
 export const config = createConfig({
@@ -13,44 +13,44 @@ export const config = createConfig({
     [polygon.id]: http(),
     [arbitrum.id]: http(),
     [optimism.id]: http(),
-    [bsc.id]: http(),
+    [bsc.id]: http()
   },
-  connectors: [],
-})
+  connectors: []
+});
 
 // Create query client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-})
+      refetchOnWindowFocus: false
+    }
+  }
+});
 
 // Project ID for WalletConnect (can be empty for local)
-export const projectId = ''
+export const projectId = '';
 
 // Web3Modal setup
 export function setupWeb3Modal() {
   if (!projectId) {
-    console.log('Web3Modal: No project ID configured, MetaMask-only mode')
-    return null
+    console.log('Web3Modal: No project ID configured, MetaMask-only mode');
+    return null;
   }
-  
+
   try {
     const modal = createWeb3Modal({
       ethersConfig: {} as any,
       projectId,
       chains: [mainnet, sepolia, polygon, arbitrum, optimism, bsc] as any,
-      enableAnalytics: false,
-    })
-    return modal
+      enableAnalytics: false
+    });
+    return modal;
   } catch (e) {
-    console.error('Web3Modal setup failed:', e)
-    return null
+    console.error('Web3Modal setup failed:', e);
+    return null;
   }
 }
 
 // Export config for use
-export const web3Config = config
-export const web3QueryClient = queryClient
+export const web3Config = config;
+export const web3QueryClient = queryClient;

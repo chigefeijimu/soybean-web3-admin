@@ -1,90 +1,116 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useWeb3 } from '@/composables/web3/useWeb3'
-import { encodeFunctionData, decodeFunctionResult, parseEther, formatEther, type Address, type Hex } from 'viem'
-import { callContractDirect } from '@/service/api/web3'
+import { computed, ref } from 'vue';
+import { type Address, type Hex, decodeFunctionResult, encodeFunctionData, formatEther, parseEther } from 'viem';
+import { callContractDirect } from '@/service/api/web3';
+import { useWeb3 } from '@/composables/web3/useWeb3';
 
 const props = defineProps<{
-  contractAddress?: string
-  abi?: any[]
-}>()
+  contractAddress?: string;
+  abi?: any[];
+}>();
 
 const emit = defineEmits<{
-  (e: 'success', data: any): void
-  (e: 'error', error: string): void
-}>()
+  (e: 'success', data: any): void;
+  (e: 'error', error: string): void;
+}>();
 
-const { account, chainId } = useWeb3()
+const { account, chainId } = useWeb3();
 
-const contractAddress = ref(props.contractAddress || '')
-const selectedMethod = ref('')
-const params = ref<string[]>([])
-const result = ref<any>(null)
-const isLoading = ref(false)
-const error = ref('')
-const useBackendApi = ref(false) // New: toggle between browser wallet and backend API
+const contractAddress = ref(props.contractAddress || '');
+const selectedMethod = ref('');
+const params = ref<string[]>([]);
+const result = ref<any>(null);
+const isLoading = ref(false);
+const error = ref('');
+const useBackendApi = ref(false); // New: toggle between browser wallet and backend API
 
 // Sample ABI methods
 const sampleMethods = [
-  { name: 'balanceOf', type: 'function', stateMutability: 'view', inputs: [{ name: 'owner', type: 'address' }], outputs: [{ type: 'uint256' }] },
+  {
+    name: 'balanceOf',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'owner', type: 'address' }],
+    outputs: [{ type: 'uint256' }]
+  },
   { name: 'totalSupply', type: 'function', stateMutability: 'view', outputs: [{ type: 'uint256' }] },
   { name: 'name', type: 'function', stateMutability: 'view', outputs: [{ type: 'string' }] },
   { name: 'symbol', type: 'function', stateMutability: 'view', outputs: [{ type: 'string' }] },
   { name: 'decimals', type: 'function', stateMutability: 'view', outputs: [{ type: 'uint8' }] },
-  { name: 'transfer', type: 'function', stateMutability: 'nonpayable', inputs: [{ name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }] },
-  { name: 'approve', type: 'function', stateMutability: 'nonpayable', inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }] },
-  { name: 'allowance', type: 'function', stateMutability: 'view', inputs: [{ name: 'owner', type: 'address' }, { name: 'spender', type: 'address' }], outputs: [{ type: 'uint256' }] },
-]
+  {
+    name: 'transfer',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'to', type: 'address' },
+      { name: 'amount', type: 'uint256' }
+    ]
+  },
+  {
+    name: 'approve',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'spender', type: 'address' },
+      { name: 'amount', type: 'uint256' }
+    ]
+  },
+  {
+    name: 'allowance',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'owner', type: 'address' },
+      { name: 'spender', type: 'address' }
+    ],
+    outputs: [{ type: 'uint256' }]
+  }
+];
 
-const currentMethod = computed(() => 
-  sampleMethods.find(m => m.name === selectedMethod.value)
-)
+const currentMethod = computed(() => sampleMethods.find(m => m.name === selectedMethod.value));
 
 const paramInputs = computed(() => {
-  if (!currentMethod.value?.inputs) return []
+  if (!currentMethod.value?.inputs) return [];
   return currentMethod.value.inputs.map((input, index) => ({
     name: input.name || `param${index}`,
     type: input.type,
-    value: params.value[index] || '',
-  }))
-})
+    value: params.value[index] || ''
+  }));
+});
 
-const isWriteMethod = computed(() => 
-  currentMethod.value?.type === 'function' && 
-  !currentMethod.value.outputs?.length
-)
+const isWriteMethod = computed(() => currentMethod.value?.type === 'function' && !currentMethod.value.outputs?.length);
 
 const validateAddress = (address: string): boolean => {
-  return /^0x[a-fA-F0-9]{40}$/.test(address)
-}
+  return /^0x[a-fA-F0-9]{40}$/.test(address);
+};
 
 const validateUint = (value: string): boolean => {
-  return /^\d+$/.test(value)
-}
+  return /^\d+$/.test(value);
+};
 
 const validateParams = (): boolean => {
   if (!contractAddress.value || !validateAddress(contractAddress.value)) {
-    error.value = 'Invalid contract address'
-    return false
+    error.value = 'Invalid contract address';
+    return false;
   }
-  
+
   for (const param of paramInputs.value) {
     if (param.type === 'address' && !validateAddress(param.value)) {
-      error.value = `Invalid ${param.name}: must be a valid address`
-      return false
+      error.value = `Invalid ${param.name}: must be a valid address`;
+      return false;
     }
     if (param.type.startsWith('uint') && !validateUint(param.value)) {
-      error.value = `Invalid ${param.name}: must be a positive integer`
-      return false
+      error.value = `Invalid ${param.name}: must be a positive integer`;
+      return false;
     }
   }
-  
-  return true
-}
+
+  return true;
+};
 
 const encodeFunctionCall = (): Hex => {
-  if (!currentMethod.value) return '0x'
-  
+  if (!currentMethod.value) return '0x';
+
   try {
     // Build ABI parameters from current method
     const abiItem = {
@@ -93,48 +119,48 @@ const encodeFunctionCall = (): Hex => {
       inputs: currentMethod.value.inputs || [],
       outputs: currentMethod.value.outputs || [],
       stateMutability: currentMethod.value.stateMutability || 'view'
-    }
-    
+    };
+
     // Parse parameters based on type
     const parsedParams = params.value.map((p, i) => {
-      const type = currentMethod.value?.inputs?.[i]?.type || 'uint256'
+      const type = currentMethod.value?.inputs?.[i]?.type || 'uint256';
       if (type === 'address') {
-        return p as Address
+        return p as Address;
       }
       if (type.startsWith('uint')) {
-        return BigInt(p)
+        return BigInt(p);
       }
       if (type.startsWith('int')) {
-        return BigInt(p)
+        return BigInt(p);
       }
       if (type === 'bool') {
-        return p === 'true' || p === '1'
+        return p === 'true' || p === '1';
       }
       if (type === 'bytes') {
-        return p as Hex
+        return p as Hex;
       }
-      return p
-    })
-    
+      return p;
+    });
+
     // Use viem's encodeFunctionData for proper ABI encoding
     return encodeFunctionData({
       abi: [abiItem],
       functionName: currentMethod.value.name,
       args: parsedParams
-    })
+    });
   } catch (e) {
-    console.error('Failed to encode function call:', e)
-    return '0x'
+    console.error('Failed to encode function call:', e);
+    return '0x';
   }
-}
+};
 
 const executeRead = async () => {
-  if (!validateParams()) return
-  
-  isLoading.value = true
-  error.value = ''
-  result.value = null
-  
+  if (!validateParams()) return;
+
+  isLoading.value = true;
+  error.value = '';
+  result.value = null;
+
   try {
     if (useBackendApi.value) {
       // Use backend API (no wallet needed)
@@ -144,170 +170,177 @@ const executeRead = async () => {
         methodName: selectedMethod.value,
         params: params.value[0] || undefined,
         fromAddress: account.value || undefined
-      })
-      
+      });
+
       if (response.data.success) {
-        result.value = response.data.data.result
-        emit('success', { method: selectedMethod.value, result: result.value })
+        result.value = response.data.data.result;
+        emit('success', { method: selectedMethod.value, result: result.value });
       } else {
-        throw new Error(response.data.msg || 'Backend call failed')
+        throw new Error(response.data.msg || 'Backend call failed');
       }
     } else {
       // Use browser wallet directly
       if (!(window as any).ethereum) {
-        throw new Error('No Ethereum provider found')
+        throw new Error('No Ethereum provider found');
       }
-      
-      const data = encodeFunctionCall()
-      
+
+      const data = encodeFunctionCall();
+
       const response = await (window as any).ethereum.request({
         method: 'eth_call',
-        params: [{
-          to: contractAddress.value,
-          data: data,
-        }, 'latest']
-      })
-      
+        params: [
+          {
+            to: contractAddress.value,
+            data
+          },
+          'latest'
+        ]
+      });
+
       // Parse result using viem's decoder
       try {
-        const method = currentMethod.value
+        const method = currentMethod.value;
         if (!method) {
-          result.value = response
-          return
+          result.value = response;
+          return;
         }
         const decoded = decodeFunctionResult({
           abi: [method],
           functionName: method.name,
           data: response
-        })
+        });
         // Format the result for display
         if (typeof decoded === 'bigint') {
-          result.value = decoded.toString()
+          result.value = decoded.toString();
         } else if (Array.isArray(decoded)) {
-          result.value = decoded.map(d => typeof d === 'bigint' ? d.toString() : d).join(', ')
+          result.value = decoded.map(d => (typeof d === 'bigint' ? d.toString() : d)).join(', ');
         } else {
-          result.value = String(decoded)
+          result.value = String(decoded);
         }
       } catch (e) {
         // Fallback to manual parsing if decode fails
-        console.warn('Failed to decode result, using raw response:', e)
+        console.warn('Failed to decode result, using raw response:', e);
         if (currentMethod.value?.outputs?.[0]) {
-          const outputType = currentMethod.value.outputs[0].type
+          const outputType = currentMethod.value.outputs[0].type;
           if (outputType === 'uint256' || outputType.startsWith('uint')) {
-            result.value = BigInt(response).toString()
+            result.value = BigInt(response).toString();
           } else {
-            result.value = response
+            result.value = response;
           }
         } else {
-          result.value = response
+          result.value = response;
         }
       }
-      
-      emit('success', { method: selectedMethod.value, result: result.value })
+
+      emit('success', { method: selectedMethod.value, result: result.value });
     }
   } catch (e: any) {
-    error.value = e.message || 'Call failed'
-    emit('error', error.value)
+    error.value = e.message || 'Call failed';
+    emit('error', error.value);
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const executeWrite = async () => {
   if (!account.value) {
-    error.value = 'Please connect wallet first'
-    return
+    error.value = 'Please connect wallet first';
+    return;
   }
-  
-  if (!validateParams()) return
-  
-  isLoading.value = true
-  error.value = ''
-  
+
+  if (!validateParams()) return;
+
+  isLoading.value = true;
+  error.value = '';
+
   try {
     if (!(window as any).ethereum) {
-      throw new Error('No Ethereum provider found')
+      throw new Error('No Ethereum provider found');
     }
-    
-    const data = encodeFunctionCall()
-    
+
+    const data = encodeFunctionCall();
+
     // Get gas estimate
     const gasEstimate = await (window as any).ethereum.request({
       method: 'eth_estimateGas',
-      params: [{
-        from: account.value,
-        to: contractAddress.value,
-        data: data,
-      }]
-    })
-    
+      params: [
+        {
+          from: account.value,
+          to: contractAddress.value,
+          data
+        }
+      ]
+    });
+
     // Send transaction
     const txHash = await (window as any).ethereum.request({
       method: 'eth_sendTransaction',
-      params: [{
-        from: account.value,
-        to: contractAddress.value,
-        data: data,
-        gas: BigInt(Number(gasEstimate) * 120 / 100).toString(16), // Add 20% buffer
-      }]
-    })
-    
-    result.value = { transactionHash: txHash }
-    emit('success', { method: selectedMethod.value, txHash })
+      params: [
+        {
+          from: account.value,
+          to: contractAddress.value,
+          data,
+          gas: BigInt((Number(gasEstimate) * 120) / 100).toString(16) // Add 20% buffer
+        }
+      ]
+    });
+
+    result.value = { transactionHash: txHash };
+    emit('success', { method: selectedMethod.value, txHash });
   } catch (e: any) {
-    error.value = e.message || 'Transaction failed'
-    emit('error', error.value)
+    error.value = e.message || 'Transaction failed';
+    emit('error', error.value);
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const addParam = () => {
-  params.value.push('')
-}
+  params.value.push('');
+};
 
 const removeParam = (index: number) => {
-  params.value.splice(index, 1)
-}
+  params.value.splice(index, 1);
+};
 
 const reset = () => {
-  selectedMethod.value = ''
-  params.value = []
-  result.value = null
-  error.value = ''
-}
+  selectedMethod.value = '';
+  params.value = [];
+  result.value = null;
+  error.value = '';
+};
 </script>
 
 <template>
-  <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
-    <div class="flex items-center justify-between mb-6">
+  <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
+    <div class="mb-6 flex items-center justify-between">
       <h2 class="text-xl font-semibold">Contract Call</h2>
-      <button 
-        @click="reset"
-        class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm transition-colors"
-      >
+      <button class="rounded-lg bg-slate-700 px-4 py-2 text-sm transition-colors hover:bg-slate-600" @click="reset">
         Reset
       </button>
     </div>
 
     <!-- Error Alert -->
-    <div v-if="error" class="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg flex justify-between items-center">
-      <span class="text-red-300 text-sm">{{ error }}</span>
-      <button @click="error = ''" class="text-red-400 hover:text-white">✕</button>
+    <div
+      v-if="error"
+      class="mb-6 flex items-center justify-between border border-red-500/50 rounded-lg bg-red-500/20 p-4"
+    >
+      <span class="text-sm text-red-300">{{ error }}</span>
+      <button class="text-red-400 hover:text-white" @click="error = ''">✕</button>
     </div>
 
     <!-- Backend API Toggle -->
-    <div class="mb-4 p-4 bg-slate-900/30 rounded-xl flex items-center justify-between">
+    <div class="mb-4 flex items-center justify-between rounded-xl bg-slate-900/30 p-4">
       <div>
-        <label class="text-sm font-medium text-slate-300">Use Backend API</label>
+        <label class="text-sm text-slate-300 font-medium">Use Backend API</label>
         <p class="text-xs text-slate-500">Call via server (no wallet needed for read)</p>
       </div>
-      <button 
-        @click="useBackendApi = !useBackendApi"
+      <button
         :class="useBackendApi ? 'bg-green-500' : 'bg-slate-600'"
-        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+        class="relative h-6 w-11 inline-flex items-center rounded-full transition-colors"
+        @click="useBackendApi = !useBackendApi"
       >
-        <span 
+        <span
           :class="useBackendApi ? 'translate-x-6' : 'translate-x-1'"
           class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
         />
@@ -316,25 +349,21 @@ const reset = () => {
 
     <!-- Contract Address -->
     <div class="mb-4">
-      <label class="block text-sm font-medium text-slate-400 mb-2">
-        Contract Address
-      </label>
-      <input 
+      <label class="mb-2 block text-sm text-slate-400 font-medium">Contract Address</label>
+      <input
         v-model="contractAddress"
         type="text"
         placeholder="0x..."
-        class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+        class="w-full border border-slate-700 rounded-xl bg-slate-900/50 px-4 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-purple-500"
       />
     </div>
 
     <!-- Method Selector -->
     <div class="mb-4">
-      <label class="block text-sm font-medium text-slate-400 mb-2">
-        Select Method
-      </label>
-      <select 
+      <label class="mb-2 block text-sm text-slate-400 font-medium">Select Method</label>
+      <select
         v-model="selectedMethod"
-        class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+        class="w-full border border-slate-700 rounded-xl bg-slate-900/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
       >
         <option value="">Choose a method...</option>
         <option v-for="method in sampleMethods" :key="method.name" :value="method.name">
@@ -345,33 +374,29 @@ const reset = () => {
 
     <!-- Parameters -->
     <div v-if="paramInputs.length > 0" class="mb-6">
-      <div class="flex items-center justify-between mb-2">
-        <label class="text-sm font-medium text-slate-400">Parameters</label>
-        <button 
+      <div class="mb-2 flex items-center justify-between">
+        <label class="text-sm text-slate-400 font-medium">Parameters</label>
+        <button
+          class="rounded-lg bg-purple-500/20 px-3 py-1 text-sm text-purple-400 transition-colors hover:bg-purple-500/30"
           @click="addParam"
-          class="px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg text-sm transition-colors"
         >
           + Add Param
         </button>
       </div>
-      
+
       <div class="space-y-3">
-        <div 
-          v-for="(param, index) in paramInputs" 
-          :key="index"
-          class="flex items-center gap-3"
-        >
+        <div v-for="(param, index) in paramInputs" :key="index" class="flex items-center gap-3">
           <div class="flex-1">
-            <input 
+            <input
               v-model="params[index]"
               :type="param.type === 'uint256' ? 'number' : 'text'"
               :placeholder="`${param.name} (${param.type})`"
-              class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+              class="w-full border border-slate-700 rounded-xl bg-slate-900/50 px-4 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
-          <button 
+          <button
+            class="rounded-xl bg-red-500/20 p-3 text-red-400 transition-colors hover:bg-red-500/30"
             @click="removeParam(index)"
-            class="p-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-colors"
           >
             ✕
           </button>
@@ -381,58 +406,70 @@ const reset = () => {
 
     <!-- Execute Button -->
     <div class="flex gap-3">
-      <button 
+      <button
         v-if="!isWriteMethod"
-        @click="executeRead"
         :disabled="isLoading || !selectedMethod"
-        class="flex-1 py-3 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-semibold transition-colors"
+        class="flex-1 rounded-xl bg-blue-500 py-3 font-semibold transition-colors disabled:cursor-not-allowed hover:bg-blue-600 disabled:opacity-50"
+        @click="executeRead"
       >
-        {{ isLoading ? 'Reading...' : (useBackendApi ? 'Call API' : 'Read') }}
+        {{ isLoading ? 'Reading...' : useBackendApi ? 'Call API' : 'Read' }}
       </button>
-      
-      <button 
+
+      <button
         v-else
-        @click="executeWrite"
         :disabled="isLoading || !selectedMethod || !account"
-        class="flex-1 py-3 bg-green-500 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-semibold transition-colors"
+        class="flex-1 rounded-xl bg-green-500 py-3 font-semibold transition-colors disabled:cursor-not-allowed hover:bg-green-600 disabled:opacity-50"
+        @click="executeWrite"
       >
         {{ isLoading ? 'Confirming...' : 'Write' }}
       </button>
     </div>
 
     <!-- Result -->
-    <div v-if="result" class="mt-6 p-4 bg-slate-900/50 rounded-xl">
-      <label class="block text-sm font-medium text-slate-400 mb-2">Result</label>
-      <div class="font-mono text-sm break-all text-green-400">
+    <div v-if="result" class="mt-6 rounded-xl bg-slate-900/50 p-4">
+      <label class="mb-2 block text-sm text-slate-400 font-medium">Result</label>
+      <div class="break-all text-sm text-green-400 font-mono">
         <pre>{{ JSON.stringify(result, null, 2) }}</pre>
       </div>
     </div>
 
     <!-- Quick Contract Templates -->
-    <div class="mt-6 pt-6 border-t border-slate-700">
-      <h3 class="text-sm font-medium text-slate-400 mb-3">Quick Templates</h3>
+    <div class="mt-6 border-t border-slate-700 pt-6">
+      <h3 class="mb-3 text-sm text-slate-400 font-medium">Quick Templates</h3>
       <div class="grid grid-cols-2 gap-2">
-        <button 
-          @click="contractAddress = '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599'; selectedMethod = 'balanceOf'"
-          class="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs text-left transition-colors"
+        <button
+          class="rounded-lg bg-slate-700 px-3 py-2 text-left text-xs transition-colors hover:bg-slate-600"
+          @click="
+            contractAddress = '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599';
+            selectedMethod = 'balanceOf';
+          "
         >
           🟡 WBTC
         </button>
-        <button 
-          @click="contractAddress = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'; selectedMethod = 'balanceOf'"
-          class="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs text-left transition-colors"
+        <button
+          class="rounded-lg bg-slate-700 px-3 py-2 text-left text-xs transition-colors hover:bg-slate-600"
+          @click="
+            contractAddress = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
+            selectedMethod = 'balanceOf';
+          "
         >
           🔵 USDC
         </button>
-        <button 
-          @click="contractAddress = '0x6B175474E89094C44Da98b954Eebc90fE31f3a2a'; selectedMethod = 'balanceOf'"
-          class="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs text-left transition-colors"
+        <button
+          class="rounded-lg bg-slate-700 px-3 py-2 text-left text-xs transition-colors hover:bg-slate-600"
+          @click="
+            contractAddress = '0x6B175474E89094C44Da98b954Eebc90fE31f3a2a';
+            selectedMethod = 'balanceOf';
+          "
         >
           🟠 DAI
         </button>
-        <button 
-          @click="contractAddress = '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9'; selectedMethod = 'balanceOf'"
-          class="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs text-left transition-colors"
+        <button
+          class="rounded-lg bg-slate-700 px-3 py-2 text-left text-xs transition-colors hover:bg-slate-600"
+          @click="
+            contractAddress = '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9';
+            selectedMethod = 'balanceOf';
+          "
         >
           🟣 AAVE
         </button>

@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue';
 
 interface Token {
-  address: string
-  name: string
-  symbol: string
-  decimals: number
-  logo?: string
+  address: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  logo?: string;
 }
 
 const emit = defineEmits<{
-  (e: 'add', token: Token): void
-  (e: 'close'): void
-}>()
+  (e: 'add', token: Token): void;
+  (e: 'close'): void;
+}>();
 
-const searchQuery = ref('')
-const customAddress = ref('')
-const isAddingCustom = ref(false)
+const searchQuery = ref('');
+const customAddress = ref('');
+const isAddingCustom = ref(false);
 
 // Popular tokens list
 const popularTokens: Token[] = [
@@ -29,103 +29,95 @@ const popularTokens: Token[] = [
   { address: '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfe5B6', name: 'Polkadot', symbol: 'DOT', decimals: 18 },
   { address: '0x4EED0fa8dE12D5a86517f214C2f11586Ba2ED88D', name: 'Polygon', symbol: 'MATIC', decimals: 18 },
   { address: '0x0D8775F648430679A709E98d2b0Cb6250d2887EF', name: 'Basic Attention', symbol: 'BAT', decimals: 18 },
-  { address: '0x1985365e9f78359a9B6AD760e32412f4a445E862', name: 'Augur', symbol: 'REP', decimals: 18 },
-]
+  { address: '0x1985365e9f78359a9B6AD760e32412f4a445E862', name: 'Augur', symbol: 'REP', decimals: 18 }
+];
 
 const defiTokens: Token[] = [
   { address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', name: 'Uniswap', symbol: 'UNI', decimals: 18 },
   { address: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9', name: 'Aave', symbol: 'AAVE', decimals: 18 },
   { address: '0x80fB784B7eD6678eFC61B830f6B111A9812E2B80', name: 'Aave (OLD)', symbol: 'LEND', decimals: 18 },
   { address: '0x0D8775F648430679A709E98d2b0Cb6250d2887EF', name: 'Basic Attention', symbol: 'BAT', decimals: 18 },
-  { address: '0x1985365e9f78359a9B6AD760e32412f4a445E862', name: 'Augur', symbol: 'REP', decimals: 18 },
-]
+  { address: '0x1985365e9f78359a9B6AD760e32412f4a445E862', name: 'Augur', symbol: 'REP', decimals: 18 }
+];
 
 const filteredTokens = computed(() => {
-  const query = searchQuery.value.toLowerCase()
-  if (!query) return popularTokens
-  return popularTokens.filter(t => 
-    t.name.toLowerCase().includes(query) || 
-    t.symbol.toLowerCase().includes(query)
-  )
-})
+  const query = searchQuery.value.toLowerCase();
+  if (!query) return popularTokens;
+  return popularTokens.filter(t => t.name.toLowerCase().includes(query) || t.symbol.toLowerCase().includes(query));
+});
 
 const isValidAddress = (address: string): boolean => {
-  return /^0x[a-fA-F0-9]{40}$/.test(address)
-}
+  return /^0x[a-fA-F0-9]{40}$/.test(address);
+};
 
 const handleAddToken = (token: Token) => {
-  emit('add', token)
-}
+  emit('add', token);
+};
 
 const handleAddCustom = () => {
   if (!isValidAddress(customAddress.value)) {
-    return
+    return;
   }
-  
+
   // In production, fetch token info from blockchain
   const token: Token = {
     address: customAddress.value,
     name: 'Unknown Token',
     symbol: '???',
-    decimals: 18,
-  }
-  
-  emit('add', token)
-}
+    decimals: 18
+  };
+
+  emit('add', token);
+};
 
 const validateAndProceed = () => {
   if (isValidAddress(customAddress.value)) {
-    handleAddCustom()
+    handleAddCustom();
   }
-}
+};
 </script>
 
 <template>
-  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-    <div class="bg-slate-800 rounded-2xl w-full max-w-lg border border-slate-700 overflow-hidden">
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+    <div class="max-w-lg w-full overflow-hidden border border-slate-700 rounded-2xl bg-slate-800">
       <!-- Header -->
-      <div class="flex items-center justify-between p-6 border-b border-slate-700">
+      <div class="flex items-center justify-between border-b border-slate-700 p-6">
         <h2 class="text-xl font-semibold">Add Token</h2>
-        <button 
-          @click="emit('close')"
-          class="p-2 hover:bg-slate-700 rounded-lg transition-colors"
-        >
-          ✕
-        </button>
+        <button class="rounded-lg p-2 transition-colors hover:bg-slate-700" @click="emit('close')">✕</button>
       </div>
 
       <!-- Search -->
-      <div class="p-4 border-b border-slate-700">
-        <input 
+      <div class="border-b border-slate-700 p-4">
+        <input
           v-model="searchQuery"
           type="text"
           placeholder="Search tokens..."
-          class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+          class="w-full border border-slate-700 rounded-xl bg-slate-900/50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
       </div>
 
       <!-- Custom Token Toggle -->
-      <div class="p-4 border-b border-slate-700">
-        <button 
+      <div class="border-b border-slate-700 p-4">
+        <button
+          class="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-700 py-3 text-sm font-medium transition-colors hover:bg-slate-600"
           @click="isAddingCustom = !isAddingCustom"
-          class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
         >
           <span>{{ isAddingCustom ? '▼' : '▶' }}</span>
           Add Custom Token
         </button>
-        
+
         <!-- Custom Token Input -->
         <div v-if="isAddingCustom" class="mt-4 space-y-3">
-          <input 
+          <input
             v-model="customAddress"
             type="text"
             placeholder="Token Contract Address (0x...)"
-            class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+            class="w-full border border-slate-700 rounded-xl bg-slate-900/50 px-4 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
-          <button 
-            @click="validateAndProceed"
+          <button
             :disabled="!isValidAddress(customAddress)"
-            class="w-full py-3 bg-purple-500 hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium transition-colors"
+            class="w-full rounded-xl bg-purple-500 py-3 font-medium transition-colors disabled:cursor-not-allowed hover:bg-purple-600 disabled:opacity-50"
+            @click="validateAndProceed"
           >
             Add Custom Token
           </button>
@@ -135,16 +127,18 @@ const validateAndProceed = () => {
       <!-- Popular Tokens -->
       <div class="max-h-96 overflow-y-auto">
         <div class="p-4">
-          <h3 class="text-sm font-medium text-slate-400 mb-3">Popular Tokens</h3>
+          <h3 class="mb-3 text-sm text-slate-400 font-medium">Popular Tokens</h3>
           <div class="space-y-2">
             <button
               v-for="token in filteredTokens"
               :key="token.address"
+              class="w-full flex items-center justify-between rounded-xl bg-slate-900/50 p-3 transition-colors hover:bg-slate-700"
               @click="handleAddToken(token)"
-              class="w-full p-3 bg-slate-900/50 hover:bg-slate-700 rounded-xl flex items-center justify-between transition-colors"
             >
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                <div
+                  class="h-10 w-10 flex items-center justify-center rounded-full from-purple-500 to-pink-500 bg-gradient-to-br text-white font-bold"
+                >
                   {{ token.symbol.charAt(0) }}
                 </div>
                 <div class="text-left">
@@ -158,17 +152,19 @@ const validateAndProceed = () => {
         </div>
 
         <!-- DeFi Tokens -->
-        <div class="p-4 border-t border-slate-700">
-          <h3 class="text-sm font-medium text-slate-400 mb-3">DeFi Tokens</h3>
+        <div class="border-t border-slate-700 p-4">
+          <h3 class="mb-3 text-sm text-slate-400 font-medium">DeFi Tokens</h3>
           <div class="space-y-2">
             <button
               v-for="token in defiTokens"
               :key="token.address"
+              class="w-full flex items-center justify-between rounded-xl bg-slate-900/50 p-3 transition-colors hover:bg-slate-700"
               @click="handleAddToken(token)"
-              class="w-full p-3 bg-slate-900/50 hover:bg-slate-700 rounded-xl flex items-center justify-between transition-colors"
             >
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white font-bold">
+                <div
+                  class="h-10 w-10 flex items-center justify-center rounded-full from-green-500 to-emerald-500 bg-gradient-to-br text-white font-bold"
+                >
                   {{ token.symbol.charAt(0) }}
                 </div>
                 <div class="text-left">
@@ -183,10 +179,8 @@ const validateAndProceed = () => {
       </div>
 
       <!-- Footer -->
-      <div class="p-4 border-t border-slate-700 bg-slate-900/50">
-        <p class="text-xs text-slate-500 text-center">
-          Token prices and balances are fetched from blockchain
-        </p>
+      <div class="border-t border-slate-700 bg-slate-900/50 p-4">
+        <p class="text-center text-xs text-slate-500">Token prices and balances are fetched from blockchain</p>
       </div>
     </div>
   </div>

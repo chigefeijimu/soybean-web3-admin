@@ -1,13 +1,9 @@
-/**
- * Web3 Error handling utilities
- */
+/** Web3 Error handling utilities */
 
-import { ref } from 'vue'
-import { useMessage } from 'naive-ui'
+import { ref } from 'vue';
+import type { useMessage } from 'naive-ui';
 
-/**
- * Common Web3 error codes and messages
- */
+/** Common Web3 error codes and messages */
 export const WEB3_ERRORS = {
   // Wallet errors
   WALLET_NOT_CONNECTED: {
@@ -25,7 +21,7 @@ export const WEB3_ERRORS = {
     message: 'Request was rejected',
     action: 'Try again'
   },
-  
+
   // Transaction errors
   INSUFFICIENT_FUNDS: {
     code: 'INSUFFICIENT_FUNDS',
@@ -42,7 +38,7 @@ export const WEB3_ERRORS = {
     message: 'Transaction failed',
     action: 'View details'
   },
-  
+
   // Contract errors
   CONTRACT_NOT_FOUND: {
     code: 'CONTRACT_NOT_FOUND',
@@ -59,7 +55,7 @@ export const WEB3_ERRORS = {
     message: 'Contract function not found',
     action: 'Verify ABI'
   },
-  
+
   // Network errors
   NETWORK_ERROR: {
     code: 'NETWORK_ERROR',
@@ -71,139 +67,125 @@ export const WEB3_ERRORS = {
     message: 'Request timed out',
     action: 'Retry'
   }
-}
+};
 
-/**
- * Parse error from Web3 operation
- */
+/** Parse error from Web3 operation */
 export function parseWeb3Error(error: any): {
-  code: string
-  message: string
-  action?: string
+  code: string;
+  message: string;
+  action?: string;
 } {
   if (!error) {
-    return WEB3_ERRORS.TRANSACTION_FAILED
+    return WEB3_ERRORS.TRANSACTION_FAILED;
   }
 
-  const errorMessage = error.message || error.toString() || ''
-  
+  const errorMessage = error.message || error.toString() || '';
+
   // Parse common errors
   if (errorMessage.includes('User rejected')) {
-    return WEB3_ERRORS.USER_REJECTED
+    return WEB3_ERRORS.USER_REJECTED;
   }
   if (errorMessage.includes('insufficient funds')) {
-    return WEB3_ERRORS.INSUFFICIENT_FUNDS
+    return WEB3_ERRORS.INSUFFICIENT_FUNDS;
   }
   if (errorMessage.includes('gas')) {
-    return WEB3_ERRORS.GAS_TOO_LOW
+    return WEB3_ERRORS.GAS_TOO_LOW;
   }
   if (errorMessage.includes('network') || errorMessage.includes('connection')) {
-    return WEB3_ERRORS.NETWORK_ERROR
+    return WEB3_ERRORS.NETWORK_ERROR;
   }
   if (errorMessage.includes('timeout')) {
-    return WEB3_ERRORS.TIMEOUT
+    return WEB3_ERRORS.TIMEOUT;
   }
-  
+
   // Default to transaction failed
   return {
     code: 'UNKNOWN_ERROR',
     message: errorMessage.slice(0, 200),
     action: 'View details'
-  }
+  };
 }
 
-/**
- * Show error message with actions
- */
+/** Show error message with actions */
 export function showWeb3Error(error: any, message?: ReturnType<typeof useMessage>) {
-  const parsed = parseWeb3Error(error)
-  message?.error(parsed.message)
-  
-  console.error('[Web3 Error]', parsed.code, parsed.message)
-  
-  return parsed
+  const parsed = parseWeb3Error(error);
+  message?.error(parsed.message);
+
+  console.error('[Web3 Error]', parsed.code, parsed.message);
+
+  return parsed;
 }
 
-/**
- * Format error for display
- */
+/** Format error for display */
 export function formatErrorForDisplay(error: any): string {
-  const parsed = parseWeb3Error(error)
-  
-  let display = `❌ ${parsed.message}`
-  
+  const parsed = parseWeb3Error(error);
+
+  let display = `❌ ${parsed.message}`;
+
   if (parsed.action) {
-    display += `\n📋 ${parsed.action}`
+    display += `\n📋 ${parsed.action}`;
   }
-  
-  return display
+
+  return display;
 }
 
-/**
- * Retry utility with exponential backoff
- */
+/** Retry utility with exponential backoff */
 export async function withRetry<T>(
   fn: () => Promise<T>,
   options: {
-    maxRetries?: number
-    delay?: number
-    onRetry?: (attempt: number, error: any) => void
+    maxRetries?: number;
+    delay?: number;
+    onRetry?: (attempt: number, error: any) => void;
   } = {}
 ): Promise<T> {
-  const { 
-    maxRetries = 3, 
-    delay = 1000,
-    onRetry 
-  } = options
-  
-  let lastError: any
-  
+  const { maxRetries = 3, delay = 1000, onRetry } = options;
+
+  let lastError: any;
+
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      return await fn()
+      return await fn();
     } catch (error: any) {
-      lastError = error
-      
+      lastError = error;
+
       if (attempt < maxRetries) {
-        const waitTime = delay * Math.pow(2, attempt)
-        onRetry?.(attempt + 1, error)
-        await new Promise(resolve => setTimeout(resolve, waitTime))
+        const waitTime = delay * 2 ** attempt;
+        onRetry?.(attempt + 1, error);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
       }
     }
   }
-  
-  throw lastError
+
+  throw lastError;
 }
 
-/**
- * Loading state manager
- */
+/** Loading state manager */
 export function useLoadingState() {
-  const isLoading = ref(false)
-  const loadingText = ref('')
-  
+  const isLoading = ref(false);
+  const loadingText = ref('');
+
   const startLoading = (text = 'Loading...') => {
-    isLoading.value = true
-    loadingText.value = text
-  }
-  
+    isLoading.value = true;
+    loadingText.value = text;
+  };
+
   const stopLoading = () => {
-    isLoading.value = false
-    loadingText.value = ''
-  }
-  
+    isLoading.value = false;
+    loadingText.value = '';
+  };
+
   return {
     isLoading,
     loadingText,
     startLoading,
     stopLoading,
     withLoading: async <T>(fn: () => Promise<T>, text?: string) => {
-      startLoading(text)
+      startLoading(text);
       try {
-        return await fn()
+        return await fn();
       } finally {
-        stopLoading()
+        stopLoading();
       }
     }
-  }
+  };
 }

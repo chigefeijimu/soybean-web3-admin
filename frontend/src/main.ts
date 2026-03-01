@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query';
+import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { config as wagmiConfig } from './plugins/web3';
 import './plugins/assets';
 import { setupAppVersionNotification, setupDayjs, setupIconifyOffline, setupLoading, setupNProgress } from './plugins';

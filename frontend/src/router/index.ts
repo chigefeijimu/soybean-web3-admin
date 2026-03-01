@@ -26,10 +26,7 @@ const rootRoute = {
 };
 
 // Include all generated routes with root redirect
-const allRoutes = [
-  rootRoute,
-  ...transformElegantRoutesToVueRoutes(generatedRoutes, layouts, views)
-];
+const allRoutes = [rootRoute, ...transformElegantRoutesToVueRoutes(generatedRoutes, layouts, views)];
 
 export const router = createRouter({
   history: historyCreatorMap[VITE_ROUTER_HISTORY_MODE](VITE_BASE_URL),
