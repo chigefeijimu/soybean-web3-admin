@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddressBook: typeof import('./../components/web3/AddressBook.vue')['default']
     AddTokenModal: typeof import('./../components/web3/AddTokenModal.vue')['default']
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
     BatchTransfer: typeof import('./../components/web3/BatchTransfer.vue')['default']
