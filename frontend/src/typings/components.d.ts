@@ -46,6 +46,7 @@ declare module 'vue' {
     LookForward: typeof import('./../components/custom/look-forward.vue')['default']
     MarketOverview: typeof import('./../components/web3/MarketOverview.vue')['default']
     MenuToggler: typeof import('./../components/common/menu-toggler.vue')['default']
+    MultisigWallet: typeof import('./../components/web3/MultisigWallet.vue')['default']
     NAlert: typeof import('naive-ui')['NAlert']
     NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']
     NBreadcrumbItem: typeof import('naive-ui')['NBreadcrumbItem']
