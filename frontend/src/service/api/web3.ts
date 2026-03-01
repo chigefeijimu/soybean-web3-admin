@@ -242,3 +242,43 @@ export async function scanBlocks(from: number, to: number) {
     method: 'GET'
   });
 }
+
+// NFT APIs
+export async function getNFTOwner(contract: string, tokenId: string, chainId?: number) {
+  return request({
+    url: `/web3/nft/${contract}/${tokenId}/owner`,
+    method: 'GET',
+    params: { chainId }
+  });
+}
+
+export async function getNFTTokenURI(contract: string, tokenId: string, chainId?: number) {
+  return request({
+    url: `/web3/nft/${contract}/${tokenId}/token-uri`,
+    method: 'GET',
+    params: { chainId }
+  });
+}
+
+export async function getNFTMetadata(tokenUri: string) {
+  return request({
+    url: `/web3/nft/metadata/${encodeURIComponent(tokenUri)}`,
+    method: 'GET'
+  });
+}
+
+export async function getNFTOwnersBatch(contract: string, tokenIds: string[], chainId?: number) {
+  return request({
+    url: `/web3/nft/${contract}/owners`,
+    method: 'POST',
+    data: { token_ids: tokenIds, chain_id: chainId }
+  });
+}
+
+export async function getNFTDetails(contract: string, tokenIds: string[], chainId?: number) {
+  return request({
+    url: `/web3/nft/${contract}/details`,
+    method: 'POST',
+    data: { token_ids: tokenIds, chain_id: chainId }
+  });
+}

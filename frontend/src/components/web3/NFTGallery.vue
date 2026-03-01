@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useWeb3 } from '@/composables/web3/useWeb3';
+import { getNFTDetails, getNFTMetadata } from '@/service/api/web3';
 
 interface NFT {
   id: string;
@@ -20,7 +21,12 @@ const isLoading = ref(false);
 const selectedNFT = ref<NFT | null>(null);
 const filter = ref<'all' | 'image' | 'video'>('all');
 
-// Mock NFT data
+// Form inputs for fetching NFTs
+const contractAddress = ref('0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'); // BAYC contract
+const tokenIds = ref('7804,1234');
+const nftChainId = ref(1);
+
+// Mock NFT data (fallback)
 const mockNFTs: NFT[] = [
   {
     id: '1',
@@ -84,18 +90,46 @@ const loadNFTs = async () => {
 
   isLoading.value = true;
   try {
-    // In production, fetch from:
-    // 1. OpenSea/Alchemy API
-    // 2. Direct blockchain queries
-    // 3. Moralis/Rarify APIs
-
-    await new Promise(resolve => setTimeout(resolve, 800));
-    nfts.value = mockNFTs;
+    // Try to fetch from backend API
+    const tokenIdList = tokenIds.value.split(',').map(t => t.trim()).filter(t => t);
+    
+    if (contractAddress.value && tokenIdList.length > 0) {
+      const response = await getNFTDetails(contractAddress.value, tokenIdList, nftChainId.value);
+      
+      if (response.data?.success && response.data?.data?.nfts) {
+        nfts.value = response.data.data.nfts.map((nft: any, index: number) => ({
+          id: String(index + 1),
+          tokenId: nft.token_id || tokenIdList[index],
+          contract: contractAddress.value,
+          name: nft.metadata?.name || `NFT #${tokenIdList[index]}`,
+          description: nft.metadata?.description || '',
+          image: nft.metadata?.image || nft.metadata?.image_url || '',
+          collection: nft.metadata?.collection?.name || '',
+          attributes: nft.metadata?.attributes
+        }));
+      } else {
+        // API call succeeded but no data, use mock
+        console.log('No NFT data from API, using mock data');
+        nfts.value = mockNFTs;
+      }
+    } else {
+      nfts.value = mockNFTs;
+    }
   } catch (e) {
-    console.error('Failed to load NFTs:', e);
+    console.error('Failed to load NFTs from API:', e);
+    // Fallback to mock data on error
+    nfts.value = mockNFTs;
   } finally {
     isLoading.value = false;
   }
+};
+
+// Also keep the mock load for quick testing
+const loadMockNFTs = async () => {
+  isLoading.value = true;
+  await new Promise(resolve => setTimeout(resolve, 500));
+  nfts.value = mockNFTs;
+  isLoading.value = false;
 };
 
 const openNFT = (nft: NFT) => {
@@ -129,13 +163,57 @@ onMounted(() => {
   <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
     <div class="mb-6 flex items-center justify-between">
       <h2 class="text-xl font-semibold">NFT Gallery</h2>
-      <button
-        :disabled="isLoading || !account"
-        class="rounded-lg bg-slate-700 px-4 py-2 text-sm transition-colors hover:bg-slate-600 disabled:opacity-50"
-        @click="loadNFTs"
-      >
-        {{ isLoading ? 'Loading...' : '↻ Refresh' }}
-      </button>
+      <div class="flex gap-2">
+        <button
+          :disabled="isLoading"
+          class="rounded-lg bg-slate-700 px-4 py-2 text-sm transition-colors hover:bg-slate-600 disabled:opacity-50"
+          @click="loadMockNFTs"
+        >
+          Load Demo
+        </button>
+        <button
+          :disabled="isLoading || !account"
+          class="rounded-lg bg-purple-500 px-4 py-2 text-sm transition-colors hover:bg-purple-600 disabled:opacity-50"
+          @click="loadNFTs"
+        >
+          {{ isLoading ? 'Loading...' : '↻ Fetch from Chain' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- NFT Config Form -->
+    <div class="mb-6 grid grid-cols-1 gap-4 rounded-xl bg-slate-900/50 p-4 md:grid-cols-3">
+      <div>
+        <label class="mb-1 block text-xs text-slate-400">Contract Address</label>
+        <input
+          v-model="contractAddress"
+          type="text"
+          placeholder="0x..."
+          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
+        />
+      </div>
+      <div>
+        <label class="mb-1 block text-xs text-slate-400">Token IDs (comma separated)</label>
+        <input
+          v-model="tokenIds"
+          type="text"
+          placeholder="1,2,3"
+          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
+        />
+      </div>
+      <div>
+        <label class="mb-1 block text-xs text-slate-400">Chain ID</label>
+        <select
+          v-model="nftChainId"
+          class="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
+        >
+          <option :value="1">Ethereum</option>
+          <option :value="5">Goerli</option>
+          <option :value="11155111">Sepolia</option>
+          <option :value="137">Polygon</option>
+          <option :value="42161">Arbitrum</option>
+        </select>
+      </div>
     </div>
 
     <!-- Filter Tabs -->
