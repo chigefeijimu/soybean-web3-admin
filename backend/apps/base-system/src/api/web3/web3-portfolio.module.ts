@@ -11,10 +11,21 @@ import { Web3GasService } from './web3-gas.service';
 import { Web3HealthController } from './web3-health.controller';
 import { Web3HealthService } from './web3-health.service';
 import { Web3YieldController } from './web3-yield.controller';
+import { Web3AnalyticsController } from './web3-analytics.controller';
+import { Web3AnalyticsService } from './web3-analytics.service';
 
 @Module({
   imports: [HttpModule],
-  controllers: [Web3PortfolioController, Web3PriceAlertController, Web3MultisigController, Web3DaoController, Web3GasController, Web3HealthController, Web3YieldController],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService],
+  controllers: [
+    Web3PortfolioController,
+    Web3PriceAlertController,
+    Web3MultisigController,
+    Web3DaoController,
+    Web3GasController,
+    Web3HealthController,
+    Web3YieldController,
+    Web3AnalyticsController,
+  ],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService],
 })
 export class Web3PortfolioModule {}
