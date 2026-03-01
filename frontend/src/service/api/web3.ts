@@ -1735,3 +1735,63 @@ export function getRebalanceStrategies() {
     method: 'get'
   });
 }
+
+// ==================== Options Tracker ====================
+
+export interface OptionsOverview {
+  timestamp: string;
+  totalOpenInterest: number;
+  totalVolume24h: number;
+  averageIv: number;
+  averagePutCallRatio: number;
+  assets: OptionsAsset[];
+  marketSentiment: string;
+}
+
+export interface OptionsAsset {
+  asset: string;
+  symbol: string;
+  totalOi: number;
+  totalOiFormatted: string;
+  callOi: number;
+  putOi: number;
+  putCallRatio: number;
+  volume24h: number;
+  volumeFormatted: string;
+  volumeChange: number;
+  iv: number;
+  ivChange: number;
+  nextExpiry: string;
+  maxPain: number;
+}
+
+export function getOptionsOverview() {
+  return request<OptionsOverview>({
+    url: '/options-tracker/overview',
+    method: 'get'
+  });
+}
+
+export function getOpenInterest(asset: string, timeframe: string = '7d') {
+  return request({
+    url: '/options-tracker/oi',
+    method: 'get',
+    params: { asset, timeframe }
+  });
+}
+
+export function getPutCallRatio(asset: string, expiry?: string) {
+  return request({
+    url: '/options-tracker/put-call-ratio',
+    method: 'get',
+    params: { asset, expiry }
+  });
+}
+
+export function getImpliedVolatility(asset: string, strike?: string) {
+  return request({
+    url: '/options-tracker/iv',
+    method: 'get',
+    params: { asset, strike }
+  });
+}

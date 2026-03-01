@@ -78,6 +78,7 @@ import GasPriceWidget from '@/components/web3/GasPriceWidget.vue';
 import DexAggregator from '@/components/web3/DexAggregator.vue';
 import PortfolioPerformance from '@/components/web3/PortfolioPerformance.vue';
 import PortfolioRebalancer from '@/components/web3/PortfolioRebalancer.vue';
+import OptionsTracker from '@/components/web3/OptionsTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -166,6 +167,7 @@ const tabs = [
   { id: 'portfolio-performance', label: 'Portfolio', icon: '📈' },
   { id: 'rebalance', label: 'Rebalance', icon: '⚖️' },
   { id: 'tax-loss', label: 'Tax Loss', icon: '🌾' },
+  { id: 'options', label: 'Options', icon: '📊' },
 ];
 
 // Supported networks with logos
@@ -758,6 +760,11 @@ onMounted(() => {
         <!-- Tax Loss Tab -->
         <div v-show="activeTab === 'tax-loss'">
           <TaxLossHarvester />
+        </div>
+
+        <!-- Options Tab -->
+        <div v-show="activeTab === 'options'">
+          <OptionsTracker />
         </div>
       </div>
 

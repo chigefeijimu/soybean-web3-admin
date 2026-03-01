@@ -133,6 +133,7 @@ declare module 'vue' {
     NTree: typeof import('naive-ui')['NTree']
     NWatermark: typeof import('naive-ui')['NWatermark']
     OnChainAnalytics: typeof import('./../components/web3/OnChainAnalytics.vue')['default']
+    OptionsTracker: typeof import('./../components/web3/OptionsTracker.vue')['default']
     OrderBook: typeof import('./../components/web3/OrderBook.vue')['default']
     PinToggler: typeof import('./../components/common/pin-toggler.vue')['default']
     PortfolioAnalytics: typeof import('./../components/web3/PortfolioAnalytics.vue')['default']
