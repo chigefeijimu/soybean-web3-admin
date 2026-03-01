@@ -1482,3 +1482,60 @@ export function getAirdropStats() {
     method: 'get'
   });
 }
+
+// ==================== Fear & Greed Index API ====================
+
+/** 恐惧贪婪指数 */
+export interface FearGreedIndex {
+  value: string;
+  value_classification: string;
+  timestamp: string;
+  time_until_update: string;
+}
+
+/** 恐惧贪婪历史数据 */
+export interface FearGreedHistoryItem {
+  value: string;
+  value_classification: string;
+  timestamp: string;
+}
+
+/** 恐惧贪婪历史 */
+export interface FearGreedHistory {
+  data: FearGreedHistoryItem[];
+}
+
+/**
+ * 获取当前恐惧贪婪指数
+ */
+export function getCurrentFearGreedIndex() {
+  return request<FearGreedIndex>({
+    url: '/web3/fear-greed',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取恐惧贪婪指数历史
+ * @param limit 返回数量 (默认30，最大90)
+ */
+export function getFearGreedHistory(limit?: number) {
+  return request<FearGreedHistory>({
+    url: '/web3/fear-greed/history',
+    method: 'get',
+    params: limit ? { limit } : {}
+  });
+}
+
+/**
+ * 获取指定日期范围的恐惧贪婪指数
+ * @param start 开始日期 (Unix timestamp)
+ * @param end 结束日期 (Unix timestamp)
+ */
+export function getFearGreedByDateRange(start: number, end: number) {
+  return request<FearGreedHistory>({
+    url: '/web3/fear-greed/range',
+    method: 'get',
+    params: { start, end }
+  });
+}

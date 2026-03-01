@@ -34,6 +34,7 @@ declare module 'vue' {
     ENSLookup: typeof import('./../components/web3/ENSLookup.vue')['default']
     EventExplorer: typeof import('./../components/web3/EventExplorer.vue')['default']
     ExceptionBase: typeof import('./../components/common/exception-base.vue')['default']
+    FearGreedIndex: typeof import('./../components/web3/FearGreedIndex.vue')['default']
     FeeTracker: typeof import('./../components/web3/FeeTracker.vue')['default']
     FullScreen: typeof import('./../components/common/full-screen.vue')['default']
     GasAnalyzer: typeof import('./../components/web3/GasAnalyzer.vue')['default']

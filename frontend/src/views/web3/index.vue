@@ -61,6 +61,7 @@ import RugPullDetector from '@/components/web3/RugPullDetector.vue';
 import VotingTracker from '@/components/web3/VotingTracker.vue';
 import ChainlinkPriceTracker from '@/components/web3/ChainlinkPriceTracker.vue';
 import DefiPortfolioTracker from '@/components/web3/DefiPortfolioTracker.vue';
+import FearGreedIndex from '@/components/web3/FearGreedIndex.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -133,6 +134,7 @@ const tabs = [
   { id: 'smart-money', label: 'Smart $', icon: '🐟' },
   { id: 'chainlink', label: 'Oracle', icon: '⛓️' },
   { id: 'defi-portfolio', label: 'DeFi Portfolio', icon: '💼' },
+  { id: 'fear-greed', label: 'Sentiment', icon: '😱' },
 ];
 
 // Supported networks with logos
@@ -645,6 +647,11 @@ onMounted(() => {
         <!-- DeFi Portfolio Tracker Tab -->
         <div v-show="activeTab === 'defi-portfolio'">
           <DefiPortfolioTracker />
+        </div>
+
+        <!-- Fear & Greed Index Tab -->
+        <div v-show="activeTab === 'fear-greed'">
+          <FearGreedIndex />
         </div>
       </div>
 
