@@ -26,6 +26,7 @@ declare module 'vue' {
     CountTo: typeof import('./../components/custom/count-to.vue')['default']
     CrossChainDashboard: typeof import('./../components/web3/CrossChainDashboard.vue')['default']
     DaoGovernance: typeof import('./../components/web3/DaoGovernance.vue')['default']
+    DappBrowser: typeof import('./../components/web3/DappBrowser/index.vue')['default']
     DarkModeContainer: typeof import('./../components/common/dark-mode-container.vue')['default']
     DataVisualizer: typeof import('./../components/web3/DataVisualizer.vue')['default']
     DefiExplorer: typeof import('./../components/web3/DefiExplorer.vue')['default']

@@ -72,6 +72,7 @@ import FlashloanDetector from '@/components/web3/FlashloanDetector.vue';
 import TokenVesting from '@/components/web3/TokenVesting.vue';
 import AddressInteractionAnalyzer from '@/components/web3/AddressInteractionAnalyzer.vue';
 import ContractStorageViewer from '@/components/web3/ContractStorageViewer.vue';
+import DappBrowser from '@/components/web3/DappBrowser/index.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -154,6 +155,7 @@ const tabs = [
   { id: 'vesting', label: 'Vesting', icon: '🔐' },
   { id: 'address-interaction', label: 'Address Link', icon: '🔗' },
   { id: 'contract-storage', label: 'Storage', icon: '📦' },
+  { id: 'dapp-browser', label: 'DApp Browser', icon: '🌐' },
 ];
 
 // Supported networks with logos
@@ -716,6 +718,11 @@ onMounted(() => {
         <!-- Contract Storage Viewer Tab -->
         <div v-show="activeTab === 'contract-storage'">
           <ContractStorageViewer />
+        </div>
+
+        <!-- DApp Browser Tab -->
+        <div v-show="activeTab === 'dapp-browser'">
+          <DappBrowser />
         </div>
       </div>
 
