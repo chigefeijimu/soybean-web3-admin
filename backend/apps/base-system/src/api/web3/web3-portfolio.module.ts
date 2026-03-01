@@ -49,6 +49,8 @@ import { AddressInteractionService } from './address-interaction.service';
 import { CrossChainTransferController } from './cross-chain-transfer.controller';
 import { DappBrowserController } from './dapp-browser.controller';
 import { DappBrowserService } from './dapp-browser.service';
+import { DexAggregatorController } from './dex-aggregator.controller';
+import { DexAggregatorService } from './dex-aggregator.service';
 
 @Module({
   imports: [HttpModule],
@@ -82,7 +84,8 @@ import { DappBrowserService } from './dapp-browser.service';
     AddressInteractionController,
     CrossChainTransferController,
     DappBrowserController,
+    DexAggregatorController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService],
 })
 export class Web3PortfolioModule {}

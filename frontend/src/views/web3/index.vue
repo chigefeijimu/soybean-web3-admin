@@ -75,6 +75,7 @@ import AddressInteractionAnalyzer from '@/components/web3/AddressInteractionAnal
 import ContractStorageViewer from '@/components/web3/ContractStorageViewer.vue';
 import DappBrowser from '@/components/web3/DappBrowser/index.vue';
 import GasPriceWidget from '@/components/web3/GasPriceWidget.vue';
+import DexAggregator from '@/components/web3/DexAggregator.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -159,6 +160,7 @@ const tabs = [
   { id: 'contract-storage', label: 'Storage', icon: '📦' },
   { id: 'dapp-browser', label: 'DApp Browser', icon: '🌐' },
   { id: 'gas-widget', label: 'Gas Widget', icon: '⛽' },
+  { id: 'dex-aggregator', label: 'Dex Agg', icon: '🔄' },
   { id: 'tax-loss', label: 'Tax Loss', icon: '🌾' },
 ];
 
@@ -732,6 +734,11 @@ onMounted(() => {
         <!-- Gas Widget Tab -->
         <div v-show="activeTab === 'gas-widget'">
           <GasPriceWidget />
+        </div>
+
+        <!-- Dex Aggregator Tab -->
+        <div v-show="activeTab === 'dex-aggregator'">
+          <DexAggregator />
         </div>
 
         <!-- Tax Loss Tab -->
