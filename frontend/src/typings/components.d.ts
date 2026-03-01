@@ -25,6 +25,7 @@ declare module 'vue' {
     EventExplorer: typeof import('./../components/web3/EventExplorer.vue')['default']
     ExceptionBase: typeof import('./../components/common/exception-base.vue')['default']
     FullScreen: typeof import('./../components/common/full-screen.vue')['default']
+    GasOptimizer: typeof import('./../components/web3/GasOptimizer.vue')['default']
     GasPrediction: typeof import('./../components/web3/GasPrediction.vue')['default']
     GasSaver: typeof import('./../components/web3/GasSaver.vue')['default']
     GasTracker: typeof import('./../components/web3/GasTracker.vue')['default']

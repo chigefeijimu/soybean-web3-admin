@@ -38,6 +38,7 @@ import TransactionSimulator from '@/components/web3/TransactionSimulator.vue';
 import CrossChainDashboard from '@/components/web3/CrossChainDashboard.vue';
 import ContractDeployer from '@/components/web3/ContractDeployer.vue';
 import EventExplorer from '@/components/web3/EventExplorer.vue';
+import GasOptimizer from '@/components/web3/GasOptimizer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -66,6 +67,7 @@ const tabs = [
   { id: 'analytics', label: 'Analytics', icon: '📊' },
   { id: 'analyzer', label: 'Analyzer', icon: '🔍' },
   { id: 'gas', label: 'Gas', icon: '⏳' },
+  { id: 'gas-optimizer', label: 'Gas Opt', icon: '🎯' },
   { id: 'mev', label: 'MEV', icon: '🛡️' },
   { id: 'safety', label: 'Safety', icon: '✅' },
   { id: 'saver', label: 'Saver', icon: '💰' },
@@ -409,6 +411,11 @@ onMounted(() => {
         <!-- Gas Prediction Tab -->
         <div v-show="activeTab === 'gas'">
           <GasPrediction />
+        </div>
+
+        <!-- Gas Optimizer Tab -->
+        <div v-show="activeTab === 'gas-optimizer'">
+          <GasOptimizer />
         </div>
 
         <!-- MEV Tab -->
