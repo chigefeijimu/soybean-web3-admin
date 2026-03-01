@@ -48,6 +48,7 @@ import AddressBook from '@/components/web3/AddressBook.vue';
 import DefiPositions from '@/components/web3/DefiPositions.vue';
 import LiquidityPoolScanner from '@/components/web3/LiquidityPoolScanner.vue';
 import NftFloorTracker from '@/components/web3/NftFloorTracker.vue';
+import TokenPriceChart from '@/components/web3/TokenPriceChart.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -106,7 +107,8 @@ const tabs = [
   { id: 'defi', label: 'DeFi', icon: '🧪' },
   { id: 'addressbook', label: 'Address Book', icon: '📒' },
   { id: 'liquidity', label: 'Liquidity', icon: '💧' },
-  { id: 'floor', label: 'Floor', icon: '📉' }
+  { id: 'floor', label: 'Floor', icon: '📉' },
+  { id: 'pricechart', label: 'Price', icon: '📈' }
 ];
 
 // Supported networks with logos
@@ -555,6 +557,11 @@ onMounted(() => {
         <!-- NFT Floor Tracker Tab -->
         <div v-show="activeTab === 'floor'">
           <component :is="markRaw(NftFloorTracker)" />
+        </div>
+
+        <!-- Price Chart Tab -->
+        <div v-show="activeTab === 'pricechart'">
+          <component :is="markRaw(TokenPriceChart)" />
         </div>
       </div>
 

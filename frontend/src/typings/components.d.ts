@@ -136,6 +136,7 @@ declare module 'vue' {
     TokenApprovalManager: typeof import('./../components/web3/TokenApprovalManager.vue')['default']
     TokenGrapher: typeof import('./../components/web3/TokenGrapher.vue')['default']
     TokenLaunchCalendar: typeof import('./../components/web3/TokenLaunchCalendar.vue')['default']
+    TokenPriceChart: typeof import('./../components/web3/TokenPriceChart.vue')['default']
     TokenSafetyChecker: typeof import('./../components/web3/TokenSafetyChecker.vue')['default']
     TokenSearch: typeof import('./../components/web3/TokenSearch.vue')['default']
     TokenSwap: typeof import('./../components/web3/TokenSwap.vue')['default']
