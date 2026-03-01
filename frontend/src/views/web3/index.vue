@@ -65,6 +65,7 @@ import FearGreedIndex from '@/components/web3/FearGreedIndex.vue';
 import StablecoinYield from '@/components/web3/StablecoinYield.vue';
 import TaxCalculator from '@/components/web3/TaxCalculator.vue';
 import LiquidationAlert from '@/components/web3/LiquidationAlert.vue';
+import StakingDashboard from '@/components/web3/StakingDashboard.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -140,6 +141,7 @@ const tabs = [
   { id: 'fear-greed', label: 'Sentiment', icon: '😱' },
   { id: 'stable-yield', label: 'Stable Yield', icon: '💰' },
   { id: 'liquidation', label: 'Liquidation', icon: '⚠️' },
+  { id: 'staking', label: 'Staking', icon: '🔒' },
 ];
 
 // Supported networks with logos
@@ -667,6 +669,11 @@ onMounted(() => {
         <!-- Liquidation Alert Tab -->
         <div v-show="activeTab === 'liquidation'">
           <LiquidationAlert />
+        </div>
+
+        <!-- Staking Dashboard Tab -->
+        <div v-show="activeTab === 'staking'">
+          <StakingDashboard />
         </div>
       </div>
 
