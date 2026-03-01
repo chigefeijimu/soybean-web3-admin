@@ -14,6 +14,8 @@ import { Web3YieldController } from './web3-yield.controller';
 import { Web3AnalyticsController } from './web3-analytics.controller';
 import { Web3AnalyticsService } from './web3-analytics.service';
 import { Web3SimulatorController } from './web3-simulator.controller';
+import { Web3CrossChainController } from './web3-cross-chain.controller';
+import { Web3SecurityController } from './web3-security.controller';
 
 @Module({
   imports: [HttpModule],
@@ -27,6 +29,8 @@ import { Web3SimulatorController } from './web3-simulator.controller';
     Web3YieldController,
     Web3AnalyticsController,
     Web3SimulatorController,
+    Web3CrossChainController,
+    Web3SecurityController,
   ],
   providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService],
 })

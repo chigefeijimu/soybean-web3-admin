@@ -32,6 +32,7 @@ import NftRarityAnalyzer from '@/components/web3/NftRarityAnalyzer.vue';
 import OnChainAnalytics from '@/components/web3/OnChainAnalytics.vue';
 import TokenWatchlist from '@/components/web3/TokenWatchlist.vue';
 import TransactionSimulator from '@/components/web3/TransactionSimulator.vue';
+import CrossChainDashboard from '@/components/web3/CrossChainDashboard.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -73,7 +74,8 @@ const tabs = [
   { id: 'rarity', label: 'Rarity', icon: '💎' },
   { id: 'onchain', label: 'On-chain', icon: '🔗' },
   { id: 'watchlist', label: 'Watchlist', icon: '👀' },
-  { id: 'simulator', label: 'Simulator', icon: '🔮' }
+  { id: 'simulator', label: 'Simulator', icon: '🔮' },
+  { id: 'crosschain', label: 'Cross-Chain', icon: '🌐' }
 ];
 
 // Supported networks with logos
@@ -437,6 +439,11 @@ onMounted(() => {
         <!-- Simulator Tab -->
         <div v-show="activeTab === 'simulator'">
           <TransactionSimulator />
+        </div>
+
+        <!-- Cross-Chain Tab -->
+        <div v-show="activeTab === 'crosschain'">
+          <CrossChainDashboard />
         </div>
       </div>
 
