@@ -48,6 +48,7 @@ import AddressBook from '@/components/web3/AddressBook.vue';
 import DefiPositions from '@/components/web3/DefiPositions.vue';
 import Web3News from '@/components/web3/Web3News.vue';
 import AirdropTracker from '@/components/web3/AirdropTracker.vue';
+import FeeTracker from '@/components/web3/FeeTracker.vue';
 import LiquidityPoolScanner from '@/components/web3/LiquidityPoolScanner.vue';
 import NftFloorTracker from '@/components/web3/NftFloorTracker.vue';
 import TokenPriceChart from '@/components/web3/TokenPriceChart.vue';
@@ -94,6 +95,7 @@ const tabs = [
   { id: 'positions', label: 'Positions', icon: '📋' },
   { id: 'news', label: 'News', icon: '📰' },
   { id: 'airdrop', label: 'Airdrop', icon: '🎁' },
+  { id: 'fees', label: 'Fees', icon: '💸' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -499,6 +501,11 @@ onMounted(() => {
         <!-- Airdrop Tab -->
         <div v-show="activeTab === 'airdrop'">
           <AirdropTracker />
+        </div>
+
+        <!-- Fees Tab -->
+        <div v-show="activeTab === 'fees'">
+          <FeeTracker />
         </div>
 
         <!-- Signature Verifier Tab -->
