@@ -45,6 +45,7 @@ import BatchTransfer from '@/components/web3/BatchTransfer.vue';
 import TxDecoder from '@/components/web3/TxDecoder.vue';
 import DefiExplorer from '@/components/web3/DefiExplorer.vue';
 import AddressBook from '@/components/web3/AddressBook.vue';
+import DefiPositions from '@/components/web3/DefiPositions.vue';
 import LiquidityPoolScanner from '@/components/web3/LiquidityPoolScanner.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
@@ -81,6 +82,7 @@ const tabs = [
   { id: 'ens', label: 'ENS', icon: '🔤' },
   { id: 'grapher', label: 'Grapher', icon: '🕸️' },
   { id: 'book', label: 'Book', icon: '📒' },
+  { id: 'positions', label: 'Positions', icon: '📋' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -461,6 +463,11 @@ onMounted(() => {
         <!-- Book Tab -->
         <div v-show="activeTab === 'book'">
           <AddressBook />
+        </div>
+
+        <!-- Positions Tab -->
+        <div v-show="activeTab === 'positions'">
+          <DefiPositions />
         </div>
 
         <!-- Signature Verifier Tab -->
