@@ -11,6 +11,9 @@ import NFTGallery from '@/components/web3/NFTGallery.vue';
 import BlockExplorer from '@/components/web3/BlockExplorer.vue';
 import TradingChart from '@/components/web3/TradingChart.vue';
 import TradingPanel from '@/components/web3/TradingPanel.vue';
+import MarketOverview from '@/components/web3/MarketOverview.vue';
+import PriceTicker from '@/components/web3/PriceTicker.vue';
+import OrderBook from '@/components/web3/OrderBook.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -30,6 +33,8 @@ const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: '📊' },
   { id: 'wallet', label: 'Wallet', icon: '💳' },
   { id: 'swap', label: 'Swap', icon: '⇄' },
+  { id: 'market', label: 'Market', icon: '🔥' },
+  { id: 'orderbook', label: 'Order Book', icon: '📋' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -302,6 +307,19 @@ onMounted(() => {
           </div>
           <div>
             <TradingPanel />
+          </div>
+        </div>
+
+        <!-- Market Tab -->
+        <div v-show="activeTab === 'market'">
+          <MarketOverview />
+        </div>
+
+        <!-- Order Book Tab -->
+        <div v-show="activeTab === 'orderbook'" class="grid gap-6 lg:grid-cols-2">
+          <OrderBook />
+          <div>
+            <PriceTicker />
           </div>
         </div>
       </div>
