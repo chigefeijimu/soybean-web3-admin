@@ -12,12 +12,6 @@ interface Candlestick {
   volume: number;
 }
 
-interface Indicator {
-  name: string;
-  value: number;
-  color: string;
-}
-
 interface TradingPair {
   base: string;
   quote: string;
@@ -73,7 +67,7 @@ const generateCandlesticks = (period: string) => {
   const data: Candlestick[] = [];
   let price = basePrice;
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i += 1) {
     const timestamp = now - (count - i - 1) * ms;
     const volatility = 0.02;
     const change = (Math.random() - 0.5) * 2 * volatility;
@@ -94,7 +88,7 @@ const generateCandlesticks = (period: string) => {
 // Calculate MA
 const calculateMA = (data: Candlestick[], period: number): number[] => {
   const result: number[] = [];
-  for (let i = period - 1; i < data.length; i++) {
+  for (let i = period - 1; i < data.length; i += 1) {
     const sum = data.slice(i - period + 1, i + 1).reduce((a, b) => a + b.close, 0);
     result.push(sum / period);
   }
@@ -132,7 +126,7 @@ const drawChart = () => {
   ctx.strokeStyle = '#1e293b';
   ctx.lineWidth = 1;
 
-  for (let i = 0; i <= 5; i++) {
+  for (let i = 0; i <= 5; i += 1) {
     const y = padding + (chartHeight / 5) * i;
     ctx.beginPath();
     ctx.moveTo(padding, y);
@@ -217,7 +211,12 @@ const loadData = async () => {
   try {
     // Fetch from API
     const [klineRes, priceRes, indicatorsRes] = await Promise.all([
-      getKLine(selectedPair.value.base, selectedPair.value.quote, selectedPeriod.value, 100),
+      getKLine({
+        base: selectedPair.value.base,
+        quote: selectedPair.value.quote,
+        period: selectedPeriod.value,
+        limit: 100
+      }),
       getPrice(selectedPair.value.base, selectedPair.value.quote),
       getIndicators(selectedPair.value.base, selectedPair.value.quote, selectedPeriod.value)
     ]);
@@ -247,8 +246,7 @@ const loadData = async () => {
         indicators.value.macd = ind.macd;
       }
     }
-  } catch (e) {
-    console.warn('Failed to fetch from API, using mock data:', e);
+  } catch {
     // Fallback to mock data
     candlesticks.value = generateCandlesticks(selectedPeriod.value);
     indicators.value.ma5 = calculateMA(candlesticks.value, 5);
@@ -263,10 +261,6 @@ const loadData = async () => {
 const changePeriod = (period: string) => {
   selectedPeriod.value = period;
   loadData();
-};
-
-const formatTime = (timestamp: number) => {
-  return new Date(timestamp).toLocaleTimeString();
 };
 
 const priceChangeClass = computed(() => {

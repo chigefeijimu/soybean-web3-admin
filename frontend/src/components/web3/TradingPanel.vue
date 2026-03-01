@@ -1,16 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-// Types
-interface Order {
-  type: 'limit' | 'market';
-  side: 'buy' | 'sell';
-  price: number;
-  amount: number;
-  total: number;
-  percentage: number;
-}
-
 // State
 const orderSide = ref<'buy' | 'sell'>('buy');
 const orderType = ref<'limit' | 'market'>('limit');
@@ -64,14 +54,15 @@ const placeOrder = async () => {
   isSubmitting.value = true;
 
   // Simulate transaction
-  await new Promise(r => setTimeout(r, 1500));
+  const wait = (ms: number) =>
+    new Promise<void>(resolve => {
+      setTimeout(resolve, ms);
+    });
+  await wait(1500);
 
   isSubmitting.value = false;
   showConfirm.value = false;
   amount.value = 0;
-
-  // Show success (in real app, would show notification)
-  alert('Order placed successfully!');
 };
 
 const formatNumber = (num: number, decimals = 2) => {

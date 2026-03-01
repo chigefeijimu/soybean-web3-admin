@@ -284,11 +284,19 @@ export async function getNFTDetails(contract: string, tokenIds: string[], chainI
 }
 
 // K-Line (Candlestick) APIs
-export async function getKLine(base: string, quote: string, period: string, limit?: number) {
+interface KLineOptions {
+  base: string;
+  quote: string;
+  period: string;
+  limit?: number;
+}
+
+export async function getKLine(options: KLineOptions) {
+  const { base, quote, period, limit } = options;
   return request({
     url: `/web3/kline/${base}/${quote}/${period}`,
     method: 'GET',
-    params: { limit }
+    params: limit ? { limit } : {}
   });
 }
 
