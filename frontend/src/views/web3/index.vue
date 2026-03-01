@@ -73,6 +73,7 @@ import TokenVesting from '@/components/web3/TokenVesting.vue';
 import AddressInteractionAnalyzer from '@/components/web3/AddressInteractionAnalyzer.vue';
 import ContractStorageViewer from '@/components/web3/ContractStorageViewer.vue';
 import DappBrowser from '@/components/web3/DappBrowser/index.vue';
+import GasPriceWidget from '@/components/web3/GasPriceWidget.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -156,6 +157,7 @@ const tabs = [
   { id: 'address-interaction', label: 'Address Link', icon: '🔗' },
   { id: 'contract-storage', label: 'Storage', icon: '📦' },
   { id: 'dapp-browser', label: 'DApp Browser', icon: '🌐' },
+  { id: 'gas-widget', label: 'Gas Widget', icon: '⛽' },
 ];
 
 // Supported networks with logos
@@ -723,6 +725,11 @@ onMounted(() => {
         <!-- DApp Browser Tab -->
         <div v-show="activeTab === 'dapp-browser'">
           <DappBrowser />
+        </div>
+
+        <!-- Gas Widget Tab -->
+        <div v-show="activeTab === 'gas-widget'">
+          <GasPriceWidget />
         </div>
       </div>
 
