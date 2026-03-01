@@ -823,3 +823,76 @@ export function getDefiStats() {
     method: 'get'
   });
 }
+
+// ==================== Blockchain Heatmap API ====================
+
+/** 区块链热力图网络数据 */
+export interface NetworkHeatmapData {
+  chainId: number;
+  name: string;
+  symbol: string;
+  color: string;
+  activity: number;
+  txCount: number;
+  activeAddresses: number;
+  gasPrice: number;
+  gasPriceGwei: number;
+  tvl: number;
+  tvlChange24h: number;
+  price: number;
+  priceChange24h: number;
+  volume24h: number;
+  congestion: 'low' | 'medium' | 'high' | 'critical';
+  lastUpdated: number;
+}
+
+/** 热力图历史数据 */
+export interface HeatmapHistory {
+  timestamp: number;
+  data: {
+    chainId: number;
+    activity: number;
+    txCount: number;
+    gasPrice: number;
+  }[];
+}
+
+/** 获取所有链的热力图数据 */
+export function getNetworksHeatmap() {
+  return request<NetworkHeatmapData[]>({
+    url: '/blockchain-heatmap/networks',
+    method: 'get'
+  });
+}
+
+/** 获取指定链的详细信息 */
+export function getNetworkDetails(chainId: number) {
+  return request<NetworkHeatmapData | null>({
+    url: `/blockchain-heatmap/network`,
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/** 获取热力图历史数据 */
+export function getHeatmapHistory(chainId?: number, period: string = '24h') {
+  return request<HeatmapHistory[]>({
+    url: '/blockchain-heatmap/history',
+    method: 'get',
+    params: { chainId, period }
+  });
+}
+
+/** 获取跨链Gas价格 */
+export function getGasPricesAcrossChains() {
+  return request<{
+    chainId: number;
+    name: string;
+    symbol: string;
+    gasPriceGwei: number;
+    congestion: string;
+  }[]>({
+    url: '/blockchain-heatmap/gas-prices',
+    method: 'get'
+  });
+}

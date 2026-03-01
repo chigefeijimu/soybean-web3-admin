@@ -13,6 +13,7 @@ declare module 'vue' {
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
     BatchTransfer: typeof import('./../components/web3/BatchTransfer.vue')['default']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
+    BlockchainHeatmap: typeof import('./../components/web3/BlockchainHeatmap.vue')['default']
     BlockExplorer: typeof import('./../components/web3/BlockExplorer.vue')['default']
     BridgePanel: typeof import('./../components/web3/BridgePanel.vue')['default']
     ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']

@@ -7,10 +7,12 @@ import { WalletTrackerController } from './wallet-tracker.controller';
 import { WalletTrackerService } from './wallet-tracker.service';
 import { TokenUnlockController } from './token-unlock.controller';
 import { TokenUnlockService } from './token-unlock.service';
+import { BlockchainHeatmapController } from './blockchain-heatmap.controller';
+import { BlockchainHeatmapService } from './blockchain-heatmap.service';
 
 @Module({
-  controllers: [TokenSafetyController, GasAnalyzerController, WalletTrackerController, TokenUnlockController],
-  providers: [TokenSafetyService, GasAnalyzerService, WalletTrackerService, TokenUnlockService],
-  exports: [TokenSafetyService, GasAnalyzerService, WalletTrackerService, TokenUnlockService],
+  controllers: [TokenSafetyController, GasAnalyzerController, WalletTrackerController, TokenUnlockController, BlockchainHeatmapController],
+  providers: [TokenSafetyService, GasAnalyzerService, WalletTrackerService, TokenUnlockService, BlockchainHeatmapService],
+  exports: [TokenSafetyService, GasAnalyzerService, WalletTrackerService, TokenUnlockService, BlockchainHeatmapService],
 })
 export class TokenSafetyModule {}
