@@ -10,6 +10,7 @@ import PortfolioDashboard from '@/components/web3/PortfolioDashboard.vue'
 import TokenSwap from '@/components/web3/TokenSwap.vue'
 import NFTGallery from '@/components/web3/NFTGallery.vue'
 import AddTokenModal from '@/components/web3/AddTokenModal.vue'
+import BlockExplorer from '@/components/web3/BlockExplorer.vue'
 
 const {
   isConnected,
@@ -44,6 +45,7 @@ const tabs = [
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
   { id: 'contracts', label: 'Contracts', icon: '📝' },
+  { id: 'explorer', label: 'Explorer', icon: '🔍' },
 ]
 
 // Supported networks with logos
@@ -292,6 +294,11 @@ onMounted(() => {
         <!-- Contracts Tab -->
         <div v-show="activeTab === 'contracts'">
           <component :is="markRaw(ContractCall)" />
+        </div>
+
+        <!-- Explorer Tab -->
+        <div v-show="activeTab === 'explorer'">
+          <component :is="markRaw(BlockExplorer)" />
         </div>
       </div>
 
