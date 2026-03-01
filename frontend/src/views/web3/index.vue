@@ -40,6 +40,7 @@ import CrossChainDashboard from '@/components/web3/CrossChainDashboard.vue';
 import ContractDeployer from '@/components/web3/ContractDeployer.vue';
 import EventExplorer from '@/components/web3/EventExplorer.vue';
 import GasOptimizer from '@/components/web3/GasOptimizer.vue';
+import BatchTransfer from '@/components/web3/BatchTransfer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -89,7 +90,8 @@ const tabs = [
   { id: 'simulator', label: 'Simulator', icon: '🔮' },
   { id: 'crosschain', label: 'Cross-Chain', icon: '🌐' },
   { id: 'deployer', label: 'Deployer', icon: '🚀' },
-  { id: 'events', label: 'Events', icon: '📡' }
+  { id: 'events', label: 'Events', icon: '📡' },
+  { id: 'batch', label: 'Batch', icon: '📤' }
 ];
 
 // Supported networks with logos
@@ -493,6 +495,11 @@ onMounted(() => {
         <!-- Events Tab -->
         <div v-show="activeTab === 'events'">
           <EventExplorer />
+        </div>
+
+        <!-- Batch Transfer Tab -->
+        <div v-show="activeTab === 'batch'">
+          <BatchTransfer />
         </div>
       </div>
 
