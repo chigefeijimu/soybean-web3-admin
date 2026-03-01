@@ -59,6 +59,7 @@ import MevExplorer from '@/components/web3/MevExplorer.vue';
 import DataVisualizer from '@/components/web3/DataVisualizer.vue';
 import RugPullDetector from '@/components/web3/RugPullDetector.vue';
 import VotingTracker from '@/components/web3/VotingTracker.vue';
+import ChainlinkPriceTracker from '@/components/web3/ChainlinkPriceTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -129,6 +130,7 @@ const tabs = [
   { id: 'rugpull', label: 'RugCheck', icon: '🚨' },
   { id: 'voting', label: 'Voting', icon: '🗳️' },
   { id: 'smart-money', label: 'Smart $', icon: '🐟' },
+  { id: 'chainlink', label: 'Oracle', icon: '⛓️' },
 ];
 
 // Supported networks with logos
@@ -631,6 +633,11 @@ onMounted(() => {
 
         <div v-show="activeTab === 'smart-money'">
           <SmartMoneyFlow />
+        </div>
+
+        <!-- Chainlink Price Tracker Tab -->
+        <div v-show="activeTab === 'chainlink'">
+          <ChainlinkPriceTracker />
         </div>
       </div>
 

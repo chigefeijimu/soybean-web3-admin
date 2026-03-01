@@ -18,6 +18,7 @@ declare module 'vue' {
     BlockExplorer: typeof import('./../components/web3/BlockExplorer.vue')['default']
     BridgePanel: typeof import('./../components/web3/BridgePanel.vue')['default']
     ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']
+    ChainlinkPriceTracker: typeof import('./../components/web3/ChainlinkPriceTracker.vue')['default']
     ContractCall: typeof import('./../components/web3/ContractCall.vue')['default']
     ContractDeployer: typeof import('./../components/web3/ContractDeployer.vue')['default']
     CountTo: typeof import('./../components/custom/count-to.vue')['default']
