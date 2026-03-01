@@ -79,6 +79,7 @@ import DexAggregator from '@/components/web3/DexAggregator.vue';
 import PortfolioPerformance from '@/components/web3/PortfolioPerformance.vue';
 import PortfolioRebalancer from '@/components/web3/PortfolioRebalancer.vue';
 import OptionsTracker from '@/components/web3/OptionsTracker.vue';
+import CryptoSentiment from '@/components/web3/CryptoSentiment.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -168,6 +169,7 @@ const tabs = [
   { id: 'rebalance', label: 'Rebalance', icon: '⚖️' },
   { id: 'tax-loss', label: 'Tax Loss', icon: '🌾' },
   { id: 'options', label: 'Options', icon: '📊' },
+  { id: 'sentiment', label: 'Sentiment', icon: '💭' },
 ];
 
 // Supported networks with logos
@@ -765,6 +767,11 @@ onMounted(() => {
         <!-- Options Tab -->
         <div v-show="activeTab === 'options'">
           <OptionsTracker />
+        </div>
+
+        <!-- Sentiment Tab -->
+        <div v-show="activeTab === 'sentiment'">
+          <CryptoSentiment />
         </div>
       </div>
 

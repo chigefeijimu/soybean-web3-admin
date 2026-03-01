@@ -25,6 +25,7 @@ declare module 'vue' {
     ContractStorageViewer: typeof import('./../components/web3/ContractStorageViewer.vue')['default']
     CountTo: typeof import('./../components/custom/count-to.vue')['default']
     CrossChainDashboard: typeof import('./../components/web3/CrossChainDashboard.vue')['default']
+    CryptoSentiment: typeof import('./../components/web3/CryptoSentiment.vue')['default']
     DaoGovernance: typeof import('./../components/web3/DaoGovernance.vue')['default']
     DappBrowser: typeof import('./../components/web3/DappBrowser/index.vue')['default']
     DarkModeContainer: typeof import('./../components/common/dark-mode-container.vue')['default']
