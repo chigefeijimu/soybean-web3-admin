@@ -57,8 +57,15 @@ const mockTransactions: TransactionUIItem[] = [
 ];
 
 const filteredTransactions = computed(() => {
-  if (filter.value === 'all') return transactions.value;
-  return transactions.value.filter(tx => tx.type === filter.value);
+  let result = transactions.value;
+  if (filter.value !== 'all') {
+    result = result.filter(tx => tx.type === filter.value);
+  }
+  // Apply limit if specified
+  if (props.limit && props.limit > 0) {
+    result = result.slice(0, props.limit);
+  }
+  return result;
 });
 
 const formatAddress = (addr: string): string => {
