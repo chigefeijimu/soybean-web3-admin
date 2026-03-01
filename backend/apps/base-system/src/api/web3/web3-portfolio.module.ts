@@ -13,6 +13,7 @@ import { Web3HealthService } from './web3-health.service';
 import { Web3YieldController } from './web3-yield.controller';
 import { Web3AnalyticsController } from './web3-analytics.controller';
 import { Web3AnalyticsService } from './web3-analytics.service';
+import { Web3SimulatorController } from './web3-simulator.controller';
 
 @Module({
   imports: [HttpModule],
@@ -25,6 +26,7 @@ import { Web3AnalyticsService } from './web3-analytics.service';
     Web3HealthController,
     Web3YieldController,
     Web3AnalyticsController,
+    Web3SimulatorController,
   ],
   providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService],
 })

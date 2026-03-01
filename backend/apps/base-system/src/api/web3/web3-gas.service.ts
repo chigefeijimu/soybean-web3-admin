@@ -28,6 +28,20 @@ interface FeeEstimate {
   currency: string;
 }
 
+interface GasEstimate {
+  gasLimit: number;
+  gasUsed: number;
+  gasPrice: number;
+  totalCost: string;
+  ethValue: string;
+  chainId: number;
+  average: number;
+  fast: number;
+  slow: number;
+  variance: number;
+  unit: string;
+}
+
 @Injectable()
 export class Web3GasService {
   private ethPrice: number = 3000; // 默认ETH价格
@@ -352,5 +366,48 @@ export class Web3GasService {
   private calculateFee(gasPrice: number, gasLimit: number): string {
     const feeEth = (gasPrice * gasLimit) / 1e9;
     return feeEth.toFixed(6) + ' ETH';
+  }
+
+  async estimateGas(dto: {
+    from: string;
+    to: string;
+    value?: string;
+    chainId: number;
+    data?: string;
+  }): Promise<GasEstimate> {
+    const gasPrice = await this.getGasPrice(dto.chainId);
+    
+    // 估算gas limit
+    let estimatedGasLimit = 21000; // 默认ETH转账
+    
+    // 如果有data，可能是合约调用，估算更高的gas
+    if (dto.data && dto.data !== '0x') {
+      estimatedGasLimit = 65000; // 默认合约调用
+      // 简单检查是否是swap
+      if (dto.data.startsWith('0x7ff36ab5') || dto.data.startsWith('0x38ed1739')) {
+        estimatedGasLimit = 150000; // DEX swap
+      }
+    }
+
+    const valueWei = dto.value ? BigInt(dto.value) : BigInt(0);
+    const valueEth = Number(valueWei) / 1e18;
+
+    const averageGwei = gasPrice.normal;
+    const totalCostWei = BigInt(Math.round(averageGwei * 1e9)) * BigInt(estimatedGasLimit);
+    const totalCostEth = Number(totalCostWei) / 1e18;
+
+    return {
+      gasLimit: estimatedGasLimit,
+      gasUsed: Math.round(estimatedGasLimit * 0.85), // 估算实际使用85%
+      gasPrice: averageGwei,
+      totalCost: (totalCostEth + valueEth).toFixed(6) + ' ETH',
+      ethValue: valueEth.toFixed(6) + ' ETH',
+      chainId: dto.chainId,
+      average: averageGwei,
+      fast: gasPrice.fast,
+      slow: gasPrice.slow,
+      variance: Math.round(((gasPrice.fast - gasPrice.slow) / gasPrice.slow) * 100),
+      unit: 'Gwei',
+    };
   }
 }
