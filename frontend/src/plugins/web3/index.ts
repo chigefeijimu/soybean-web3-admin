@@ -45,7 +45,7 @@ export function setupWeb3Modal() {
       enableAnalytics: false
     });
     return modal;
-  } catch (e) {
+  } catch {
     // Web3Modal setup failed, falling back to MetaMask-only
     return null;
   }
