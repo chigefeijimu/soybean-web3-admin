@@ -68,6 +68,7 @@ declare module 'vue' {
     NFormItem: typeof import('naive-ui')['NFormItem']
     NFormItemGi: typeof import('naive-ui')['NFormItemGi']
     NFTGallery: typeof import('./../components/web3/NFTGallery.vue')['default']
+    NftRarityAnalyzer: typeof import('./../components/web3/NftRarityAnalyzer.vue')['default']
     NGi: typeof import('naive-ui')['NGi']
     NGrid: typeof import('naive-ui')['NGrid']
     NInput: typeof import('naive-ui')['NInput']

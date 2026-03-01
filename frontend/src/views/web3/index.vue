@@ -27,6 +27,7 @@ import SignatureVerifier from '@/components/web3/SignatureVerifier.vue';
 import TokenApprovalManager from '@/components/web3/TokenApprovalManager.vue';
 import WalletHealthAnalyzer from '@/components/web3/WalletHealthAnalyzer.vue';
 import YieldTracker from '@/components/web3/YieldTracker.vue';
+import NftRarityAnalyzer from '@/components/web3/NftRarityAnalyzer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -63,7 +64,8 @@ const tabs = [
   { id: 'signature', label: 'Signature', icon: '🔏' },
   { id: 'approvals', label: 'Approvals', icon: '🔐' },
   { id: 'health', label: 'Health', icon: '🛡️' },
-  { id: 'yield', label: 'Yield', icon: '🌾' }
+  { id: 'yield', label: 'Yield', icon: '🌾' },
+  { id: 'rarity', label: 'Rarity', icon: '💎' }
 ];
 
 // Supported networks with logos
@@ -402,6 +404,11 @@ onMounted(() => {
         <!-- Yield Tracker Tab -->
         <div v-show="activeTab === 'yield'">
           <YieldTracker />
+        </div>
+
+        <!-- NFT Rarity Tab -->
+        <div v-show="activeTab === 'rarity'">
+          <NftRarityAnalyzer />
         </div>
       </div>
 
