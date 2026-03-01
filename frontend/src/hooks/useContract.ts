@@ -52,12 +52,10 @@ export function useContract(options: UseContractOptions): UseContractReturn {
   const writeError = ref<Error | null>(null);
   const txHash = ref<string | null>(null);
 
-  // Transaction receipt
+  // Transaction receipt - use computed to react to txHash changes
+  const txHashForReceipt = computed(() => txHash.value as `0x${string}` | undefined);
   const { data: receipt, isLoading: isConfirming } = useWaitForTransactionReceipt({
-    hash: txHash.value as any,
-    query: {
-      enabled: Boolean(txHash.value)
-    }
+    hash: txHashForReceipt
   });
 
   const isConfirmed = computed(() => Boolean(receipt));
