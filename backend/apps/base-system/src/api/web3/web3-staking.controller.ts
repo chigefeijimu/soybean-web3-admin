@@ -235,7 +235,7 @@ export class Web3StakingController {
   }
 
   private getMockAprHistory(days: number) {
-    const data = [];
+    const data: { date: string; apr: string }[] = [];
     const now = Date.now();
     const baseApr = 3.8;
 

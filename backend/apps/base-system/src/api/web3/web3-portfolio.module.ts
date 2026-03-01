@@ -40,6 +40,8 @@ import { DefiPortfolioController } from './defi-portfolio.controller';
 import { DefiPortfolioService } from './defi-portfolio.service';
 import { FearGreedController } from './web3-fear-greed.controller';
 import { FearGreedService } from './web3-fear-greed.service';
+import { FlashloanDetectorController } from './flashloan-detector.controller';
+import { FlashloanDetectorService } from './flashloan-detector.service';
 
 @Module({
   imports: [HttpModule],
@@ -68,7 +70,8 @@ import { FearGreedService } from './web3-fear-greed.service';
     AirdropTrackerController,
     DefiPortfolioController,
     FearGreedController,
+    FlashloanDetectorController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService],
 })
 export class Web3PortfolioModule {}

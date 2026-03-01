@@ -68,6 +68,7 @@ import TaxCalculator from '@/components/web3/TaxCalculator.vue';
 import LiquidationAlert from '@/components/web3/LiquidationAlert.vue';
 import StakingDashboard from '@/components/web3/StakingDashboard.vue';
 import WalletAnalyzer from '@/components/web3/WalletAnalyzer.vue';
+import FlashloanDetector from '@/components/web3/FlashloanDetector.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -137,6 +138,7 @@ const tabs = [
   { id: 'faucet', label: 'Faucet', icon: '⛽' },
   { id: 'dataviz', label: 'DataViz', icon: '📊' },
   { id: 'rugpull', label: 'RugCheck', icon: '🚨' },
+  { id: 'flashloan', label: 'Flashloan', icon: '⚡' },
   { id: 'voting', label: 'Voting', icon: '🗳️' },
   { id: 'smart-money', label: 'Smart $', icon: '🐟' },
   { id: 'chainlink', label: 'Oracle', icon: '⛓️' },
@@ -644,6 +646,11 @@ onMounted(() => {
         <!-- Rug Pull Detector Tab -->
         <div v-show="activeTab === 'rugpull'">
           <component :is="markRaw(RugPullDetector)" />
+        </div>
+        
+        <!-- Flashloan Detector Tab -->
+        <div v-show="activeTab === 'flashloan'">
+          <FlashloanDetector />
         </div>
         
         <!-- Voting Tracker Tab -->
