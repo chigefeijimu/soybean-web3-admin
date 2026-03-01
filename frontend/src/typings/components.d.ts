@@ -56,6 +56,7 @@ declare module 'vue' {
     IconUilSearch: typeof import('~icons/uil/search')['default']
     IpfsUpload: typeof import('./../components/web3/IpfsUpload.vue')['default']
     LangSwitch: typeof import('./../components/common/lang-switch.vue')['default']
+    LiquidityPoolScanner: typeof import('./../components/web3/LiquidityPoolScanner.vue')['default']
     LookForward: typeof import('./../components/custom/look-forward.vue')['default']
     MarketOverview: typeof import('./../components/web3/MarketOverview.vue')['default']
     MenuToggler: typeof import('./../components/common/menu-toggler.vue')['default']

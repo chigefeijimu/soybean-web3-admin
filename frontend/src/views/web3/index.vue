@@ -45,6 +45,7 @@ import BatchTransfer from '@/components/web3/BatchTransfer.vue';
 import TxDecoder from '@/components/web3/TxDecoder.vue';
 import DefiExplorer from '@/components/web3/DefiExplorer.vue';
 import AddressBook from '@/components/web3/AddressBook.vue';
+import LiquidityPoolScanner from '@/components/web3/LiquidityPoolScanner.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -100,7 +101,8 @@ const tabs = [
   { id: 'batch', label: 'Batch', icon: '📤' },
   { id: 'decoder', label: 'Decoder', icon: '🔓' },
   { id: 'defi', label: 'DeFi', icon: '🧪' },
-  { id: 'addressbook', label: 'Address Book', icon: '📒' }
+  { id: 'addressbook', label: 'Address Book', icon: '📒' },
+  { id: 'liquidity', label: 'Liquidity', icon: '💧' }
 ];
 
 // Supported networks with logos
@@ -534,6 +536,11 @@ onMounted(() => {
         <!-- Address Book Tab -->
         <div v-show="activeTab === 'addressbook'">
           <component :is="markRaw(AddressBook)" />
+        </div>
+
+        <!-- Liquidity Pool Tab -->
+        <div v-show="activeTab === 'liquidity'">
+          <component :is="markRaw(LiquidityPoolScanner)" />
         </div>
       </div>
 
