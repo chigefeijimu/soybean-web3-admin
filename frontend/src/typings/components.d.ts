@@ -112,5 +112,6 @@ declare module 'vue' {
     WalletConnect: typeof import('./../components/web3/WalletConnect.vue')['default']
     WalletLookup: typeof import('./../components/web3/WalletLookup.vue')['default']
     WaveBg: typeof import('./../components/custom/wave-bg.vue')['default']
+    WhaleTracker: typeof import('./../components/web3/WhaleTracker.vue')['default']
   }
 }
