@@ -25,6 +25,7 @@ import GasPrediction from '@/components/web3/GasPrediction.vue';
 import MevProtection from '@/components/web3/MevProtection.vue';
 import TokenSafetyChecker from '@/components/web3/TokenSafetyChecker.vue';
 import GasSaver from '@/components/web3/GasSaver.vue';
+import EnsLookup from '@/components/web3/EnsLookup.vue';
 import WalletLookup from '@/components/web3/WalletLookup.vue';
 import DaoGovernance from '@/components/web3/DaoGovernance.vue';
 import SignatureVerifier from '@/components/web3/SignatureVerifier.vue';
@@ -71,6 +72,7 @@ const tabs = [
   { id: 'mev', label: 'MEV', icon: '🛡️' },
   { id: 'safety', label: 'Safety', icon: '✅' },
   { id: 'saver', label: 'Saver', icon: '💰' },
+  { id: 'ens', label: 'ENS', icon: '🔤' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -431,6 +433,11 @@ onMounted(() => {
         <!-- Saver Tab -->
         <div v-show="activeTab === 'saver'">
           <GasSaver />
+        </div>
+
+        <!-- ENS Tab -->
+        <div v-show="activeTab === 'ens'">
+          <EnsLookup />
         </div>
 
         <!-- Signature Verifier Tab -->

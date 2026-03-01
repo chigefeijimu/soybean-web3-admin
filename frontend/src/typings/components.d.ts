@@ -22,6 +22,7 @@ declare module 'vue' {
     DarkModeContainer: typeof import('./../components/common/dark-mode-container.vue')['default']
     DefiPortfolio: typeof import('./../components/web3/DefiPortfolio.vue')['default']
     EnsLookup: typeof import('./../components/web3/EnsLookup.vue')['default']
+    ENSLookup: typeof import('./../components/web3/ENSLookup.vue')['default']
     EventExplorer: typeof import('./../components/web3/EventExplorer.vue')['default']
     ExceptionBase: typeof import('./../components/common/exception-base.vue')['default']
     FullScreen: typeof import('./../components/common/full-screen.vue')['default']
