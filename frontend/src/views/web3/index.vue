@@ -46,6 +46,7 @@ import TxDecoder from '@/components/web3/TxDecoder.vue';
 import DefiExplorer from '@/components/web3/DefiExplorer.vue';
 import AddressBook from '@/components/web3/AddressBook.vue';
 import DefiPositions from '@/components/web3/DefiPositions.vue';
+import Web3News from '@/components/web3/Web3News.vue';
 import LiquidityPoolScanner from '@/components/web3/LiquidityPoolScanner.vue';
 import NftFloorTracker from '@/components/web3/NftFloorTracker.vue';
 import TokenPriceChart from '@/components/web3/TokenPriceChart.vue';
@@ -86,6 +87,7 @@ const tabs = [
   { id: 'grapher', label: 'Grapher', icon: '🕸️' },
   { id: 'book', label: 'Book', icon: '📒' },
   { id: 'positions', label: 'Positions', icon: '📋' },
+  { id: 'news', label: 'News', icon: '📰' },
   { id: 'tokens', label: 'Tokens', icon: '🪙' },
   { id: 'nfts', label: 'NFTs', icon: '🖼️' },
   { id: 'history', label: 'History', icon: '📜' },
@@ -474,6 +476,11 @@ onMounted(() => {
         <!-- Positions Tab -->
         <div v-show="activeTab === 'positions'">
           <DefiPositions />
+        </div>
+
+        <!-- News Tab -->
+        <div v-show="activeTab === 'news'">
+          <Web3News />
         </div>
 
         <!-- Signature Verifier Tab -->
