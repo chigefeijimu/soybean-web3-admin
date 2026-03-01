@@ -180,6 +180,68 @@ const closeReceiptModal = () => {
   receiptData.value = null;
 };
 
+// Export functions
+const exportTransactions = (format: 'csv' | 'json') => {
+  const dataToExport = filteredTransactions.value;
+  
+  if (dataToExport.length === 0) {
+    error.value = 'No transactions to export';
+    return;
+  }
+
+  let content: string;
+  let filename: string;
+  let mimeType: string;
+
+  if (format === 'csv') {
+    // CSV header
+    const headers = ['Hash', 'Type', 'From', 'To', 'Value', 'Token', 'Status', 'ChainId', 'Timestamp', 'Gas Used', 'Block Number'];
+    const rows = dataToExport.map(tx => [
+      tx.hash,
+      tx.type,
+      tx.from,
+      tx.to,
+      tx.value,
+      tx.token,
+      tx.status,
+      tx.chainId?.toString() || '',
+      new Date(tx.timestamp).toISOString(),
+      tx.gasUsed?.toString() || '',
+      tx.blockNumber?.toString() || ''
+    ]);
+    
+    // Escape CSV values
+    const escapeCSV = (val: string) => {
+      if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+        return `"${val.replace(/"/g, '""')}"`;
+      }
+      return val;
+    };
+    
+    content = [headers.join(','), ...rows.map(row => row.map(escapeCSV).join(','))].join('\n');
+    filename = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
+    mimeType = 'text/csv';
+  } else {
+    // JSON format
+    content = JSON.stringify(dataToExport, null, 2);
+    filename = `transactions_${new Date().toISOString().split('T')[0]}.json`;
+    mimeType = 'application/json';
+  }
+
+  // Create download
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+const showExportMenu = ref(false);
+
 // Watch for account changes
 watch(
   () => account.value,
@@ -224,13 +286,42 @@ onMounted(() => {
   <div class="border border-slate-700/50 rounded-2xl bg-slate-800/50 p-6 backdrop-blur-xl">
     <div class="mb-6 flex items-center justify-between">
       <h2 class="text-xl font-semibold">Transaction History</h2>
-      <button
-        :disabled="isLoading"
-        class="rounded-lg bg-slate-700 px-4 py-2 text-sm transition-colors hover:bg-slate-600 disabled:opacity-50"
-        @click="loadTransactions"
-      >
-        {{ isLoading ? 'Loading...' : '↻ Refresh' }}
-      </button>
+      <div class="flex gap-2">
+        <!-- Export Dropdown -->
+        <div class="relative">
+          <button
+            :disabled="filteredTransactions.length === 0"
+            class="rounded-lg bg-slate-700 px-4 py-2 text-sm transition-colors hover:bg-slate-600 disabled:opacity-50"
+            @click="showExportMenu = !showExportMenu"
+          >
+            📥 Export
+          </button>
+          <div
+            v-if="showExportMenu"
+            class="absolute right-0 mt-2 w-40 origin-top-right rounded-lg border border-slate-600 bg-slate-800 shadow-xl z-10"
+          >
+            <button
+              class="block w-full px-4 py-2 text-left text-sm hover:bg-slate-700"
+              @click="exportTransactions('csv'); showExportMenu = false"
+            >
+              📄 Export as CSV
+            </button>
+            <button
+              class="block w-full px-4 py-2 text-left text-sm hover:bg-slate-700"
+              @click="exportTransactions('json'); showExportMenu = false"
+            >
+              📋 Export as JSON
+            </button>
+          </div>
+        </div>
+        <button
+          :disabled="isLoading"
+          class="rounded-lg bg-slate-700 px-4 py-2 text-sm transition-colors hover:bg-slate-600 disabled:opacity-50"
+          @click="loadTransactions"
+        >
+          {{ isLoading ? 'Loading...' : '↻ Refresh' }}
+        </button>
+      </div>
     </div>
 
     <!-- Filter Tabs -->
