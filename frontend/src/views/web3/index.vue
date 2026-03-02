@@ -23,6 +23,7 @@ import BridgePanel from '@/components/web3/BridgePanel.vue';
 import PortfolioAnalytics from '@/components/web3/PortfolioAnalytics.vue';
 import TokenAnalyzer from '@/components/web3/TokenAnalyzer.vue';
 import GasPrediction from '@/components/web3/GasPrediction.vue';
+import GasPricePrediction from '@/components/web3/GasPricePrediction.vue';
 import MevProtection from '@/components/web3/MevProtection.vue';
 import TokenSafetyChecker from '@/components/web3/TokenSafetyChecker.vue';
 import GasSaver from '@/components/web3/GasSaver.vue';
@@ -256,6 +257,7 @@ const tabs = [
   { id: 'priority-fee', label: 'Priority Fee', icon: '⚡' },
   { id: 'portfolio-export', label: 'Export', icon: '📤' },
   { id: 'gas-history', label: 'Gas History', icon: '📊' },
+  { id: 'gas-prediction', label: 'Gas Predict', icon: '🔮' },
   { id: 'tx-accelerator', label: 'Tx Accelerator', icon: '🚀' },
   { id: 'yield-farming', label: 'Yield Farming', icon: '🌾' },
   { id: 'defi-insurance', label: 'Insurance', icon: '🛡️' },
@@ -978,6 +980,11 @@ onMounted(() => {
         <!-- Gas History Tab -->
         <div v-show="activeTab === 'gas-history'">
           <GasHistory />
+        </div>
+
+        <!-- Gas Prediction Tab -->
+        <div v-show="activeTab === 'gas-prediction'">
+          <GasPricePrediction />
         </div>
 
         <!-- Gas Comparison Tab -->
