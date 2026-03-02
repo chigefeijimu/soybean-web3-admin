@@ -4435,3 +4435,133 @@ export function quickEstimateDefiGas(operation: string, chainId: number, speed: 
     params: { chainId, speed }
   });
 }
+
+// ========== DeFi Analytics API ==========
+
+export interface ProtocolInfo {
+  name: string;
+  logo: string;
+  category: 'lending' | 'dex' | 'yield' | 'liquid-staking' | 'bridge';
+  chain: string;
+  tvl: number;
+  tvlChange24h: number;
+  volume24h: number;
+  fees24h: number;
+  avgApy: number;
+  riskScore: number;
+  riskLevel: 'low' | 'medium' | 'high';
+  popularPools: PoolInfo[];
+}
+
+export interface PoolInfo {
+  name: string;
+  token0: string;
+  token1: string;
+  tvl: number;
+  apy: number;
+  volume24h: number;
+  poolAddress: string;
+}
+
+export interface ProtocolHistory {
+  date: string;
+  tvl: number;
+  volume: number;
+  fees: number;
+}
+
+export interface ChainStats {
+  chain: string;
+  chainId: number;
+  totalTvl: number;
+  protocolCount: number;
+  topProtocols: string[];
+}
+
+export interface MarketOverview {
+  totalTvl: number;
+  totalTvlChange24h: number;
+  totalVolume24h: number;
+  totalFees24h: number;
+  topChains: ChainStats[];
+  topProtocols: ProtocolInfo[];
+}
+
+export function getDefiAnalyticsOverview() {
+  return request<MarketOverview>({
+    url: '/api/web3/defi-analytics/overview',
+    method: 'get'
+  });
+}
+
+export function getDefiAnalyticsProtocols(params?: { category?: string; chain?: string; sortBy?: string }) {
+  return request<ProtocolInfo[]>({
+    url: '/api/web3/defi-analytics/protocols',
+    method: 'get',
+    params
+  });
+}
+
+export function getDefiProtocolDetails(name: string) {
+  return request<ProtocolInfo>({
+    url: `/api/web3/defi-analytics/protocols/${name}`,
+    method: 'get'
+  });
+}
+
+export function getDefiProtocolHistory(name: string, days: number = 30) {
+  return request<ProtocolHistory[]>({
+    url: `/api/web3/defi-analytics/protocols/${name}/history`,
+    method: 'get',
+    params: { days }
+  });
+}
+
+export function getDefiProtocolPools(name: string) {
+  return request<PoolInfo[]>({
+    url: `/api/web3/defi-analytics/protocols/${name}/pools`,
+    method: 'get'
+  });
+}
+
+export function getDefiCategories() {
+  return request<{ name: string; label: string; count: number; description: string }[]>({
+    url: '/api/web3/defi-analytics/categories',
+    method: 'get'
+  });
+}
+
+export function getDefiChains() {
+  return request<{ name: string; chainId: number; symbol: string; logo: string }[]>({
+    url: '/api/web3/defi-analytics/chains',
+    method: 'get'
+  });
+}
+
+export function compareDefiProtocolsByName(names?: string) {
+  return request<ProtocolInfo[]>({
+    url: '/api/web3/defi-analytics/compare',
+    method: 'get',
+    params: { names }
+  });
+}
+
+export function getTrendingDefiProtocols(limit: number = 5) {
+  return request<ProtocolInfo[]>({
+    url: '/api/web3/defi-analytics/trending',
+    method: 'get',
+    params: { limit }
+  });
+}
+
+export function getDefiRiskAnalysis() {
+  return request<{
+    low: ProtocolInfo[];
+    medium: ProtocolInfo[];
+    high: ProtocolInfo[];
+    summary: { lowCount: number; mediumCount: number; highCount: number };
+  }>({
+    url: '/api/web3/defi-analytics/risk-analysis',
+    method: 'get'
+  });
+}

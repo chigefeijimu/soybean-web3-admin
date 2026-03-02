@@ -16,12 +16,15 @@ import { TokenSignalAnalyzerModule } from './web3/token-signal-analyzer.module';
 import { LiquidationScannerModule } from './web3/liquidation-scanner.module';
 import { DefiPositionManagerModule } from './web3/defi-position-manager.module';
 import { TokenCorrelationModule } from './web3/token-correlation.module';
+import { Web3DefiAnalyticsModule } from './web3/web3-defi-analytics.module';
+import { CrossChainPriceApiModule } from './web3/cross-chain-price-api.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
 import { Controllers as IamRest } from './iam/rest';
 import { Controllers as LoginLogRest } from './log-audit/login-log/rest';
 import { Controllers as OperationLogRest } from './log-audit/operation-log/rest';
+import { Web3DefiAnalyticsController } from './web3/web3-defi-analytics.controller';
 
 @Module({
   imports: [
@@ -41,6 +44,8 @@ import { Controllers as OperationLogRest } from './log-audit/operation-log/rest'
     LiquidationScannerModule,
     DefiPositionManagerModule,
     TokenCorrelationModule,
+    CrossChainPriceApiModule,
+    Web3DefiAnalyticsModule,
   ],
   controllers: [
     ...IamRest,
@@ -48,6 +53,7 @@ import { Controllers as OperationLogRest } from './log-audit/operation-log/rest'
     ...LoginLogRest,
     ...OperationLogRest,
     ...AccessKeyRest,
+    Web3DefiAnalyticsController,
   ],
 })
 export class ApiModule {}
