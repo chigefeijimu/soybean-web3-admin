@@ -2188,3 +2188,16 @@ export async function fetchCoinPrices(ids: string[]): Promise<Record<string, { u
   );
   return response.json();
 }
+
+/**
+ * Fetch DeFi yields from DeFi Llama (free API)
+ */
+export async function fetchDefiYields(): Promise<any> {
+  try {
+    const response = await fetch('https://yields.llama.fi/protocols');
+    return response.json();
+  } catch (e) {
+    console.error('Failed to fetch yields:', e);
+    return [];
+  }
+}
