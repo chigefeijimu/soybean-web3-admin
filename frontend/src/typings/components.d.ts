@@ -29,6 +29,7 @@ declare module 'vue' {
     CountTo: typeof import('./../components/custom/count-to.vue')['default']
     CrossChainBalance: typeof import('./../components/web3/CrossChainBalance.vue')['default']
     CrossChainDashboard: typeof import('./../components/web3/CrossChainDashboard.vue')['default']
+    CrossChainSwapAggregator: typeof import('./../components/web3/CrossChainSwapAggregator.vue')['default']
     CryptoSentiment: typeof import('./../components/web3/CryptoSentiment.vue')['default']
     DaoGovernance: typeof import('./../components/web3/DaoGovernance.vue')['default']
     DaoTreasury: typeof import('./../components/web3/DaoTreasury/index.vue')['default']

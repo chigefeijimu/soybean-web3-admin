@@ -3461,3 +3461,126 @@ export function getRiskAssessment(address: string, chain: string = 'ethereum') {
     params: { address, chain }
   });
 }
+
+// ========== 跨链Swap聚合器 API ==========
+
+export interface ChainInfo {
+  id: string;
+  name: string;
+  symbol: string;
+  logo: string;
+}
+
+export interface TokenInfo {
+  symbol: string;
+  name: string;
+  decimals: number;
+  address: string;
+}
+
+export interface BridgeInfo {
+  id: string;
+  name: string;
+  logo: string;
+  supportedChains: string[];
+  fee: number;
+  avgTime: string;
+}
+
+export interface SwapQuote {
+  bridge: string;
+  fromChain: string;
+  toChain: string;
+  fromToken: string;
+  toToken: string;
+  fromAmount: string;
+  toAmount: string;
+  gasCost: string;
+  estimatedTime: string;
+  price: string;
+  slippage: number;
+}
+
+export interface PopularRoute {
+  from: string;
+  to: string;
+  fromToken: string;
+  toToken: string;
+  name: string;
+}
+
+/**
+ * 获取支持的链列表
+ */
+export function fetchCrossChainChains() {
+  return request<ChainInfo[]>({
+    url: '/web3/cross-chain-swap/chains',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取链上支持的代币列表
+ */
+export function fetchCrossChainTokens(chain: string) {
+  return request<TokenInfo[]>({
+    url: '/web3/cross-chain-swap/tokens',
+    method: 'get',
+    params: { chain }
+  });
+}
+
+/**
+ * 获取支持的跨链桥列表
+ */
+export function fetchBridgeList() {
+  return request<BridgeInfo[]>({
+    url: '/web3/cross-chain-swap/bridges',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取热门跨链路线
+ */
+export function fetchPopularRoutes() {
+  return request<PopularRoute[]>({
+    url: '/web3/cross-chain-swap/routes',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取跨链Swap报价
+ */
+export function fetchSwapQuotes(params: {
+  fromChain: string;
+  toChain: string;
+  fromToken: string;
+  toToken: string;
+  amount: string;
+}) {
+  return request<SwapQuote[]>({
+    url: '/web3/cross-chain-swap/quotes',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * 获取最佳Swap报价
+ */
+export function fetchSwapEstimate(params: {
+  fromChain: string;
+  toChain: string;
+  fromToken: string;
+  toToken: string;
+  amount: string;
+  bridge?: string;
+}) {
+  return request<SwapQuote>({
+    url: '/web3/cross-chain-swap/estimate',
+    method: 'get',
+    params
+  });
+}
