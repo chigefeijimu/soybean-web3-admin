@@ -2355,3 +2355,46 @@ export async function fetchFaucetGasPrice(chainId: string): Promise<GasPrice> {
   const response = await fetch(`/api/web3/gas-faucet/gas-price/${chainId}`);
   return response.json();
 }
+
+/**
+ * Fetch trending tokens from DexScreener API
+ */
+export async function fetchTrendingTokens(): Promise<any[]> {
+  try {
+    const response = await fetch('https://api.dexscreener.com/latest/dex/tokens');
+    const data = await response.json();
+    return data.pairs || [];
+  } catch (e) {
+    console.error('Failed to fetch trending:', e);
+    return [];
+  }
+}
+
+/**
+ * Fetch token info from DexScreener
+ */
+export async function fetchTokenInfo(address: string): Promise<any> {
+  try {
+    const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${address}`);
+    return response.json();
+  } catch (e) {
+    console.error('Failed to fetch token:', e);
+    return null;
+  }
+}
+
+/**
+ * Fetch NFT floor price from OpenSea API
+ */
+export async function fetchNftFloorPrice(collection: string): Promise<number> {
+  try {
+    const response = await fetch(
+      `https://api.opensea.io/api/v2/collections/${collection}`
+    );
+    const data = await response.json();
+    return data.collection?.floor_price || 0;
+  } catch (e) {
+    console.error('Failed to fetch NFT floor:', e);
+    return 0;
+  }
+}
