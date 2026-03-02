@@ -52,6 +52,7 @@ declare module 'vue' {
     GasRebates: typeof import('./../components/web3/GasRebates.vue')['default']
     GasSaver: typeof import('./../components/web3/GasSaver.vue')['default']
     GasTracker: typeof import('./../components/web3/GasTracker.vue')['default']
+    GovernanceExplorer: typeof import('./../components/web3/GovernanceExplorer/index.vue')['default']
     IconAntDesignEnterOutlined: typeof import('~icons/ant-design/enter-outlined')['default']
     IconAntDesignReloadOutlined: typeof import('~icons/ant-design/reload-outlined')['default']
     IconAntDesignSettingOutlined: typeof import('~icons/ant-design/setting-outlined')['default']

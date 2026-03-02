@@ -78,6 +78,7 @@ import GasPriceWidget from '@/components/web3/GasPriceWidget.vue';
 import DexAggregator from '@/components/web3/DexAggregator.vue';
 import PortfolioPerformance from '@/components/web3/PortfolioPerformance.vue';
 import PortfolioRebalancer from '@/components/web3/PortfolioRebalancer.vue';
+import GovernanceExplorer from '@/components/web3/GovernanceExplorer/index.vue';
 import OptionsTracker from '@/components/web3/OptionsTracker.vue';
 import CryptoSentiment from '@/components/web3/CryptoSentiment.vue';
 import FundFlowAnalyzer from '@/components/web3/FundFlowAnalyzer.vue';
@@ -174,6 +175,7 @@ const tabs = [
   { id: 'sentiment', label: 'Sentiment', icon: '💭' },
   { id: 'fund-flow', label: 'Fund Flow', icon: '🔄' },
   { id: 'oracle', label: 'Oracle', icon: '⛓️' },
+  { id: 'governance-explorer', label: 'Governance', icon: '🏛️' },
 ];
 
 // Supported networks with logos
@@ -786,6 +788,11 @@ onMounted(() => {
         <!-- Oracle Price Comparison Tab -->
         <div v-show="activeTab === 'oracle'">
           <OraclePriceComparison />
+        </div>
+
+        <!-- Governance Explorer Tab -->
+        <div v-show="activeTab === 'governance-explorer'">
+          <GovernanceExplorer />
         </div>
       </div>
 
