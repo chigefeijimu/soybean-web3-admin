@@ -1,0 +1,19 @@
+{
+  "name": "@soya/web3-tx-receipt-analyzer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nest build web3-tx-receipt-analyzer",
+    "dev": "nest start web3-tx-receipt-analyzer --watch",
+    "start": "nest start web3-tx-receipt-analyzer"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/platform-express": "^10.3.0",
+    "@nestjs/axios": "^3.0.1",
+    "axios": "^1.6.5",
+    "reflect-metadata": "^0.2.1",
+    "rxjs": "^7.8.1"
+  }
+}

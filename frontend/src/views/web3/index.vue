@@ -98,6 +98,7 @@ import DexVolume from '@/components/web3/DexVolume/index.vue';
 import PnLTracker from '@/components/web3/PnLTracker.vue';
 import PriorityFeeEstimator from '@/components/web3/PriorityFeeEstimator.vue';
 import CrossChainBalance from '@/components/web3/CrossChainBalance.vue';
+import TxReceiptAnalyzer from '@/components/web3/TxReceiptAnalyzer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -206,6 +207,7 @@ const tabs = [
   { id: 'pnl-tracker', label: 'P&L Tracker', icon: '📈' },
   { id: 'priority-fee', label: 'Priority Fee', icon: '⚡' },
   { id: 'cross-chain-balance', label: 'Cross-Chain', icon: '🔗' },
+  { id: 'tx-receipt', label: 'Tx Receipt', icon: '🧾' },
 ];
 
 // Supported networks with logos
@@ -873,6 +875,11 @@ onMounted(() => {
         <!-- Cross-chain Balance Tab -->
         <div v-show="activeTab === 'cross-chain-balance'">
           <CrossChainBalance />
+        </div>
+
+        <!-- Tx Receipt Analyzer Tab -->
+        <div v-show="activeTab === 'tx-receipt'">
+          <TxReceiptAnalyzer />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
