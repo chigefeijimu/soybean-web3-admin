@@ -132,6 +132,7 @@ declare module 'vue' {
     NftCollectionTracker: typeof import('./../components/web3/NftCollectionTracker.vue')['default']
     NftFloorTracker: typeof import('./../components/web3/NftFloorTracker.vue')['default']
     NFTGallery: typeof import('./../components/web3/NFTGallery.vue')['default']
+    NftPortfolioTracker: typeof import('./../components/web3/NftPortfolioTracker.vue')['default']
     NftRarityAnalyzer: typeof import('./../components/web3/NftRarityAnalyzer.vue')['default']
     NGi: typeof import('naive-ui')['NGi']
     NGrid: typeof import('naive-ui')['NGrid']
