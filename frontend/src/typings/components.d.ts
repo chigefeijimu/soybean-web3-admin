@@ -161,6 +161,7 @@ declare module 'vue' {
     SoybeanAvatar: typeof import('./../components/custom/soybean-avatar.vue')['default']
     StablecoinYield: typeof import('./../components/web3/StablecoinYield.vue')['default']
     StakingDashboard: typeof import('./../components/web3/StakingDashboard.vue')['default']
+    StrategyBacktester: typeof import('./../components/web3/StrategyBacktester.vue')['default']
     SvgIcon: typeof import('./../components/custom/svg-icon.vue')['default']
     SystemLogo: typeof import('./../components/common/system-logo.vue')['default']
     TableColumnSetting: typeof import('./../components/advanced/table-column-setting.vue')['default']

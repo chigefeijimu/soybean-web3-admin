@@ -91,6 +91,7 @@ import PortfolioComparator from '@/components/web3/PortfolioComparator.vue';
 import TokenTransferAnalyzer from '@/components/web3/TokenTransferAnalyzer.vue';
 import AddressLabelLookup from '@/components/web3/AddressLabelLookup.vue';
 import NftCollectionTracker from '@/components/web3/NftCollectionTracker.vue';
+import StrategyBacktester from '@/components/web3/StrategyBacktester.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -192,6 +193,7 @@ const tabs = [
   { id: 'token-transfer', label: 'Transfer', icon: '🔄' },
   { id: 'address-label', label: 'Address Label', icon: '🏷️' },
   { id: 'nft-collection', label: 'NFT Tracker', icon: '🎨' },
+  { id: 'strategy-backtest', label: 'Backtest', icon: '📈' },
 ];
 
 // Supported networks with logos
@@ -849,6 +851,11 @@ onMounted(() => {
         <!-- NFT Collection Tracker Tab -->
         <div v-show="activeTab === 'nft-collection'">
           <NftCollectionTracker />
+        </div>
+
+        <!-- Strategy Backtester Tab -->
+        <div v-show="activeTab === 'strategy-backtest'">
+          <StrategyBacktester />
         </div>
       </div>
 
