@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AddressLabelController } from '../../../../web3-address-label/src/address-label.controller';
-import { AddressLabelService } from '../../../../web3-address-label/src/address-label.service';
+import { AddressLabelController } from './address-label.controller';
+import { AddressLabelService } from './address-label.service';
 
 @Module({
   controllers: [AddressLabelController],

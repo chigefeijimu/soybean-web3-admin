@@ -57,6 +57,8 @@ import { NftPortfolioController } from './nft-portfolio.controller';
 import { NftPortfolioService } from './nft-portfolio.service';
 import { DefiTvlController } from './defi-tvl.controller';
 import { DefiTvlService } from './defi-tvl.service';
+import { AddressLabelController } from './address-label.controller';
+import { AddressLabelService } from './address-label.service';
 
 @Module({
   imports: [HttpModule],
@@ -94,7 +96,8 @@ import { DefiTvlService } from './defi-tvl.service';
     FundFlowAnalyzerController,
     NftPortfolioController,
     DefiTvlController,
+    AddressLabelController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService],
 })
 export class Web3PortfolioModule {}
