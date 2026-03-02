@@ -3584,3 +3584,117 @@ export function fetchSwapEstimate(params: {
     params
   });
 }
+
+// ============= Transaction Timeline API =============
+
+export interface Transaction {
+  hash: string;
+  from: string;
+  to: string;
+  value: string;
+  gasPrice: string;
+  gasUsed: string;
+  timestamp: number;
+  blockNumber: number;
+  status: 'success' | 'failed';
+  tokenTransfers?: TokenTransfer[];
+}
+
+export interface TokenTransfer {
+  from: string;
+  to: string;
+  token: string;
+  symbol: string;
+  value: string;
+  decimals: number;
+}
+
+export interface TimelineGroup {
+  date: string;
+  transactions: Transaction[];
+  totalValue: string;
+  count: number;
+  gasUsed: string;
+}
+
+export interface TimelineStats {
+  totalTransactions: number;
+  totalValue: string;
+  totalGasUsed: string;
+  averageGasPrice: string;
+  successRate: string;
+  dailyStats: DailyStat[];
+}
+
+export interface DailyStat {
+  date: string;
+  count: number;
+  successCount: number;
+  totalValue: string;
+  totalGas: string;
+}
+
+export interface TransactionPatterns {
+  mostActiveHour: number;
+  mostActiveDay: number;
+  averageTxValue: string;
+  commonInteractions: { address: string; count: number }[];
+  transactionTypes: { type: string; count: number }[];
+}
+
+export interface HourlyDistribution {
+  hours: { hour: number; count: number; percentage: string }[];
+  days: { day: number; name: string; count: number; percentage: string }[];
+}
+
+/**
+ * 获取交易时间线
+ */
+export function fetchTransactionTimeline(params: {
+  address: string;
+  chain?: string;
+  period?: 'day' | 'week' | 'month';
+  days?: number;
+}) {
+  return request<{ timeline: TimelineGroup[]; stats: TimelineStats }>({
+    url: 'http://localhost:3007/tx-timeline/timeline/' + params.address,
+    method: 'get',
+    params: {
+      chain: params.chain || 'ethereum',
+      period: params.period || 'day',
+      days: params.days || 30
+    }
+  });
+}
+
+/**
+ * 获取交易模式分析
+ */
+export function fetchTransactionPatterns(address: string, chain?: string) {
+  return request<TransactionPatterns>({
+    url: 'http://localhost:3007/tx-timeline/patterns/' + address,
+    method: 'get',
+    params: { chain: chain || 'ethereum' }
+  });
+}
+
+/**
+ * 获取交易时间分布
+ */
+export function fetchHourlyDistribution(address: string, chain?: string) {
+  return request<HourlyDistribution>({
+    url: 'http://localhost:3007/tx-timeline/distribution/' + address,
+    method: 'get',
+    params: { chain: chain || 'ethereum' }
+  });
+}
+
+/**
+ * 获取支持的链列表
+ */
+export function fetchTxTimelineChains() {
+  return request<{ chains: string[] }>({
+    url: 'http://localhost:3007/tx-timeline/chains',
+    method: 'get'
+  });
+}

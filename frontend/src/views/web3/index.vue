@@ -134,6 +134,7 @@ import CrossChainSwapAggregator from '@/components/web3/CrossChainSwapAggregator
 import PortfolioAlertApi from '@/components/web3/PortfolioAlertApi/index.vue';
 import TokenLockTracker from '@/components/web3/TokenLockTracker.vue';
 import TokenHistoryApi from '@/components/web3/TokenHistoryApi/index.vue';
+import TxTimeline from '@/components/web3/TxTimeline.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -278,6 +279,7 @@ const tabs = [
   { id: 'portfolio-alert-api', label: 'Alert API', icon: '📡' },
   { id: 'token-lock', label: 'Token Lock', icon: '🔒' },
   { id: 'token-history-api', label: 'History API', icon: '📈' },
+  { id: 'tx-timeline', label: 'Tx Timeline', icon: '📊' },
 ];
 
 // Supported networks with logos
@@ -1125,6 +1127,11 @@ onMounted(() => {
         <!-- Token History API Tab -->
         <div v-show="activeTab === 'token-history-api'">
           <TokenHistoryApi />
+        </div>
+
+        <!-- Transaction Timeline Tab -->
+        <div v-show="activeTab === 'tx-timeline'">
+          <TxTimeline />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
