@@ -3849,3 +3849,115 @@ export function fetchSupportedDaos() {
     method: 'get'
   });
 }
+
+// ============ DeFi Protocol Compare ============
+
+export interface Protocol {
+  id: string;
+  name: string;
+  category: string;
+  chain: string;
+  logo: string;
+  tvl: number;
+  apy: number;
+  users: number;
+  fees24h: number;
+  volume24h: number;
+  riskScore: number;
+  auditScore: number;
+  age: number;
+  description: string;
+  website: string;
+}
+
+export interface ComparisonResult {
+  protocols: Protocol[];
+  metrics: {
+    tvlComparison: { name: string; value: number }[];
+    apyComparison: { name: string; value: number }[];
+    riskComparison: { name: string; value: number }[];
+    feesComparison: { name: string; value: number }[];
+  };
+  recommendations: string[];
+}
+
+/**
+ * 获取DeFi协议列表
+ */
+export function fetchDefiProtocols(category?: string, chain?: string) {
+  const params = new URLSearchParams();
+  if (category) params.append('category', category);
+  if (chain) params.append('chain', chain);
+  
+  return request<{ data: Protocol[] }>({
+    url: `http://localhost:3015/defi-compare/protocols?${params.toString()}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取协议详情
+ */
+export function fetchProtocolById(id: string) {
+  return request<{ data: Protocol | null }>({
+    url: `http://localhost:3015/defi-compare/protocols/${id}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 比较协议
+ */
+export function compareDefiProtocols(ids: string[]) {
+  return request<{ data: ComparisonResult }>({
+    url: `http://localhost:3015/defi-compare/compare?ids=${ids.join(',')}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取协议分类
+ */
+export function fetchDefiCategories() {
+  return request<{ data: string[] }>({
+    url: 'http://localhost:3015/defi-compare/categories',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取支持的链
+ */
+export function fetchDefiChains() {
+  return request<{ data: string[] }>({
+    url: 'http://localhost:3015/defi-compare/chains',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取分类Top协议
+ */
+export function fetchDefiTopByCategory() {
+  return request<{ data: Record<string, Protocol[]> }>({
+    url: 'http://localhost:3015/defi-compare/top',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取协议排名
+ */
+export function fetchDefiRankings() {
+  return request<{
+    data: {
+      byTVL: Protocol[];
+      byAPY: Protocol[];
+      byUsers: Protocol[];
+      bySafety: Protocol[];
+    }
+  }>({
+    url: 'http://localhost:3015/defi-compare/rankings',
+    method: 'get'
+  });
+}

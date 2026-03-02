@@ -102,6 +102,7 @@ import YieldFarmingDashboard from '@/components/web3/YieldFarmingDashboard.vue';
 import PortfolioExport from '@/components/web3/PortfolioExport.vue';
 import GasHistory from '@/components/web3/GasHistory.vue';
 import GasComparison from '@/components/web3/GasComparison.vue';
+import DefiCompare from '@/components/web3/DefiCompare.vue';
 import TransactionScheduler from '@/components/web3/TransactionScheduler.vue';
 import DefiInsurance from '@/components/web3/DefiInsurance.vue';
 import DefiAlerts from '@/components/web3/DefiAlerts.vue';
@@ -282,6 +283,7 @@ const tabs = [
   { id: 'token-history-api', label: 'History API', icon: '📈' },
   { id: 'tx-timeline', label: 'Tx Timeline', icon: '📊' },
   { id: 'governance-power', label: 'Gov Power', icon: '🗳️' },
+  { id: 'defi-compare', label: 'DeFi Compare', icon: '⚖️' },
 ];
 
 // Supported networks with logos
@@ -1139,6 +1141,11 @@ onMounted(() => {
         <!-- Governance Power Tracker Tab -->
         <div v-show="activeTab === 'governance-power'">
           <GovernancePowerTracker />
+        </div>
+
+        <!-- DeFi Compare Tab -->
+        <div v-show="activeTab === 'defi-compare'">
+          <component :is="markRaw(DefiCompare)" />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
