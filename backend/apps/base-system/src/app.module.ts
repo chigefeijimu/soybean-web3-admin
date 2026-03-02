@@ -39,6 +39,7 @@ import { OptionsTrackerController } from './api/web3/options-tracker.controller'
 import { OptionsTrackerService } from './api/web3/options-tracker.service';
 import { GovernanceExplorerController } from './api/web3/governance-explorer.controller';
 import { GovernanceExplorerService } from './api/web3/governance-explorer.service';
+import { NftCollectionTrackerController } from '../../../web3-nft-collection-tracker/src/nft-collection-tracker.controller';
 
 const strategies = [JwtStrategy];
 
@@ -164,7 +165,7 @@ class ThrottlerStorageAdapter implements ThrottlerStorage {
     ApiKeyModule,
     BootstrapModule,
   ],
-  controllers: [AppController, MevExplorerController, VotingTrackerController, OptionsTrackerController, GovernanceExplorerController],
+  controllers: [AppController, MevExplorerController, VotingTrackerController, OptionsTrackerController, GovernanceExplorerController, NftCollectionTrackerController],
   providers: [
     AppService,
     MevExplorerService,

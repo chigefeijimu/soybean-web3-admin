@@ -1925,3 +1925,151 @@ export function getSupportedOracleTokens() {
     method: 'get'
   });
 }
+
+// ==================== NFT Collection Tracker API ====================
+
+export interface NftCollection {
+  name: string;
+  symbol: string;
+  contractAddress: string;
+  chain: string;
+  floorPrice: number;
+  floorPriceChange24h: number;
+  totalVolume: number;
+  volume24h: number;
+  sales24h: number;
+  holders: number;
+  totalSupply: number;
+  marketCap: number;
+  imageUrl: string;
+}
+
+export interface NftCollectionDetails extends NftCollection {
+  description: string;
+  traits: { trait_type: string; value: string; count: number; percentage: number }[];
+  owners: { address: string; tokens: number; percentage: number }[];
+  priceHistory: { timestamp: number; price: number }[];
+  volumeHistory: { timestamp: number; volume: number }[];
+}
+
+export interface NftListing {
+  tokenId: string;
+  price: number;
+  seller: string;
+  expiresAt: number;
+}
+
+export interface NftSale {
+  tokenId: string;
+  price: number;
+  buyer: string;
+  seller: string;
+  timestamp: number;
+  txHash: string;
+}
+
+export interface NftHolder {
+  rank: number;
+  address: string;
+  tokens: number;
+  percentage: string;
+  lastActivity: number;
+}
+
+export interface WhaleActivity {
+  type: 'buy' | 'sell' | 'transfer';
+  address: string;
+  tokens: number;
+  totalValue: number;
+  time: string;
+}
+
+/**
+ * Get popular NFT collections
+ */
+export function fetchNftCollections(params?: {
+  chain?: string;
+  sortBy?: 'volume' | 'floorPrice' | 'volume24h' | 'sales24h' | 'holders' | 'change24h';
+  limit?: number;
+}) {
+  return request<{ success: boolean; data: NftCollection[]; total: number }>({
+    url: '/web3/nft-collection/collections',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * Get collection details
+ */
+export function fetchNftCollectionDetails(address: string) {
+  return request<{ success: boolean; data: NftCollectionDetails }>({
+    url: `/web3/nft-collection/collection/${address}`,
+    method: 'get'
+  });
+}
+
+/**
+ * Get collection listings
+ */
+export function fetchNftListings(address: string, limit: number = 20) {
+  return request<{ success: boolean; data: NftListing[] }>({
+    url: `/web3/nft-collection/collection/${address}/listings`,
+    method: 'get',
+    params: { limit }
+  });
+}
+
+/**
+ * Get collection sales
+ */
+export function fetchNftSales(address: string, limit: number = 20) {
+  return request<{ success: boolean; data: NftSale[] }>({
+    url: `/web3/nft-collection/collection/${address}/sales`,
+    method: 'get',
+    params: { limit }
+  });
+}
+
+/**
+ * Get collection holders
+ */
+export function fetchNftHolders(address: string, limit: number = 50) {
+  return request<{ success: boolean; data: NftHolder[]; totalHolders: number }>({
+    url: `/web3/nft-collection/collection/${address}/holders`,
+    method: 'get',
+    params: { limit }
+  });
+}
+
+/**
+ * Get whale activities for collection
+ */
+export function fetchNftWhales(address: string) {
+  return request<{ success: boolean; data: WhaleActivity[] }>({
+    url: `/web3/nft-collection/collection/${address}/whales`,
+    method: 'get'
+  });
+}
+
+/**
+ * Get trending NFT collections
+ */
+export function fetchTrendingCollections(timeRange: '24h' | '7d' | '30d' = '24h') {
+  return request<{ success: boolean; data: NftCollection[]; timeRange: string }>({
+    url: '/web3/nft-collection/trending',
+    method: 'get',
+    params: { timeRange }
+  });
+}
+
+/**
+ * Search NFT collections
+ */
+export function searchNftCollections(query: string) {
+  return request<{ success: boolean; data: NftCollection[] }>({
+    url: '/web3/nft-collection/search',
+    method: 'get',
+    params: { q: query }
+  });
+}

@@ -88,6 +88,8 @@ import TokenEconomics from '@/components/web3/TokenEconomics/index.vue';
 import DefiTvlTracker from '@/components/web3/DefiTvlTracker.vue';
 import PortfolioComparator from '@/components/web3/PortfolioComparator.vue';
 import TokenTransferAnalyzer from '@/components/web3/TokenTransferAnalyzer.vue';
+import AddressLabelLookup from '@/components/web3/AddressLabelLookup.vue';
+import NftCollectionTracker from '@/components/web3/NftCollectionTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -186,6 +188,8 @@ const tabs = [
   { id: 'token-economics', label: 'Token Economics', icon: '📊' },
   { id: 'defi-tvl', label: 'DeFi TVL', icon: '📊' },
   { id: 'token-transfer', label: 'Transfer', icon: '🔄' },
+  { id: 'address-label', label: 'Address Label', icon: '🏷️' },
+  { id: 'nft-collection', label: 'NFT Tracker', icon: '🎨' },
 ];
 
 // Supported networks with logos
@@ -828,6 +832,16 @@ onMounted(() => {
         <!-- Token Transfer Analyzer Tab -->
         <div v-show="activeTab === 'token-transfer'">
           <TokenTransferAnalyzer />
+        </div>
+
+        <!-- Address Label Lookup Tab -->
+        <div v-show="activeTab === 'address-label'">
+          <AddressLabelLookup />
+        </div>
+
+        <!-- NFT Collection Tracker Tab -->
+        <div v-show="activeTab === 'nft-collection'">
+          <NftCollectionTracker />
         </div>
       </div>
 
