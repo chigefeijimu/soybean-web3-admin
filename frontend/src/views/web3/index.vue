@@ -103,6 +103,7 @@ import GasHistory from '@/components/web3/GasHistory.vue';
 import GasComparison from '@/components/web3/GasComparison.vue';
 import TransactionScheduler from '@/components/web3/TransactionScheduler.vue';
 import DefiInsurance from '@/components/web3/DefiInsurance.vue';
+import DefiAlerts from '@/components/web3/DefiAlerts.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -216,6 +217,7 @@ const tabs = [
   { id: 'gas-history', label: 'Gas History', icon: '📊' },
   { id: 'tx-accelerator', label: 'Tx Accelerator', icon: '🚀' },
   { id: 'defi-insurance', label: 'Insurance', icon: '🛡️' },
+  { id: 'defi-alerts', label: 'Alerts', icon: '🚨' },
 ];
 
 // Supported networks with logos
@@ -908,6 +910,11 @@ onMounted(() => {
         <!-- DeFi Insurance Tab -->
         <div v-show="activeTab === 'defi-insurance'">
           <DefiInsurance />
+        </div>
+
+        <!-- DeFi Alerts Tab -->
+        <div v-show="activeTab === 'defi-alerts'">
+          <DefiAlerts />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

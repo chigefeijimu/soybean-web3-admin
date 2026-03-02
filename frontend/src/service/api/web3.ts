@@ -2445,3 +2445,190 @@ export function compareCrossChainBalances(addresses: string, chains?: string) {
     params: { addresses, chains }
   });
 }
+
+// ==================== DeFi Alerts API ====================
+
+export interface DefiAlert {
+  id: string;
+  type: 'liquidation' | 'tvl_change' | 'yield_anomaly' | 'volatility' | 'security';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  protocol: string;
+  chain: string;
+  title: string;
+  description: string;
+  value?: number;
+  valueChange?: number;
+  previousValue?: number;
+  timestamp: string;
+  status: 'active' | 'acknowledged' | 'resolved';
+  metadata?: Record<string, any>;
+}
+
+export interface AlertConfig {
+  id?: string;
+  alertType: string;
+  protocol?: string;
+  chain?: string;
+  threshold: number;
+  enabled: boolean;
+  notifyEmail?: boolean;
+  notifyTelegram?: boolean;
+}
+
+export interface ProtocolMetric {
+  protocol: string;
+  chain: string;
+  tvl: number;
+  tvlChange24h: number;
+  yield: number;
+  yieldChange24h: number;
+  volume24h: number;
+  activeUsers: number;
+  timestamp: string;
+}
+
+/**
+ * Get DeFi alerts
+ */
+export function getDefiAlerts(params?: { type?: string; status?: string }) {
+  return request<DefiAlert[]>({
+    url: '/web3/defi-alerts/alerts',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * Get alert by ID
+ */
+export function getDefiAlertById(id: string) {
+  return request<DefiAlert>({
+    url: `/web3/defi-alerts/alerts/${id}`,
+    method: 'get'
+  });
+}
+
+/**
+ * Create alert configuration
+ */
+export function createAlertConfig(config: AlertConfig) {
+  return request<AlertConfig>({
+    url: '/web3/defi-alerts/alerts/config',
+    method: 'post',
+    data: config
+  });
+}
+
+/**
+ * Get all alert configurations
+ */
+export function getAlertConfigs() {
+  return request<AlertConfig[]>({
+    url: '/web3/defi-alerts/alerts/configs',
+    method: 'get'
+  });
+}
+
+/**
+ * Disable alert configuration
+ */
+export function disableAlertConfig(id: string) {
+  return request<AlertConfig>({
+    url: `/web3/defi-alerts/alerts/configs/${id}/disable`,
+    method: 'post'
+  });
+}
+
+/**
+ * Get monitored protocols
+ */
+export function getMonitoredProtocols() {
+  return request({
+    url: '/web3/defi-alerts/protocols',
+    method: 'get'
+  });
+}
+
+/**
+ * Get protocol metrics
+ */
+export function getProtocolMetrics(name: string) {
+  return request<ProtocolMetric>({
+    url: `/web3/defi-alerts/protocols/${name}/metrics`,
+    method: 'get'
+  });
+}
+
+/**
+ * Get all protocol metrics
+ */
+export function getAllMetrics(chain?: string) {
+  return request<ProtocolMetric[]>({
+    url: '/web3/defi-alerts/metrics',
+    method: 'get',
+    params: { chain }
+  });
+}
+
+/**
+ * Get liquidation events
+ */
+export function getLiquidationEvents(minAmount?: number) {
+  return request({
+    url: '/web3/defi-alerts/liquidation-events',
+    method: 'get',
+    params: { minAmount }
+  });
+}
+
+/**
+ * Get TVL changes
+ */
+export function getTVLChanges(threshold?: number) {
+  return request({
+    url: '/web3/defi-alerts/tvl-changes',
+    method: 'get',
+    params: { threshold }
+  });
+}
+
+/**
+ * Get yield anomalies
+ */
+export function getYieldAnomalies() {
+  return request({
+    url: '/web3/defi-alerts/yield-anomalies',
+    method: 'get'
+  });
+}
+
+/**
+ * Get alerts dashboard
+ */
+export function getAlertsDashboard() {
+  return request({
+    url: '/web3/defi-alerts/dashboard',
+    method: 'get'
+  });
+}
+
+/**
+ * Acknowledge an alert
+ */
+export function acknowledgeAlert(id: string) {
+  return request<DefiAlert>({
+    url: `/web3/defi-alerts/alerts/${id}/acknowledge`,
+    method: 'post'
+  });
+}
+
+/**
+ * Clear old alerts
+ */
+export function clearOldAlerts(daysOld: number) {
+  return request({
+    url: '/web3/defi-alerts/alerts/clear',
+    method: 'post',
+    data: { daysOld }
+  });
+}
