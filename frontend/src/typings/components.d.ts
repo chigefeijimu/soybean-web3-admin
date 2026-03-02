@@ -23,6 +23,7 @@ declare module 'vue' {
     ChainlinkPriceTracker: typeof import('./../components/web3/ChainlinkPriceTracker.vue')['default']
     ContractCall: typeof import('./../components/web3/ContractCall.vue')['default']
     ContractDeployer: typeof import('./../components/web3/ContractDeployer.vue')['default']
+    ContractMethodSelector: typeof import('./../components/web3/ContractMethodSelector.vue')['default']
     ContractStorageViewer: typeof import('./../components/web3/ContractStorageViewer.vue')['default']
     CountTo: typeof import('./../components/custom/count-to.vue')['default']
     CrossChainBalance: typeof import('./../components/web3/CrossChainBalance.vue')['default']
