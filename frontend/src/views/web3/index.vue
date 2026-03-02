@@ -93,6 +93,7 @@ import AddressLabelLookup from '@/components/web3/AddressLabelLookup.vue';
 import NftCollectionTracker from '@/components/web3/NftCollectionTracker.vue';
 import StrategyBacktester from '@/components/web3/StrategyBacktester.vue';
 import LiquidityPoolMonitor from '@/components/web3/LiquidityPoolMonitor.vue';
+import GasPriceApiDashboard from '@/components/web3/GasPriceApiDashboard.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -196,6 +197,7 @@ const tabs = [
   { id: 'nft-collection', label: 'NFT Tracker', icon: '🎨' },
   { id: 'strategy-backtest', label: 'Backtest', icon: '📈' },
   { id: 'liquidity-pool', label: 'Liquidity Pool', icon: '🦄' },
+  { id: 'gas-price-api', label: 'Gas API', icon: '⛽' },
 ];
 
 // Supported networks with logos
@@ -863,6 +865,11 @@ onMounted(() => {
         <!-- Liquidity Pool Monitor Tab -->
         <div v-show="activeTab === 'liquidity-pool'">
           <LiquidityPoolMonitor />
+        </div>
+
+        <!-- Gas Price API Dashboard Tab -->
+        <div v-show="activeTab === 'gas-price-api'">
+          <GasPriceApiDashboard />
         </div>
       </div>
 
