@@ -2398,3 +2398,50 @@ export async function fetchNftFloorPrice(collection: string): Promise<number> {
     return 0;
   }
 }
+
+/**
+ * Cross-chain Balance API
+ */
+export interface CrossChainBalance {
+  address: string;
+  balances: Array<{
+    chain: string;
+    nativeBalance: string;
+    nativeSymbol: string;
+    nativeUsd: string;
+    totalUsd: string;
+    tokens: Array<{
+      symbol: string;
+      contractAddress: string;
+      balance: string;
+      usdValue: string;
+    }>;
+    error?: string;
+  }>;
+  totalUsd: string;
+  chainsChecked: number;
+  chainsSuccess: number;
+  chainsFailed: number;
+}
+
+/**
+ * Get cross-chain balance for an address
+ */
+export function getCrossChainBalance(address: string, chains?: string) {
+  return request<CrossChainBalance>({
+    url: `/web3/cross-chain-balance/address/${address}`,
+    method: 'get',
+    params: { chains }
+  });
+}
+
+/**
+ * Compare multiple addresses across chains
+ */
+export function compareCrossChainBalances(addresses: string, chains?: string) {
+  return request({
+    url: '/web3/cross-chain-balance/compare',
+    method: 'get',
+    params: { addresses, chains }
+  });
+}

@@ -66,6 +66,7 @@ import { LiquidityPoolService } from './liquidity-pool.service';
 import { MevProtectController } from './mev-protect.controller';
 import { MevProtectService } from './mev-protect.service';
 import { Web3PriorityFeeController } from './web3-priority-fee.controller';
+import { CrossChainBalanceController } from './cross-chain-balance.controller';
 
 @Module({
   imports: [HttpModule],
@@ -108,6 +109,7 @@ import { Web3PriorityFeeController } from './web3-priority-fee.controller';
     LiquidityPoolController,
     MevProtectController,
     Web3PriorityFeeController,
+    CrossChainBalanceController,
   ],
   providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService],
 })
