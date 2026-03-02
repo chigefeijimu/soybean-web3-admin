@@ -232,6 +232,7 @@ declare module 'vue' {
     WalletLookup: typeof import('./../components/web3/WalletLookup.vue')['default']
     WaveBg: typeof import('./../components/custom/wave-bg.vue')['default']
     Web3News: typeof import('./../components/web3/Web3News.vue')['default']
+    WhaleAlert: typeof import('./../components/web3/WhaleAlert.vue')['default']
     WhaleTracker: typeof import('./../components/web3/WhaleTracker.vue')['default']
     YieldTracker: typeof import('./../components/web3/YieldTracker.vue')['default']
   }

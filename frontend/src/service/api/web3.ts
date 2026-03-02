@@ -3160,3 +3160,128 @@ export function getTopInsiderTokens(chainId?: number) {
     params: { chainId }
   });
 }
+
+// ============ Whale Alert API ============
+
+export interface WhaleAlertConfig {
+  id: string;
+  address: string;
+  label: string;
+  chain: string;
+  threshold: number;
+  alertType: 'above' | 'below' | 'any';
+  notifyEmail: boolean;
+  notifyTelegram: boolean;
+  isActive: boolean;
+  createdAt: Date;
+}
+
+export interface WhaleAlertTransaction {
+  hash: string;
+  from: string;
+  to: string;
+  amount: number;
+  token: string;
+  chain: string;
+  timestamp: Date;
+  valueUSD: number;
+}
+
+export interface WhaleAlertNotification {
+  id: string;
+  alertId: string;
+  address: string;
+  transaction: WhaleAlertTransaction;
+  triggeredAt: Date;
+  notified: boolean;
+}
+
+export interface WhaleAlertStats {
+  totalAlerts: number;
+  activeAlerts: number;
+  totalNotifications: number;
+  unreadNotifications: number;
+  knownWhalesCount: number;
+}
+
+export function getWhaleAlertsConfig() {
+  return request<WhaleAlertConfig[]>({
+    url: '/web3/whale-alert/alerts',
+    method: 'get'
+  });
+}
+
+export function createWhaleAlert(data: Omit<WhaleAlertConfig, 'id' | 'createdAt'>) {
+  return request<WhaleAlertConfig>({
+    url: '/web3/whale-alert/alerts',
+    method: 'post',
+    data
+  });
+}
+
+export function updateWhaleAlert(id: string, data: Partial<WhaleAlertConfig>) {
+  return request<WhaleAlertConfig>({
+    url: `/web3/whale-alert/alerts/${id}`,
+    method: 'put',
+    data
+  });
+}
+
+export function deleteWhaleAlert(id: string) {
+  return request<{ success: boolean }>({
+    url: `/web3/whale-alert/alerts/${id}`,
+    method: 'delete'
+  });
+}
+
+export function getKnownWhales() {
+  return request<Array<{ address: string; label: string; category: string }>>({
+    url: '/web3/whale-alert/whales',
+    method: 'get'
+  });
+}
+
+export function addCustomWhale(data: { address: string; label: string; category?: string }) {
+  return request<{ success: boolean }>({
+    url: '/web3/whale-alert/whales',
+    method: 'post',
+    data
+  });
+}
+
+export function getWhaleAlertTransactions(chain?: string, minValueUSD?: number, limit?: number) {
+  return request<WhaleAlertTransaction[]>({
+    url: '/web3/whale-alert/transactions',
+    method: 'get',
+    params: { chain, minValueUSD, limit }
+  });
+}
+
+export function getWhaleAlertNotifications(alertId?: string) {
+  return request<WhaleAlertNotification[]>({
+    url: '/web3/whale-alert/notifications',
+    method: 'get',
+    params: { alertId }
+  });
+}
+
+export function markAlertNotificationRead(id: string) {
+  return request<{ success: boolean }>({
+    url: `/web3/whale-alert/notifications/${id}/read`,
+    method: 'post'
+  });
+}
+
+export function getWhaleAlertStats() {
+  return request<WhaleAlertStats>({
+    url: '/web3/whale-alert/stats',
+    method: 'get'
+  });
+}
+
+export function checkWhaleMovements() {
+  return request<WhaleAlertNotification[]>({
+    url: '/web3/whale-alert/check',
+    method: 'post'
+  });
+}
