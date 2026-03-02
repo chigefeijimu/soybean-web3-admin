@@ -141,6 +141,7 @@ import YieldAggregator from '@/components/web3/YieldAggregator/index.vue';
 import ValidatorTracker from '@/components/web3/ValidatorTracker.vue';
 import NftPortfolioTracker from '@/components/web3/NftPortfolioTracker.vue';
 import LiquidationScanner from '@/views/web3/LiquidationScanner.vue';
+import DefiPositionManager from '@/views/web3/DefiPositionManager.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -289,6 +290,7 @@ const tabs = [
   { id: 'governance-power', label: 'Gov Power', icon: '🗳️' },
   { id: 'defi-compare', label: 'DeFi Compare', icon: '⚖️' },
   { id: 'yield-aggregator', label: 'Yield Agg', icon: '🌾' },
+  { id: 'defi-position-manager', label: 'Position Mgr', icon: '🎯' },
   { id: 'validator-tracker', label: 'Validator', icon: '🔒' },
   { id: 'nft-portfolio', label: 'NFT Portfolio', icon: '🖼️' },
   { id: 'liquidation-scanner', label: 'Liq Scanner', icon: '🔍' },
@@ -1159,6 +1161,11 @@ onMounted(() => {
         <!-- Yield Aggregator Tab -->
         <div v-show="activeTab === 'yield-aggregator'">
           <YieldAggregator />
+        </div>
+
+        <!-- DeFi Position Manager Tab -->
+        <div v-show="activeTab === 'defi-position-manager'">
+          <DefiPositionManager />
         </div>
 
         <!-- Validator Tracker Tab -->

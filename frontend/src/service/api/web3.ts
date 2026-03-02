@@ -4094,20 +4094,6 @@ export function fetchGainersLosers(address: string, chainId?: number) {
 }
 
 /**
- * 对比两个投资组合
- * @param address1 第一个钱包地址
- * @param address2 第二个钱包地址
- * @param chainId 链ID (默认1)
- */
-export function comparePortfolios(address1: string, address2: string, chainId?: number) {
-  return request({
-    url: 'http://localhost:3014/portfolio-analytics/compare',
-    method: 'get',
-    params: { address1, address2, chainId }
-  });
-}
-
-/**
  * 获取性能指标
  * @param address 钱包地址
  * @param chainId 链ID (默认1)

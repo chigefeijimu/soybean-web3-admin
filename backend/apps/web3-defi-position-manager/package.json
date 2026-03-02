@@ -1,0 +1,26 @@
+{
+  "name": "web3-defi-position-manager",
+  "version": "1.0.0",
+  "description": "DeFi Position Manager API - Unified DeFi position tracking across protocols",
+  "main": "src/main.ts",
+  "scripts": {
+    "build": "nest build web3-defi-position-manager",
+    "start": "nest start web3-defi-position-manager",
+    "start:dev": "nest start web3-defi-position-manager --watch",
+    "start:prod": "node dist/web3-defi-position-manager/main"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.3.1",
+    "typescript": "^5.1.3"
+  }
+}
