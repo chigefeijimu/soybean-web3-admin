@@ -1795,3 +1795,81 @@ export function getImpliedVolatility(asset: string, strike?: string) {
     params: { asset, strike }
   });
 }
+
+// ============ Oracle Price Comparison API ============
+
+export interface OraclePrice {
+  source: string;
+  symbol: string;
+  price: number;
+  timestamp: number;
+  confidence: number | null;
+  change24h: number | null;
+}
+
+export interface PriceComparison {
+  symbol: string;
+  prices: OraclePrice[];
+  averagePrice: number;
+  priceDiffPercent: number;
+  highestPrice: OraclePrice;
+  lowestPrice: OraclePrice;
+  arbitrageOpportunity: boolean;
+}
+
+export interface OracleStatus {
+  source: string;
+  status: string;
+  latencyMs: number;
+  lastUpdate: number;
+}
+
+export interface SupportedToken {
+  symbol: string;
+  name: string;
+  chainlink: boolean;
+  binance: boolean;
+  coingecko: boolean;
+  uniswap: boolean;
+}
+
+/**
+ * Compare prices from multiple oracles for a symbol
+ */
+export function getPriceComparison(symbol: string) {
+  return request<PriceComparison>({
+    url: `/web3/oracle/compare/${symbol}`,
+    method: 'get'
+  });
+}
+
+/**
+ * Compare prices for multiple symbols
+ */
+export function getMultiPriceComparison(symbols: string[]) {
+  return request<PriceComparison[]>({
+    url: '/web3/oracle/multi',
+    method: 'post',
+    data: { symbols }
+  });
+}
+
+/**
+ * Get oracle status
+ */
+export function getOracleStatus() {
+  return request<OracleStatus[]>({
+    url: '/web3/oracle/status',
+    method: 'get'
+  });
+}
+
+/**
+ * Get supported tokens for oracle comparison
+ */
+export function getSupportedOracleTokens() {
+  return request<SupportedToken[]>({
+    url: '/web3/oracle/supported',
+    method: 'get'
+  });
+}
