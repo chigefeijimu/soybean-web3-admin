@@ -205,6 +205,7 @@ declare module 'vue' {
     TokenDiscovery: typeof import('./../components/web3/TokenDiscovery/index.vue')['default']
     TokenEconomics: typeof import('./../components/web3/TokenEconomics/index.vue')['default']
     TokenGrapher: typeof import('./../components/web3/TokenGrapher.vue')['default']
+    TokenHistoryApi: typeof import('./../components/web3/TokenHistoryApi/index.vue')['default']
     TokenHolderDistribution: typeof import('./../components/web3/TokenHolderDistribution.vue')['default']
     TokenImpersonatorScanner: typeof import('./../components/web3/TokenImpersonatorScanner.vue')['default']
     TokenInflationTracker: typeof import('./../components/web3/TokenInflationTracker.vue')['default']
