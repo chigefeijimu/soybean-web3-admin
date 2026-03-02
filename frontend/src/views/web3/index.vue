@@ -115,6 +115,7 @@ import SmartOrderManager from '@/components/web3/SmartOrderManager.vue';
 import MarketCapDashboard from '@/components/web3/MarketCapDashboard.vue';
 import WalletGroupAnalyzer from '@/components/web3/WalletGroupAnalyzer/index.vue';
 import DaoTreasury from '@/components/web3/DaoTreasury/index.vue';
+import GasFeeAnalytics from '@/components/web3/GasFeeAnalytics.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -240,6 +241,7 @@ const tabs = [
   { id: 'smart-order', label: 'Smart Order', icon: '📋' },
   { id: 'market-cap', label: 'Market Cap', icon: '📈' },
   { id: 'dao-treasury', label: 'Treasury', icon: '🏛️' },
+  { id: 'gas-fee-analytics', label: 'Gas Analytics', icon: '⛽' },
 ];
 
 // Supported networks with logos
@@ -992,6 +994,11 @@ onMounted(() => {
         <!-- DAO Treasury Dashboard Tab -->
         <div v-show="activeTab === 'dao-treasury'">
           <DaoTreasury />
+        </div>
+
+        <!-- Gas Fee Analytics Tab -->
+        <div v-show="activeTab === 'gas-fee-analytics'">
+          <GasFeeAnalytics />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
