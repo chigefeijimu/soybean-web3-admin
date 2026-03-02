@@ -2201,3 +2201,53 @@ export async function fetchDefiYields(): Promise<any> {
     return [];
   }
 }
+
+/**
+ * Fetch gas prices from Etherscan API
+ */
+export async function fetchGasPricesFromEtherscan(chain: string = 'ethereum'): Promise<{ slow: number; normal: number; fast: number }> {
+  const chainIdMap: Record<string, string> = {
+    ethereum: '1',
+    polygon: '137',
+    arbitrum: '42161',
+    optimism: '10',
+    bsc: '56'
+  };
+  const chainId = chainIdMap[chain] || '1';
+  
+  try {
+    const response = await fetch(`https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=YourApiKeyToken`);
+    const data = await response.json();
+    if (data.status === '1') {
+      return {
+        slow: parseFloat(data.result.SafeGasPrice),
+        normal: parseFloat(data.result.ProposeGasPrice),
+        fast: parseFloat(data.result.FastGasPrice)
+      };
+    }
+  } catch (e) {
+    console.error('Failed to fetch gas:', e);
+  }
+  
+  // Fallback to typical values
+  return { slow: 15, normal: 25, fast: 45 };
+}
+
+/**
+ * Fetch ETH balance for an address
+ */
+export async function fetchEthBalance(address: string): Promise<string> {
+  try {
+    const response = await fetch(
+      `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=YourApiKeyToken`
+    );
+    const data = await response.json();
+    if (data.status === '1') {
+      // Convert from Wei to ETH
+      return (parseFloat(data.result) / 1e18).toFixed(6);
+    }
+  } catch (e) {
+    console.error('Failed to fetch balance:', e);
+  }
+  return '0';
+}
