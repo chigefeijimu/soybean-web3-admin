@@ -2278,3 +2278,80 @@ export async function fetchTransactions(address: string, page: number = 1): Prom
   }
   return [];
 }
+
+/**
+ * Gas Faucet API Types
+ */
+export interface FaucetNetwork {
+  chainId: string;
+  name: string;
+  symbol: string;
+  faucet: boolean;
+  faucetAddress: string;
+  explorer: string;
+}
+
+export interface FaucetRequest {
+  address: string;
+  network: string;
+  amount?: string;
+}
+
+export interface FaucetHistory {
+  address: string;
+  network: string;
+  amount: string;
+  txHash: string;
+  timestamp: Date;
+}
+
+export interface GasPrice {
+  slow: string;
+  standard: string;
+  fast: string;
+  unit: string;
+}
+
+/**
+ * Get supported testnetworks
+ */
+export async function fetchFaucetNetworks(): Promise<FaucetNetwork[]> {
+  const response = await fetch('/api/web3/gas-faucet/networks');
+  return response.json();
+}
+
+/**
+ * Get faucet address for a network
+ */
+export async function fetchFaucetAddress(chainId: string): Promise<{ address: string }> {
+  const response = await fetch(`/api/web3/gas-faucet/address/${chainId}`);
+  return response.json();
+}
+
+/**
+ * Request testnet tokens
+ */
+export async function requestFaucetTokens(request: FaucetRequest): Promise<{ success: boolean; txHash?: string; message: string }> {
+  const response = await fetch('/api/web3/gas-faucet/request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  });
+  return response.json();
+}
+
+/**
+ * Get request history for an address
+ */
+export async function fetchFaucetHistory(address: string): Promise<FaucetHistory[]> {
+  const response = await fetch(`/api/web3/gas-faucet/history/${address}`);
+  return response.json();
+}
+
+/**
+ * Get gas prices for a network
+ */
+export async function fetchFaucetGasPrice(chainId: string): Promise<GasPrice> {
+  const response = await fetch(`/api/web3/gas-faucet/gas-price/${chainId}`);
+  return response.json();
+}
