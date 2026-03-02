@@ -33,6 +33,7 @@ declare module 'vue' {
     DaoGovernance: typeof import('./../components/web3/DaoGovernance.vue')['default']
     DaoTreasury: typeof import('./../components/web3/DaoTreasury/index.vue')['default']
     DappBrowser: typeof import('./../components/web3/DappBrowser/index.vue')['default']
+    DAppInteractionAnalytics: typeof import('./../components/web3/DAppInteractionAnalytics.vue')['default']
     DarkModeContainer: typeof import('./../components/common/dark-mode-container.vue')['default']
     DataExporter: typeof import('./../components/web3/DataExporter.vue')['default']
     DataVisualizer: typeof import('./../components/web3/DataVisualizer.vue')['default']
