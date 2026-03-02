@@ -750,6 +750,58 @@ export function getPopularEnsDomains(limit?: number) {
   });
 }
 
+// ==================== Portfolio Comparator API ====================
+
+export interface ComparatorToken {
+  tokenAddress: string;
+  symbol: string;
+  name: string;
+  balance: string;
+  price: number;
+  value: number;
+  change24h: number;
+}
+
+export interface ComparatorPortfolio {
+  address: string;
+  totalValue: number;
+  tokens: ComparatorToken[];
+  ethBalance: string;
+}
+
+export interface ComparatorResult {
+  portfolioA: ComparatorPortfolio;
+  portfolioB: ComparatorPortfolio;
+  comparison: {
+    totalValueDiff: number;
+    totalValueDiffPercent: number;
+    commonTokens: ComparatorToken[];
+    uniqueToA: ComparatorToken[];
+    uniqueToB: ComparatorToken[];
+    overlappingValue: number;
+    divergenceScore: number;
+  };
+  ranking: { address: string; totalValue: number; rank: number }[];
+}
+
+export function comparePortfolios(addressA: string, addressB: string, chainId?: number) {
+  return request<ComparatorResult>({
+    url: '/web3/portfolio-comparator/compare',
+    method: 'get',
+    params: { addressA, addressB, chainId }
+  });
+}
+
+export function rankPortfolios(addresses: string[], chainId?: number) {
+  return request<{
+    rankings: { address: string; totalValue: number; rank: number }[];
+  }>({
+    url: '/web3/portfolio-comparator/rank',
+    method: 'get',
+    params: { addresses: addresses.join(','), chainId }
+  });
+}
+
 // ==================== DeFi Protocol Explorer API ====================
 
 /** DeFi Protocol Info */

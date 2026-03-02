@@ -142,6 +142,7 @@ declare module 'vue' {
     OrderBook: typeof import('./../components/web3/OrderBook.vue')['default']
     PinToggler: typeof import('./../components/common/pin-toggler.vue')['default']
     PortfolioAnalytics: typeof import('./../components/web3/PortfolioAnalytics.vue')['default']
+    PortfolioComparator: typeof import('./../components/web3/PortfolioComparator.vue')['default']
     PortfolioDashboard: typeof import('./../components/web3/PortfolioDashboard.vue')['default']
     PortfolioPerformance: typeof import('./../components/web3/PortfolioPerformance.vue')['default']
     PortfolioRebalancer: typeof import('./../components/web3/PortfolioRebalancer.vue')['default']

@@ -86,6 +86,7 @@ import OraclePriceComparison from '@/components/web3/OraclePriceComparison.vue';
 import TokenApprovalRevoker from '@/components/web3/TokenApprovalRevoker.vue';
 import TokenEconomics from '@/components/web3/TokenEconomics/index.vue';
 import DefiTvlTracker from '@/components/web3/DefiTvlTracker.vue';
+import PortfolioComparator from '@/components/web3/PortfolioComparator.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -177,6 +178,7 @@ const tabs = [
   { id: 'options', label: 'Options', icon: '📊' },
   { id: 'sentiment', label: 'Sentiment', icon: '💭' },
   { id: 'fund-flow', label: 'Fund Flow', icon: '🔄' },
+  { id: 'portfolio-comparator', label: 'Compare', icon: '⚖️' },
   { id: 'oracle', label: 'Oracle', icon: '⛓️' },
   { id: 'governance-explorer', label: 'Governance', icon: '🏛️' },
   { id: 'approval-revoker', label: 'Approval Revoker', icon: '🔐' },
@@ -789,6 +791,11 @@ onMounted(() => {
         <!-- Fund Flow Tab -->
         <div v-show="activeTab === 'fund-flow'">
           <FundFlowAnalyzer />
+        </div>
+
+        <!-- Portfolio Comparator Tab -->
+        <div v-show="activeTab === 'portfolio-comparator'">
+          <PortfolioComparator />
         </div>
 
         <!-- Oracle Price Comparison Tab -->
