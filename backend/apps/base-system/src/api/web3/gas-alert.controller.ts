@@ -94,7 +94,7 @@ export class Web3GasAlertController {
       const gasPrice = gasPrices.find((g) => g.chainId === alert.chainId);
       if (!gasPrice) continue;
 
-      const currentGasPrice = gasPrice.standard || gasPrice.fast || gasPrice.slow || 0;
+      const currentGasPrice = gasPrice.normal || gasPrice.fast || gasPrice.slow || 0;
       const shouldTrigger =
         (alert.direction === 'below' && currentGasPrice <= alert.targetGasPrice) ||
         (alert.direction === 'above' && currentGasPrice >= alert.targetGasPrice);
