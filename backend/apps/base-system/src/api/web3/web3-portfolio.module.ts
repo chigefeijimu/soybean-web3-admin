@@ -63,6 +63,8 @@ import { TaxReportController } from './tax-report/tax-report.controller';
 import { TaxReportService } from './tax-report/tax-report.service';
 import { LiquidityPoolController } from './liquidity-pool.controller';
 import { LiquidityPoolService } from './liquidity-pool.service';
+import { MevProtectController } from './mev-protect.controller';
+import { MevProtectService } from './mev-protect.service';
 
 @Module({
   imports: [HttpModule],
@@ -103,7 +105,8 @@ import { LiquidityPoolService } from './liquidity-pool.service';
     AddressLabelController,
     TaxReportController,
     LiquidityPoolController,
+    MevProtectController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService],
 })
 export class Web3PortfolioModule {}
