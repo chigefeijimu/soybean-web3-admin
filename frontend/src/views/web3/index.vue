@@ -128,6 +128,7 @@ import WhaleAlert from '@/components/web3/WhaleAlert.vue';
 import DefiYieldCompare from '@/components/web3/DefiYieldCompare.vue';
 import WalletSnapshot from '@/components/web3/WalletSnapshot.vue';
 import TokenInflationTracker from '@/components/web3/TokenInflationTracker.vue';
+import TxQueue from '@/components/web3/TxQueue/index.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -266,6 +267,7 @@ const tabs = [
   { id: 'defi-yield-compare', label: 'Yield Compare', icon: '🧪' },
   { id: 'wallet-snapshot', label: 'Snapshot', icon: '📸' },
   { id: 'token-inflation', label: 'Inflation', icon: '💰' },
+  { id: 'tx-queue', label: 'Tx Queue', icon: '📋' },
 ];
 
 // Supported networks with logos
@@ -1083,6 +1085,11 @@ onMounted(() => {
         <!-- Token Inflation Tracker Tab -->
         <div v-show="activeTab === 'token-inflation'">
           <TokenInflationTracker />
+        </div>
+
+        <!-- Transaction Queue Manager Tab -->
+        <div v-show="activeTab === 'tx-queue'">
+          <TxQueue />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
