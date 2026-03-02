@@ -20,6 +20,8 @@ import { initDocSwagger } from '@lib/bootstrap/swagger/init-doc.swagger';
 import { ConfigKeyPaths, IAppConfig, ICorsConfig } from '@lib/config';
 import { fastifyApp } from '@lib/infra/adapter/fastify.adapter';
 import { registerHelmet } from '@lib/infra/adapter/security.adapter';
+import { AllExceptionsFilter } from '@lib/infra/filters/all-exceptions.filter';
+import { TransformInterceptor } from '@lib/infra/interceptors/transform.interceptor';
 import { RedisUtility } from '@lib/shared/redis/redis.util';
 import { isDevEnvironment, isMainProcess } from '@lib/utils/env';
 
@@ -88,9 +90,9 @@ async function bootstrap() {
   const GLOBAL_PREFIX = 'v1';
   app.setGlobalPrefix(GLOBAL_PREFIX);
 
-  app.useGlobalPipes(new ValidationPipe(validationPipeOptions));
-
-  initDocSwagger(app, configService);
+  // app.useGlobalPipes(new ValidationPipe(validationPipeOptions));
+  // app.useGlobalFilters(new AllExceptionsFilter());
+  // app.useGlobalInterceptors(new TransformInterceptor());
 
   // @ts-ignore
   await app.register(fastifyCompress, { encodings: ['gzip', 'deflate'] });

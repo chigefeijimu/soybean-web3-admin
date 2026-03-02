@@ -1,7 +1,7 @@
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { ExecutionContext, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule, ThrottlerStorage } from '@nestjs/throttler';
 import { ThrottlerStorageRecord } from '@nestjs/throttler/dist/throttler-storage-record.interface';
@@ -22,6 +22,7 @@ import { GlobalCqrsModule } from '@lib/global/global.module';
 import { SharedModule } from '@lib/global/shared.module';
 import { AuthZModule, AUTHZ_ENFORCER, PrismaAdapter } from '@lib/infra/casbin';
 import { AllExceptionsFilter } from '@lib/infra/filters/all-exceptions.filter';
+import { TransformInterceptor } from '@lib/infra/interceptors/transform.interceptor';
 import { ApiKeyModule } from '@lib/infra/guard/api-key/api-key.module';
 import { JwtAuthGuard } from '@lib/infra/guard/jwt.auth.guard';
 import { JwtStrategy } from '@lib/infra/strategies/jwt.passport-strategy';
@@ -175,10 +176,8 @@ class ThrottlerStorageAdapter implements ThrottlerStorage {
 
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
 
-    //TODO 拦截器极度影响性能 有需要自行开启 对性能有要求使用decorator形式 每个接口手动加虽然麻烦点或者app.use指定路由统一使用相对代码量少
-    // { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor },
-    // { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
-    // { provide: APP_INTERCEPTOR, useClass: LogInterceptor },
+    // 统一响应格式
+    { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
 
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     // { provide: APP_GUARD, useClass: ThrottlerGuard },

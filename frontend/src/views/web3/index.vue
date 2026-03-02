@@ -109,6 +109,7 @@ import ContractMethodSelector from '@/components/web3/ContractMethodSelector.vue
 import PortfolioPro from '@/components/web3/PortfolioPro.vue';
 import TxFailureAnalyzer from '@/components/web3/TxFailureAnalyzer.vue';
 import NetworkStatus from '@/components/web3/NetworkStatus.vue';
+import WalletActivityAnalytics from '@/components/web3/WalletActivityAnalytics.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
