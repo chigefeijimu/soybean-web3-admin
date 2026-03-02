@@ -135,6 +135,7 @@ import PortfolioAlertApi from '@/components/web3/PortfolioAlertApi/index.vue';
 import TokenLockTracker from '@/components/web3/TokenLockTracker.vue';
 import TokenHistoryApi from '@/components/web3/TokenHistoryApi/index.vue';
 import TxTimeline from '@/components/web3/TxTimeline.vue';
+import GovernancePowerTracker from '@/components/web3/GovernancePowerTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -280,6 +281,7 @@ const tabs = [
   { id: 'token-lock', label: 'Token Lock', icon: '🔒' },
   { id: 'token-history-api', label: 'History API', icon: '📈' },
   { id: 'tx-timeline', label: 'Tx Timeline', icon: '📊' },
+  { id: 'governance-power', label: 'Gov Power', icon: '🗳️' },
 ];
 
 // Supported networks with logos
@@ -1132,6 +1134,11 @@ onMounted(() => {
         <!-- Transaction Timeline Tab -->
         <div v-show="activeTab === 'tx-timeline'">
           <TxTimeline />
+        </div>
+
+        <!-- Governance Power Tracker Tab -->
+        <div v-show="activeTab === 'governance-power'">
+          <GovernancePowerTracker />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

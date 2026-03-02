@@ -3698,3 +3698,154 @@ export function fetchTxTimelineChains() {
     method: 'get'
   });
 }
+
+// ============ Governance Power Tracker API ============
+
+export interface VotingPowerResult {
+  address: string;
+  daos: {
+    dao: string;
+    daoName: string;
+    token: string;
+    chain: string;
+    votingPower: {
+      raw: number;
+      normalized: number;
+      delegated: number;
+      selfDelegated: number;
+    };
+  }[];
+  totalVotingPower: number;
+}
+
+export interface DelegateInfo {
+  dao: string;
+  daoName: string;
+  token: string;
+  totalDelegates: number;
+  delegates: {
+    address: string;
+    votes: number;
+    proposals: number;
+    voters: number;
+  }[];
+}
+
+export interface ProposalInfo {
+  dao: string;
+  daoName: string;
+  totalProposals: number;
+  proposals: {
+    id: string;
+    title: string;
+    status: 'active' | 'passed' | 'failed' | 'executed';
+    forVotes: number;
+    againstVotes: number;
+    abstainVotes: number;
+    startBlock: number;
+    endBlock: number;
+  }[];
+}
+
+export interface PowerAnalytics {
+  address: string;
+  summary: {
+    totalDaos: number;
+    totalVotingPower: number;
+    totalProposals: number;
+    activeProposals: number;
+  };
+  breakdown: any[];
+  topHolders: { dao: string; power: number }[];
+  recommendations: string[];
+}
+
+export interface PowerHistory {
+  address: string;
+  dao: string;
+  period: number;
+  history: { date: string; votingPower: number; normalized: number }[];
+  stats: {
+    average: number;
+    max: number;
+    min: number;
+    trend: string;
+  };
+}
+
+/**
+ * 获取地址的投票权
+ */
+export function fetchVotingPower(address: string, dao?: string) {
+  return request<{ data: VotingPowerResult }>({
+    url: `http://localhost:3009/governance-power/voting-power/${address}`,
+    method: 'get',
+    params: dao ? { dao } : {}
+  });
+}
+
+/**
+ * 获取DAO委托列表
+ */
+export function fetchDelegates(daoId: string) {
+  return request<{ data: DelegateInfo }>({
+    url: `http://localhost:3009/governance-power/delegates/${daoId}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取DAO提案列表
+ */
+export function fetchProposals(daoId: string, status?: string) {
+  return request<{ data: ProposalInfo }>({
+    url: `http://localhost:3009/governance-power/proposals/${daoId}`,
+    method: 'get',
+    params: status ? { status } : {}
+  });
+}
+
+/**
+ * 获取投票权分析
+ */
+export function fetchPowerAnalytics(address: string) {
+  return request<{ data: PowerAnalytics }>({
+    url: `http://localhost:3009/governance-power/analytics/${address}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 获取投票权历史
+ */
+export function fetchPowerHistory(address: string, dao?: string, days?: number) {
+  return request<{ data: PowerHistory }>({
+    url: `http://localhost:3009/governance-power/history/${address}`,
+    method: 'get',
+    params: {
+      dao: dao || 'uniswap',
+      days: days || 90
+    }
+  });
+}
+
+/**
+ * 比较两个地址的投票权
+ */
+export function compareVotingPower(address1: string, address2: string) {
+  return request({
+    url: 'http://localhost:3009/governance-power/compare',
+    method: 'post',
+    data: { address1, address2 }
+  });
+}
+
+/**
+ * 获取支持的DAO列表
+ */
+export function fetchSupportedDaos() {
+  return request<{ data: { id: string; name: string; token: string; chain: string }[] }>({
+    url: 'http://localhost:3009/governance-power/daos',
+    method: 'get'
+  });
+}
