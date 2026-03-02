@@ -84,6 +84,7 @@ import CryptoSentiment from '@/components/web3/CryptoSentiment.vue';
 import FundFlowAnalyzer from '@/components/web3/FundFlowAnalyzer.vue';
 import OraclePriceComparison from '@/components/web3/OraclePriceComparison.vue';
 import TokenApprovalRevoker from '@/components/web3/TokenApprovalRevoker.vue';
+import TokenEconomics from '@/components/web3/TokenEconomics/index.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -178,6 +179,7 @@ const tabs = [
   { id: 'oracle', label: 'Oracle', icon: '⛓️' },
   { id: 'governance-explorer', label: 'Governance', icon: '🏛️' },
   { id: 'approval-revoker', label: 'Approval Revoker', icon: '🔐' },
+  { id: 'token-economics', label: 'Token Economics', icon: '📊' },
 ];
 
 // Supported networks with logos
@@ -800,6 +802,11 @@ onMounted(() => {
         <!-- Approval Revoker Tab -->
         <div v-show="activeTab === 'approval-revoker'">
           <TokenApprovalRevoker />
+        </div>
+
+        <!-- Token Economics Tab -->
+        <div v-show="activeTab === 'token-economics'">
+          <TokenEconomics />
         </div>
       </div>
 
