@@ -4323,3 +4323,115 @@ export function comparePortfolioHealth(addresses: string, chainId?: number) {
     params: { chainId }
   });
 }
+
+// ============ DeFi Gas Estimator API ============
+
+export interface DefiGasEstimate {
+  operation: string;
+  protocol: string;
+  chain: string;
+  chainId: number;
+  gasLimit: number;
+  gasPrice: string;
+  estimatedGasFee: string;
+  estimatedGasFeeUsd: number;
+  confidence: 'low' | 'medium' | 'high';
+  historicalAvg: number;
+  tips: string[];
+}
+
+export interface DefiOperation {
+  type: string;
+  protocol: string;
+  chainId: number;
+  token0?: string;
+  token1?: string;
+  amount0?: string;
+  amount1?: string;
+}
+
+export interface SupportedOperation {
+  type: string;
+  description: string;
+  protocols: string[];
+}
+
+export interface SupportedChain {
+  id: number;
+  name: string;
+  symbol: string;
+}
+
+/**
+ * 预估DeFi操作Gas费用
+ */
+export function estimateDefiGas(
+  operation: string,
+  protocol: string,
+  chainId: number,
+  speed: 'slow' | 'normal' | 'fast' = 'normal'
+) {
+  return request<DefiGasEstimate>({
+    url: '/web3/defi-gas-estimator/estimate',
+    method: 'get',
+    params: { operation, protocol, chainId, speed }
+  });
+}
+
+/**
+ * 批量预估多个操作的Gas费用
+ */
+export function batchEstimateDefiGas(operations: DefiOperation[], speed?: 'slow' | 'normal' | 'fast') {
+  return request<DefiGasEstimate[]>({
+    url: '/web3/defi-gas-estimator/batch',
+    method: 'post',
+    data: { operations, speed }
+  });
+}
+
+/**
+ * 跨链Gas费用对比
+ */
+export function compareDefiGasChains(
+  chains: number[],
+  operation: string,
+  protocol: string,
+  speed: 'slow' | 'normal' | 'fast' = 'normal'
+) {
+  return request<DefiGasEstimate[]>({
+    url: '/web3/defi-gas-estimator/compare',
+    method: 'get',
+    params: { chains: chains.join(','), operation, protocol, speed }
+  });
+}
+
+/**
+ * 获取支持的DeFi操作类型
+ */
+export function getSupportedDefiOperations() {
+  return request<SupportedOperation[]>({
+    url: '/web3/defi-gas-estimator/operations',
+    method: 'get'
+  });
+}
+
+/**
+ * 获取支持的网络
+ */
+export function getSupportedDefiChains() {
+  return request<SupportedChain[]>({
+    url: '/web3/defi-gas-estimator/chains',
+    method: 'get'
+  });
+}
+
+/**
+ * 快速预估通用操作
+ */
+export function quickEstimateDefiGas(operation: string, chainId: number, speed: 'slow' | 'normal' | 'fast' = 'normal') {
+  return request<DefiGasEstimate>({
+    url: `/web3/defi-gas-estimator/quick/${operation}`,
+    method: 'get',
+    params: { chainId, speed }
+  });
+}
