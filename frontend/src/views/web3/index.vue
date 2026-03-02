@@ -108,6 +108,7 @@ import TxBundle from '@/components/web3/TxBundle/index.vue';
 import ContractMethodSelector from '@/components/web3/ContractMethodSelector.vue';
 import PortfolioPro from '@/components/web3/PortfolioPro.vue';
 import TxFailureAnalyzer from '@/components/web3/TxFailureAnalyzer.vue';
+import NetworkStatus from '@/components/web3/NetworkStatus.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -226,6 +227,7 @@ const tabs = [
   { id: 'method-selector', label: 'Method Selector', icon: '🔧' },
   { id: 'portfolio-pro', label: 'Portfolio Pro', icon: '💼' },
   { id: 'tx-failure', label: 'Tx Failure', icon: '🔍' },
+  { id: 'network-status', label: 'Network Status', icon: '🌐' },
 ];
 
 // Supported networks with logos
@@ -943,6 +945,11 @@ onMounted(() => {
         <!-- Transaction Failure Analyzer Tab -->
         <div v-show="activeTab === 'tx-failure'">
           <TxFailureAnalyzer />
+        </div>
+
+        <!-- Network Status Tab -->
+        <div v-show="activeTab === 'network-status'">
+          <NetworkStatus />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

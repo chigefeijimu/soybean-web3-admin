@@ -2632,3 +2632,144 @@ export function clearOldAlerts(daysOld: number) {
     data: { daysOld }
   });
 }
+
+// ==================== Network Status API ====================
+
+export interface NetworkStatus {
+  chainId: number;
+  chainName: string;
+  symbol: string;
+  status: 'healthy' | 'degraded' | 'down' | 'unknown';
+  blockNumber: number;
+  blockTime: number;
+  gasPrice: number;
+  gasPriceGwei: number;
+  tps: number;
+  avgBlockTime: number;
+  lastBlockTime: number;
+  uptime: number;
+  latency: number;
+  validators: number;
+  activeValidators: number;
+  pendingTransactions: number;
+  chainLogo: string;
+  color: string;
+  features: string[];
+}
+
+export interface NetworkAlert {
+  id: string;
+  chainId: number;
+  chainName: string;
+  type: 'gas_spike' | 'congestion' | 'outage' | 'upgrade' | 'slashing';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  message: string;
+  timestamp: number;
+  resolved: boolean;
+}
+
+export interface NetworkStats {
+  totalChains: number;
+  healthyChains: number;
+  degradedChains: number;
+  downChains: number;
+  avgGasPrice: number;
+  totalTps: number;
+  totalValidators: number;
+}
+
+/**
+ * Get all network statuses
+ */
+export function getNetworkStatuses(status?: string) {
+  return request<NetworkStatus[]>({
+    url: '/network-status/networks',
+    method: 'get',
+    params: status ? { status } : {}
+  });
+}
+
+/**
+ * Get specific network status
+ */
+export function getNetworkStatus(chainId: number) {
+  return request<NetworkStatus>({
+    url: `/network-status/network/${chainId}`,
+    method: 'get'
+  });
+}
+
+/**
+ * Get network stats summary
+ */
+export function getNetworkStats() {
+  return request<NetworkStats>({
+    url: '/network-status/stats',
+    method: 'get'
+  });
+}
+
+/**
+ * Get network alerts
+ */
+export function getNetworkAlerts(chainId?: number, resolved?: boolean) {
+  return request<NetworkAlert[]>({
+    url: '/network-status/alerts',
+    method: 'get',
+    params: {
+      ...(chainId && { chainId: chainId.toString() }),
+      ...(resolved !== undefined && { resolved: resolved.toString() })
+    }
+  });
+}
+
+/**
+ * Get alert by ID
+ */
+export function getNetworkAlertById(id: string) {
+  return request<NetworkAlert>({
+    url: `/network-status/alerts/${id}`,
+    method: 'get'
+  });
+}
+
+/**
+ * Compare multiple networks
+ */
+export function compareNetworks(chainIds: number[]) {
+  return request<NetworkStatus[]>({
+    url: '/network-status/compare',
+    method: 'get',
+    params: { chains: chainIds.join(',') }
+  });
+}
+
+/**
+ * Get trending networks by TPS
+ */
+export function getTrendingNetworks() {
+  return request<NetworkStatus[]>({
+    url: '/network-status/trending',
+    method: 'get'
+  });
+}
+
+/**
+ * Get cheapest networks by gas price
+ */
+export function getCheapestNetworks() {
+  return request<NetworkStatus[]>({
+    url: '/network-status/cheapest',
+    method: 'get'
+  });
+}
+
+/**
+ * Get fastest networks by block time
+ */
+export function getFastestNetworks() {
+  return request<NetworkStatus[]>({
+    url: '/network-status/fastest',
+    method: 'get'
+  });
+}
