@@ -97,6 +97,7 @@ import GasPriceApiDashboard from '@/components/web3/GasPriceApiDashboard.vue';
 import DexVolume from '@/components/web3/DexVolume/index.vue';
 import PnLTracker from '@/components/web3/PnLTracker.vue';
 import PriorityFeeEstimator from '@/components/web3/PriorityFeeEstimator.vue';
+import PortfolioExport from '@/components/web3/PortfolioExport.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -204,6 +205,7 @@ const tabs = [
   { id: 'dex-volume', label: 'Dex Volume', icon: '📊' },
   { id: 'pnl-tracker', label: 'P&L Tracker', icon: '📈' },
   { id: 'priority-fee', label: 'Priority Fee', icon: '⚡' },
+  { id: 'portfolio-export', label: 'Export', icon: '📤' },
 ];
 
 // Supported networks with logos
@@ -866,6 +868,11 @@ onMounted(() => {
         <!-- Priority Fee Estimator Tab -->
         <div v-show="activeTab === 'priority-fee'">
           <PriorityFeeEstimator />
+        </div>
+
+        <!-- Portfolio Export Tab -->
+        <div v-show="activeTab === 'portfolio-export'">
+          <PortfolioExport />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

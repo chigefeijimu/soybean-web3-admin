@@ -153,6 +153,7 @@ declare module 'vue' {
     PortfolioAnalytics: typeof import('./../components/web3/PortfolioAnalytics.vue')['default']
     PortfolioComparator: typeof import('./../components/web3/PortfolioComparator.vue')['default']
     PortfolioDashboard: typeof import('./../components/web3/PortfolioDashboard.vue')['default']
+    PortfolioExport: typeof import('./../components/web3/PortfolioExport.vue')['default']
     PortfolioPerformance: typeof import('./../components/web3/PortfolioPerformance.vue')['default']
     PortfolioRebalancer: typeof import('./../components/web3/PortfolioRebalancer.vue')['default']
     PriceTicker: typeof import('./../components/web3/PriceTicker.vue')['default']

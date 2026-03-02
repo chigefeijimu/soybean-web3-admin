@@ -67,6 +67,8 @@ import { MevProtectController } from './mev-protect.controller';
 import { MevProtectService } from './mev-protect.service';
 import { Web3PriorityFeeController } from './web3-priority-fee.controller';
 import { CrossChainBalanceController } from './cross-chain-balance.controller';
+import { PortfolioExportController } from './portfolio-export.controller';
+import { PortfolioExportService } from './portfolio-export.service';
 
 @Module({
   imports: [HttpModule],
@@ -110,7 +112,8 @@ import { CrossChainBalanceController } from './cross-chain-balance.controller';
     MevProtectController,
     Web3PriorityFeeController,
     CrossChainBalanceController,
+    PortfolioExportController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService],
 })
 export class Web3PortfolioModule {}
