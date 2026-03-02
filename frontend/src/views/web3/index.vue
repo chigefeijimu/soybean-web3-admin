@@ -113,6 +113,8 @@ import WalletActivityAnalytics from '@/components/web3/WalletActivityAnalytics.v
 import DataExporter from '@/components/web3/DataExporter.vue';
 import SmartOrderManager from '@/components/web3/SmartOrderManager.vue';
 import MarketCapDashboard from '@/components/web3/MarketCapDashboard.vue';
+import WalletGroupAnalyzer from '@/components/web3/WalletGroupAnalyzer/index.vue';
+import DaoTreasury from '@/components/web3/DaoTreasury/index.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -192,6 +194,7 @@ const tabs = [
   { id: 'liquidation', label: 'Liquidation', icon: '⚠️' },
   { id: 'staking', label: 'Staking', icon: '🔒' },
   { id: 'wallet-analyzer', label: 'Wallet Analyzer', icon: '🔍' },
+  { id: 'wallet-group', label: 'Group', icon: '👥' },
   { id: 'vesting', label: 'Vesting', icon: '🔐' },
   { id: 'address-interaction', label: 'Address Link', icon: '🔗' },
   { id: 'contract-storage', label: 'Storage', icon: '📦' },
@@ -236,6 +239,7 @@ const tabs = [
   { id: 'data-exporter', label: 'Data Export', icon: '📤' },
   { id: 'smart-order', label: 'Smart Order', icon: '📋' },
   { id: 'market-cap', label: 'Market Cap', icon: '📈' },
+  { id: 'dao-treasury', label: 'Treasury', icon: '🏛️' },
 ];
 
 // Supported networks with logos
@@ -785,6 +789,11 @@ onMounted(() => {
           <WalletAnalyzer />
         </div>
 
+        <!-- Wallet Group Analyzer Tab -->
+        <div v-show="activeTab === 'wallet-group'">
+          <WalletGroupAnalyzer />
+        </div>
+
         <!-- Token Vesting Tab -->
         <div v-show="activeTab === 'vesting'">
           <TokenVesting />
@@ -978,6 +987,11 @@ onMounted(() => {
         <!-- Market Cap Dashboard Tab -->
         <div v-show="activeTab === 'market-cap'">
           <MarketCapDashboard />
+        </div>
+
+        <!-- DAO Treasury Dashboard Tab -->
+        <div v-show="activeTab === 'dao-treasury'">
+          <DaoTreasury />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

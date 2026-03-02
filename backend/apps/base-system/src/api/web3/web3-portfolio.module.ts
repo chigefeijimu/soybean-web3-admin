@@ -72,6 +72,8 @@ import { PortfolioExportService } from './portfolio-export.service';
 import { TransactionSchedulerController } from './web3-transaction-scheduler.controller';
 import { ContractMethodSelectorController } from './contract-method-selector.controller';
 import { NetworkStatusController } from './network-status.controller';
+import { WalletGroupController } from './wallet-group/wallet-group.controller';
+import { WalletGroupService } from './wallet-group/wallet-group.service';
 
 @Module({
   imports: [HttpModule],
@@ -119,7 +121,8 @@ import { NetworkStatusController } from './network-status.controller';
     TransactionSchedulerController,
     ContractMethodSelectorController,
     NetworkStatusController,
+    WalletGroupController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService, WalletGroupService],
 })
 export class Web3PortfolioModule {}
