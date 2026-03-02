@@ -34,6 +34,7 @@ declare module 'vue' {
     DefiPortfolio: typeof import('./../components/web3/DefiPortfolio.vue')['default']
     DefiPortfolioTracker: typeof import('./../components/web3/DefiPortfolioTracker.vue')['default']
     DefiPositions: typeof import('./../components/web3/DefiPositions.vue')['default']
+    DefiTvlTracker: typeof import('./../components/web3/DefiTvlTracker.vue')['default']
     DexAggregator: typeof import('./../components/web3/DexAggregator.vue')['default']
     EnsLookup: typeof import('./../components/web3/EnsLookup.vue')['default']
     ENSLookup: typeof import('./../components/web3/ENSLookup.vue')['default']

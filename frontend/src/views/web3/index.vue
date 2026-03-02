@@ -85,6 +85,7 @@ import FundFlowAnalyzer from '@/components/web3/FundFlowAnalyzer.vue';
 import OraclePriceComparison from '@/components/web3/OraclePriceComparison.vue';
 import TokenApprovalRevoker from '@/components/web3/TokenApprovalRevoker.vue';
 import TokenEconomics from '@/components/web3/TokenEconomics/index.vue';
+import DefiTvlTracker from '@/components/web3/DefiTvlTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -180,6 +181,7 @@ const tabs = [
   { id: 'governance-explorer', label: 'Governance', icon: '🏛️' },
   { id: 'approval-revoker', label: 'Approval Revoker', icon: '🔐' },
   { id: 'token-economics', label: 'Token Economics', icon: '📊' },
+  { id: 'defi-tvl', label: 'DeFi TVL', icon: '📊' },
 ];
 
 // Supported networks with logos
@@ -807,6 +809,11 @@ onMounted(() => {
         <!-- Token Economics Tab -->
         <div v-show="activeTab === 'token-economics'">
           <TokenEconomics />
+        </div>
+
+        <!-- DeFi TVL Tracker Tab -->
+        <div v-show="activeTab === 'defi-tvl'">
+          <DefiTvlTracker />
         </div>
       </div>
 
