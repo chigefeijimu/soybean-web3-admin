@@ -148,6 +148,7 @@ declare module 'vue' {
     OraclePriceComparison: typeof import('./../components/web3/OraclePriceComparison.vue')['default']
     OrderBook: typeof import('./../components/web3/OrderBook.vue')['default']
     PinToggler: typeof import('./../components/common/pin-toggler.vue')['default']
+    PnLTracker: typeof import('./../components/web3/PnLTracker.vue')['default']
     PortfolioAnalytics: typeof import('./../components/web3/PortfolioAnalytics.vue')['default']
     PortfolioComparator: typeof import('./../components/web3/PortfolioComparator.vue')['default']
     PortfolioDashboard: typeof import('./../components/web3/PortfolioDashboard.vue')['default']

@@ -269,7 +269,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { message } from 'ant-design-vue';
+// import removed - ant-design-vue
 
 const loading = ref(false);
 const result = ref(null);

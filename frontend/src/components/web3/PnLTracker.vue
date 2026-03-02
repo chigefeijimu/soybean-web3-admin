@@ -258,7 +258,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
-import { message } from 'ant-design-vue'
+// import removed
 import * as echarts from 'echarts'
 
 const walletAddress = ref('')
