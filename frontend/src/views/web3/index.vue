@@ -120,6 +120,8 @@ import ArbitrageScanner from '@/components/web3/ArbitrageScanner.vue';
 import TokenInsiderTracker from '@/components/web3/TokenInsiderTracker.vue';
 import DAppInteractionAnalytics from '@/components/web3/DAppInteractionAnalytics.vue';
 import PortfolioAlertManager from '@/components/web3/PortfolioAlertManager.vue';
+import TokenDiscovery from '@/components/web3/TokenDiscovery/index.vue';
+import WalletActivityMonitor from '@/components/web3/WalletActivityMonitor.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -250,6 +252,8 @@ const tabs = [
   { id: 'insider-tracker', label: 'Insider', icon: '🎯' },
   { id: 'dapp-analytics', label: 'DApp Analytics', icon: '📱' },
   { id: 'portfolio-alerts', label: 'Alerts', icon: '🔔' },
+  { id: 'token-discovery', label: 'Discovery', icon: '🔍' },
+  { id: 'wallet-monitor', label: 'Wallet Monitor', icon: '👀' },
 ];
 
 // Supported networks with logos
@@ -1027,6 +1031,16 @@ onMounted(() => {
         <!-- Portfolio Alert Manager Tab -->
         <div v-show="activeTab === 'portfolio-alerts'">
           <PortfolioAlertManager />
+        </div>
+
+        <!-- Token Discovery Tab -->
+        <div v-show="activeTab === 'token-discovery'">
+          <TokenDiscovery />
+        </div>
+
+        <!-- Wallet Activity Monitor Tab -->
+        <div v-show="activeTab === 'wallet-monitor'">
+          <WalletActivityMonitor />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
