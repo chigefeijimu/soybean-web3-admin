@@ -123,6 +123,7 @@ import PortfolioAlertManager from '@/components/web3/PortfolioAlertManager.vue';
 import TokenDiscovery from '@/components/web3/TokenDiscovery/index.vue';
 import WalletActivityMonitor from '@/components/web3/WalletActivityMonitor.vue';
 import TokenImpersonatorScanner from '@/components/web3/TokenImpersonatorScanner.vue';
+import TokenMomentumScanner from '@/components/web3/TokenMomentumScanner/index.vue';
 import WhaleAlert from '@/components/web3/WhaleAlert.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
@@ -258,6 +259,7 @@ const tabs = [
   { id: 'token-discovery', label: 'Discovery', icon: '🔍' },
   { id: 'wallet-monitor', label: 'Wallet Monitor', icon: '👀' },
   { id: 'whale-alert', label: 'Whale Alert', icon: '🔔' },
+  { id: 'token-momentum', label: 'Momentum', icon: '📈' },
 ];
 
 // Supported networks with logos
@@ -1055,6 +1057,11 @@ onMounted(() => {
         <!-- Whale Alert Tab -->
         <div v-show="activeTab === 'whale-alert'">
           <WhaleAlert />
+        </div>
+
+        <!-- Token Momentum Scanner Tab -->
+        <div v-show="activeTab === 'token-momentum'">
+          <TokenMomentumScanner />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
