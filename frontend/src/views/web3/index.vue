@@ -125,6 +125,7 @@ import WalletActivityMonitor from '@/components/web3/WalletActivityMonitor.vue';
 import TokenImpersonatorScanner from '@/components/web3/TokenImpersonatorScanner.vue';
 import TokenMomentumScanner from '@/components/web3/TokenMomentumScanner/index.vue';
 import WhaleAlert from '@/components/web3/WhaleAlert.vue';
+import DefiYieldCompare from '@/components/web3/DefiYieldCompare.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -260,6 +261,7 @@ const tabs = [
   { id: 'wallet-monitor', label: 'Wallet Monitor', icon: '👀' },
   { id: 'whale-alert', label: 'Whale Alert', icon: '🔔' },
   { id: 'token-momentum', label: 'Momentum', icon: '📈' },
+  { id: 'defi-yield-compare', label: 'Yield Compare', icon: '🧪' },
 ];
 
 // Supported networks with logos
@@ -1062,6 +1064,11 @@ onMounted(() => {
         <!-- Token Momentum Scanner Tab -->
         <div v-show="activeTab === 'token-momentum'">
           <TokenMomentumScanner />
+        </div>
+
+        <!-- Defi Yield Compare Tab -->
+        <div v-show="activeTab === 'defi-yield-compare'">
+          <DefiYieldCompare />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

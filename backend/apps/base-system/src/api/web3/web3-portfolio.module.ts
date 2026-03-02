@@ -75,6 +75,8 @@ import { NetworkStatusController } from './network-status.controller';
 import { WalletGroupController } from './wallet-group/wallet-group.controller';
 import { WalletGroupService } from './wallet-group/wallet-group.service';
 import { TokenInsiderTrackerController } from './token-insider-tracker.controller';
+import { DefiYieldCompareController } from './defi-yield-compare.controller';
+import { DefiYieldCompareService } from './defi-yield-compare.service';
 
 @Module({
   imports: [HttpModule],
@@ -124,7 +126,8 @@ import { TokenInsiderTrackerController } from './token-insider-tracker.controlle
     NetworkStatusController,
     WalletGroupController,
     TokenInsiderTrackerController,
+    DefiYieldCompareController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService, WalletGroupService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService, WalletGroupService, DefiYieldCompareService],
 })
 export class Web3PortfolioModule {}
