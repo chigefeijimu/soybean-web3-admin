@@ -2177,3 +2177,14 @@ export async function fetchCurrentPrice(symbol: string = 'ETHUSDT'): Promise<{ p
     change: data.priceChange || '0'
   };
 }
+
+/**
+ * Fetch coin prices from CoinGecko (free, no API key)
+ */
+export async function fetchCoinPrices(ids: string[]): Promise<Record<string, { usd: number; usd_24h_change: number }>> {
+  const idsStr = ids.join(',');
+  const response = await fetch(
+    `https://api.coingecko.com/api/v3/simple/price?ids=${idsStr}&vs_currencies=usd&include_24hr_change=true`
+  );
+  return response.json();
+}
