@@ -1,0 +1,21 @@
+{
+  "name": "web3-portfolio-pro",
+  "version": "1.0.0",
+  "description": "Enhanced Crypto Portfolio Dashboard Pro",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "ts-node src/main.ts",
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

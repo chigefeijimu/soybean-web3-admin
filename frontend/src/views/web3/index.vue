@@ -106,6 +106,7 @@ import DefiInsurance from '@/components/web3/DefiInsurance.vue';
 import DefiAlerts from '@/components/web3/DefiAlerts.vue';
 import TxBundle from '@/components/web3/TxBundle/index.vue';
 import ContractMethodSelector from '@/components/web3/ContractMethodSelector.vue';
+import PortfolioPro from '@/components/web3/PortfolioPro.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -222,6 +223,7 @@ const tabs = [
   { id: 'defi-alerts', label: 'Alerts', icon: '🚨' },
   { id: 'tx-bundle', label: 'Tx Bundle', icon: '📦' },
   { id: 'method-selector', label: 'Method Selector', icon: '🔧' },
+  { id: 'portfolio-pro', label: 'Portfolio Pro', icon: '💼' },
 ];
 
 // Supported networks with logos
@@ -929,6 +931,11 @@ onMounted(() => {
         <!-- Method Selector Tab -->
         <div v-show="activeTab === 'method-selector'">
           <ContractMethodSelector />
+        </div>
+
+        <!-- Portfolio Pro Tab -->
+        <div v-show="activeTab === 'portfolio-pro'">
+          <PortfolioPro />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
