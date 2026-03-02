@@ -226,6 +226,7 @@ declare module 'vue' {
     TokenVesting: typeof import('./../components/web3/TokenVesting.vue')['default']
     TokenVolatilityAnalyzer: typeof import('./../components/web3/TokenVolatilityAnalyzer.vue')['default']
     TokenWatchlist: typeof import('./../components/web3/TokenWatchlist.vue')['default']
+    TradingBotSimulator: typeof import('./../components/web3/TradingBotSimulator.vue')['default']
     TradingChart: typeof import('./../components/web3/TradingChart.vue')['default']
     TradingPanel: typeof import('./../components/web3/TradingPanel.vue')['default']
     TransactionHistory: typeof import('./../components/web3/TransactionHistory.vue')['default']

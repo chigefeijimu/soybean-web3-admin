@@ -4119,3 +4119,132 @@ export function fetchBatchPortfolios(addresses: string[], chainId?: number) {
     data: { addresses, chainId }
   });
 }
+
+// ==================== Trading Bot Simulator API ====================
+
+export interface Trade {
+  type: 'buy' | 'sell';
+  price: number;
+  amount: number;
+  timestamp: number;
+  value: number;
+}
+
+export interface BacktestResult {
+  strategy: string;
+  symbol: string;
+  period: { start: string; end: string };
+  initialCapital: number;
+  finalCapital: number;
+  totalReturn: number;
+  totalReturnPercent: number;
+  maxDrawdown: number;
+  winRate: number;
+  totalTrades: number;
+  profitableTrades: number;
+  losingTrades: number;
+  avgProfit: number;
+  avgLoss: number;
+  profitFactor: number;
+  sharpeRatio: number;
+  trades: Trade[];
+  equityCurve: { timestamp: number; value: number }[];
+}
+
+export interface StrategyConfig {
+  strategy: string;
+  symbol: string;
+  startDate: string;
+  endDate: string;
+  initialCapital: number;
+  parameters?: Record<string, any>;
+}
+
+export interface CompareResult {
+  results: BacktestResult[];
+  metrics: {
+    bestStrategy: string;
+    bestReturn: number;
+    bestSharpe: string;
+    bestWinRate: string;
+  };
+}
+
+/**
+ * 获取可用策略列表
+ */
+export function fetchTradingStrategies() {
+  return request<{ data: string[] }>({
+    url: 'http://localhost:3000/trading-bot/strategies',
+    method: 'get'
+  });
+}
+
+/**
+ * 回测策略
+ */
+export function backtestStrategy(params: {
+  strategy: string;
+  symbol: string;
+  startDate: string;
+  endDate: string;
+  initialCapital: number;
+  marketType?: 'bull' | 'bear' | 'sideways' | 'volatile';
+  parameters?: Record<string, any>;
+}) {
+  return request<{ data: BacktestResult }>({
+    url: 'http://localhost:3000/trading-bot/backtest',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * 比较多个策略
+ */
+export function compareStrategies(params: {
+  strategies: string[];
+  symbol: string;
+  startDate: string;
+  endDate: string;
+  initialCapital: number;
+  marketType?: 'bull' | 'bear' | 'sideways' | 'volatile';
+}) {
+  return request<{ data: CompareResult }>({
+    url: 'http://localhost:3000/trading-bot/compare',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * 优化策略参数
+ */
+export function optimizeStrategy(params: {
+  strategy: string;
+  symbol: string;
+  startDate: string;
+  endDate: string;
+  initialCapital: number;
+  marketType?: 'bull' | 'bear' | 'sideways' | 'volatile';
+  paramRanges?: Record<string, { min: number; max: number; step: number }>;
+}) {
+  return request<{ data: { bestParams: Record<string, any>; results: BacktestResult } }>({
+    url: 'http://localhost:3000/trading-bot/optimize',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * 获取实时交易信号
+ */
+export function fetchLiveTradingSignals(params?: {
+  timeRange?: string;
+}) {
+  return request<{ data: { symbol: string; signal: string; strength: number; price: number; change24h: number }[] }>({
+    url: 'http://localhost:3000/trading-bot/live-signals',
+    method: 'get',
+    params
+  });
+}

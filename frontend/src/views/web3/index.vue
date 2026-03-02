@@ -98,6 +98,7 @@ import DexVolume from '@/components/web3/DexVolume/index.vue';
 import PnLTracker from '@/components/web3/PnLTracker.vue';
 import PriorityFeeEstimator from '@/components/web3/PriorityFeeEstimator.vue';
 import TxAccelerator from '@/components/web3/TxAccelerator.vue';
+import TradingBotSimulator from '@/components/web3/TradingBotSimulator.vue';
 import YieldFarmingDashboard from '@/components/web3/YieldFarmingDashboard.vue';
 import PortfolioExport from '@/components/web3/PortfolioExport.vue';
 import GasHistory from '@/components/web3/GasHistory.vue';
@@ -291,6 +292,7 @@ const tabs = [
   { id: 'defi-compare', label: 'DeFi Compare', icon: '⚖️' },
   { id: 'yield-aggregator', label: 'Yield Agg', icon: '🌾' },
   { id: 'defi-position-manager', label: 'Position Mgr', icon: '🎯' },
+  { id: 'trading-bot-simulator', label: 'Trading Bot', icon: '🤖' },
   { id: 'validator-tracker', label: 'Validator', icon: '🔒' },
   { id: 'nft-portfolio', label: 'NFT Portfolio', icon: '🖼️' },
   { id: 'liquidation-scanner', label: 'Liq Scanner', icon: '🔍' },
@@ -1166,6 +1168,11 @@ onMounted(() => {
         <!-- DeFi Position Manager Tab -->
         <div v-show="activeTab === 'defi-position-manager'">
           <DefiPositionManager />
+        </div>
+
+        <!-- Trading Bot Simulator Tab -->
+        <div v-show="activeTab === 'trading-bot-simulator'">
+          <TradingBotSimulator />
         </div>
 
         <!-- Validator Tracker Tab -->
