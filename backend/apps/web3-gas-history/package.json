@@ -1,0 +1,28 @@
+{
+  "name": "web3-gas-history",
+  "version": "1.0.0",
+  "description": "Gas Fee History API Service - Historical gas price data and analytics",
+  "private": true,
+  "scripts": {
+    "build": "nest build web3-gas-history",
+    "start": "nest start web3-gas-history",
+    "start:dev": "nest start web3-gas-history --watch",
+    "start:prod": "node dist/apps/web3-gas-history/main"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/platform-express": "^10.3.0",
+    "@nestjs/axios": "^3.0.0",
+    "axios": "^1.6.0",
+    "reflect-metadata": "^0.2.1",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.3.0",
+    "@nestjs/schematics": "^10.1.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}

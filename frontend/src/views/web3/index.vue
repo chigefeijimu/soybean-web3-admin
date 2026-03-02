@@ -99,6 +99,7 @@ import PnLTracker from '@/components/web3/PnLTracker.vue';
 import PriorityFeeEstimator from '@/components/web3/PriorityFeeEstimator.vue';
 import TxAccelerator from '@/components/web3/TxAccelerator.vue';
 import PortfolioExport from '@/components/web3/PortfolioExport.vue';
+import GasHistory from '@/components/web3/GasHistory.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -207,6 +208,7 @@ const tabs = [
   { id: 'pnl-tracker', label: 'P&L Tracker', icon: '📈' },
   { id: 'priority-fee', label: 'Priority Fee', icon: '⚡' },
   { id: 'portfolio-export', label: 'Export', icon: '📤' },
+  { id: 'gas-history', label: 'Gas History', icon: '📊' },
   { id: 'tx-accelerator', label: 'Tx Accelerator', icon: '🚀' },
 ];
 
@@ -875,6 +877,11 @@ onMounted(() => {
         <!-- Portfolio Export Tab -->
         <div v-show="activeTab === 'portfolio-export'">
           <PortfolioExport />
+        </div>
+
+        <!-- Gas History Tab -->
+        <div v-show="activeTab === 'gas-history'">
+          <GasHistory />
         </div>
 
         <!-- Transaction Accelerator Tab -->

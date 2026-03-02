@@ -52,6 +52,7 @@ declare module 'vue' {
     GasAlert: typeof import('./../components/web3/GasAlert.vue')['default']
     GasAnalyzer: typeof import('./../components/web3/GasAnalyzer.vue')['default']
     GasFaucet: typeof import('./../components/web3/GasFaucet.vue')['default']
+    GasHistory: typeof import('./../components/web3/GasHistory.vue')['default']
     GasOptimizer: typeof import('./../components/web3/GasOptimizer.vue')['default']
     GasPrediction: typeof import('./../components/web3/GasPrediction.vue')['default']
     GasPriceApiDashboard: typeof import('./../components/web3/GasPriceApiDashboard.vue')['default']
