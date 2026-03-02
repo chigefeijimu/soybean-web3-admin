@@ -3961,3 +3961,175 @@ export function fetchDefiRankings() {
     method: 'get'
   });
 }
+
+// ========================================
+// Portfolio Analytics API Service
+// ========================================
+
+/** 代币持仓 */
+export interface TokenHolding {
+  symbol: string;
+  name: string;
+  contractAddress: string;
+  balance: string;
+  balanceUsd: string;
+  price: string;
+  change24h: string;
+  percentage: string;
+}
+
+/** 投资组合摘要 */
+export interface PortfolioSummary {
+  address: string;
+  totalValueUsd: string;
+  totalValueChange24h: string;
+  changePercentage24h: string;
+  tokenCount: number;
+  chain: string;
+  topHoldings: TokenHolding[];
+}
+
+/** 资产分布 */
+export interface AssetDistribution {
+  category: string;
+  valueUsd: string;
+  percentage: string;
+  tokens: string[];
+}
+
+/** 投资组合指标 */
+export interface PortfolioMetrics {
+  sharpeRatio: number;
+  maxDrawdown: string;
+  volatility: string;
+  riskScore: number;
+  diversificationScore: number;
+}
+
+/** 历史价值 */
+export interface HistoricalValue {
+  timestamp: number;
+  valueUsd: string;
+}
+
+/** 涨跌数据 */
+export interface GainersLosers {
+  gainers: { symbol: string; amount: number; valueUsd: number }[];
+  losers: { symbol: string; amount: number; valueUsd: number }[];
+}
+
+/** 性能指标 */
+export interface PerformanceMetrics {
+  totalReturn: string;
+  annualizedReturn: string;
+  bestDay: string;
+  worstDay: string;
+  avgDailyVolume: string;
+}
+
+/**
+ * 获取投资组合摘要
+ * @param address 钱包地址
+ * @param chainId 链ID (默认1)
+ */
+export function fetchPortfolioSummary(address: string, chainId?: number) {
+  return request<PortfolioSummary>({
+    url: 'http://localhost:3014/portfolio-analytics/summary',
+    method: 'get',
+    params: { address, chainId }
+  });
+}
+
+/**
+ * 获取资产分布
+ * @param address 钱包地址
+ * @param chainId 链ID (默认1)
+ */
+export function fetchAssetDistribution(address: string, chainId?: number) {
+  return request<AssetDistribution[]>({
+    url: 'http://localhost:3014/portfolio-analytics/distribution',
+    method: 'get',
+    params: { address, chainId }
+  });
+}
+
+/**
+ * 获取投资组合指标
+ * @param address 钱包地址
+ * @param chainId 链ID (默认1)
+ */
+export function fetchPortfolioMetrics(address: string, chainId?: number) {
+  return request<PortfolioMetrics>({
+    url: 'http://localhost:3014/portfolio-analytics/metrics',
+    method: 'get',
+    params: { address, chainId }
+  });
+}
+
+/**
+ * 获取历史价值
+ * @param address 钱包地址
+ * @param chainId 链ID (默认1)
+ * @param days 天数 (默认30)
+ */
+export function fetchHistoricalValue(address: string, chainId?: number, days?: number) {
+  return request<HistoricalValue[]>({
+    url: 'http://localhost:3014/portfolio-analytics/history',
+    method: 'get',
+    params: { address, chainId, days }
+  });
+}
+
+/**
+ * 获取涨跌排行
+ * @param address 钱包地址
+ * @param chainId 链ID (默认1)
+ */
+export function fetchGainersLosers(address: string, chainId?: number) {
+  return request<GainersLosers>({
+    url: 'http://localhost:3014/portfolio-analytics/gainers-losers',
+    method: 'get',
+    params: { address, chainId }
+  });
+}
+
+/**
+ * 对比两个投资组合
+ * @param address1 第一个钱包地址
+ * @param address2 第二个钱包地址
+ * @param chainId 链ID (默认1)
+ */
+export function comparePortfolios(address1: string, address2: string, chainId?: number) {
+  return request({
+    url: 'http://localhost:3014/portfolio-analytics/compare',
+    method: 'get',
+    params: { address1, address2, chainId }
+  });
+}
+
+/**
+ * 获取性能指标
+ * @param address 钱包地址
+ * @param chainId 链ID (默认1)
+ * @param timeframe 时间范围 (7d/30d/90d)
+ */
+export function fetchPerformanceMetrics(address: string, chainId?: number, timeframe?: string) {
+  return request<PerformanceMetrics>({
+    url: 'http://localhost:3014/portfolio-analytics/performance',
+    method: 'get',
+    params: { address, chainId, timeframe }
+  });
+}
+
+/**
+ * 批量获取多个钱包投资组合
+ * @param addresses 钱包地址列表
+ * @param chainId 链ID (默认1)
+ */
+export function fetchBatchPortfolios(addresses: string[], chainId?: number) {
+  return request({
+    url: 'http://localhost:3014/portfolio-analytics/batch',
+    method: 'post',
+    data: { addresses, chainId }
+  });
+}
