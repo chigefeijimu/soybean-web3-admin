@@ -1,0 +1,10 @@
+{
+  "name": "@sovran/web3-privacy-analyzer",
+  "version": "1.0.0",
+  "description": "Web3 Privacy Analyzer - analyze wallet transaction privacy risks",
+  "main": "src/main.ts",
+  "scripts": {
+    "build": "nest build web3-privacy-analyzer",
+    "start": "nest start web3-privacy-analyzer"
+  }
+}
