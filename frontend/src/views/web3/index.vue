@@ -119,6 +119,7 @@ import GasFeeAnalytics from '@/components/web3/GasFeeAnalytics.vue';
 import ArbitrageScanner from '@/components/web3/ArbitrageScanner.vue';
 import TokenInsiderTracker from '@/components/web3/TokenInsiderTracker.vue';
 import DAppInteractionAnalytics from '@/components/web3/DAppInteractionAnalytics.vue';
+import PortfolioAlertManager from '@/components/web3/PortfolioAlertManager.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -248,6 +249,7 @@ const tabs = [
   { id: 'arbitrage', label: 'Arbitrage', icon: '💱' },
   { id: 'insider-tracker', label: 'Insider', icon: '🎯' },
   { id: 'dapp-analytics', label: 'DApp Analytics', icon: '📱' },
+  { id: 'portfolio-alerts', label: 'Alerts', icon: '🔔' },
 ];
 
 // Supported networks with logos
@@ -1020,6 +1022,11 @@ onMounted(() => {
         <!-- DApp Interaction Analytics Tab -->
         <div v-show="activeTab === 'dapp-analytics'">
           <DAppInteractionAnalytics />
+        </div>
+
+        <!-- Portfolio Alert Manager Tab -->
+        <div v-show="activeTab === 'portfolio-alerts'">
+          <PortfolioAlertManager />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
