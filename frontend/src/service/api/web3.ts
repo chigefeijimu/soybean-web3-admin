@@ -2073,3 +2073,68 @@ export function searchNftCollections(query: string) {
     params: { q: query }
   });
 }
+
+/** Order Book Entry */
+export interface OrderBookEntry {
+  price: string;
+  amount: string;
+  total: string;
+}
+
+/** Order Book Data */
+export interface OrderBookData {
+  symbol: string;
+  baseToken: string;
+  quoteToken: string;
+  sellOrders: OrderBookEntry[];
+  buyOrders: OrderBookEntry[];
+  spread: string;
+  spreadPercent: string;
+  lastUpdate: string;
+}
+
+/**
+ * Fetch Order Book from Binance API
+ */
+export async function fetchOrderBook(symbol: string = 'ETHUSDT'): Promise<OrderBookData> {
+  const response = await fetch(`https://api.binance.com/api/v3/depth?symbol=${symbol}&limit=20`);
+  const data = await response.json();
+  
+  const sells = (data.bids || []).map((item: string[]) => ({
+    price: item[0],
+    amount: item[1],
+    total: (parseFloat(item[0]) * parseFloat(item[1])).toFixed(2)
+  }));
+  
+  const buys = (data.asks || []).map((item: string[]) => ({
+    price: item[0],
+    amount: item[1],
+    total: (parseFloat(item[0]) * parseFloat(item[1])).toFixed(2)
+  }));
+  
+  const bestAsk = parseFloat(sells[0]?.price || '0');
+  const bestBid = parseFloat(buys[0]?.price || '0');
+  const spread = bestAsk - bestBid;
+  const mid = (bestAsk + bestBid) / 2;
+  
+  return {
+    symbol,
+    baseToken: symbol.replace('USDT', '').replace('USDC', ''),
+    quoteToken: symbol.includes('USDT') ? 'USDT' : 'USDC',
+    sellOrders: sells,
+    buyOrders: buys,
+    spread: spread.toFixed(2),
+    spreadPercent: mid > 0 ? ((spread / mid) * 100).toFixed(3) : '0',
+    lastUpdate: new Date().toISOString()
+  };
+}
+
+/** Trading pair */
+export function getTradingPairs() {
+  return [
+    { symbol: 'ETHUSDT', base: 'ETH', quote: 'USDT' },
+    { symbol: 'BTCUSDT', base: 'BTC', quote: 'USDT' },
+    { symbol: 'BNBUSDT', base: 'BNB', quote: 'USDT' },
+    { symbol: 'SOLUSDT', base: 'SOL', quote: 'USDT' },
+  ];
+}

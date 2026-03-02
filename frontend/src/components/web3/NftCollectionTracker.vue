@@ -321,7 +321,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
 import {
   fetchNftCollections,
   fetchNftCollectionDetails,
@@ -393,7 +392,7 @@ const loadCollections = async () => {
     }
   } catch (error) {
     console.error('Failed to load collections:', error)
-    ElMessage.error('Failed to load collections')
+    console.error('Failed to load collections')
   } finally {
     loading.value = false
   }
@@ -459,7 +458,7 @@ const selectCollection = async (collection: NftCollection) => {
     }
   } catch (error) {
     console.error('Failed to load collection details:', error)
-    ElMessage.error('Failed to load collection details')
+    console.error('Failed to load collection details')
   } finally {
     loading.value = false
   }

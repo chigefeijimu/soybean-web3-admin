@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { fetchOrderBook, getTradingPairs, type OrderBookData } from '@/service/api/web3';
 
 interface Order {
   price: number;
@@ -7,35 +8,13 @@ interface Order {
   total: number;
 }
 
-const baseToken = ref('ETH');
-const quoteToken = ref('USDC');
+const selectedPair = ref('ETHUSDT');
+const tradingPairs = getTradingPairs();
 
-// Mock order book data
-const sellOrders = ref<Order[]>([
-  { price: 2505.5, amount: 2.5, total: 6263.75 },
-  { price: 2505.0, amount: 1.8, total: 4509.0 },
-  { price: 2504.5, amount: 3.2, total: 8014.4 },
-  { price: 2504.0, amount: 1.5, total: 3756.0 },
-  { price: 2503.5, amount: 2.0, total: 5007.0 },
-  { price: 2503.0, amount: 1.2, total: 3003.6 },
-  { price: 2502.5, amount: 2.8, total: 7007.0 },
-  { price: 2502.0, amount: 1.5, total: 3753.0 },
-  { price: 2501.5, amount: 3.0, total: 7504.5 },
-  { price: 2501.0, amount: 2.2, total: 5502.2 }
-]);
-
-const buyOrders = ref<Order[]>([
-  { price: 2500.5, amount: 2.0, total: 5001.0 },
-  { price: 2500.0, amount: 3.5, total: 8750.0 },
-  { price: 2499.5, amount: 1.8, total: 4499.1 },
-  { price: 2499.0, amount: 2.5, total: 6247.5 },
-  { price: 2498.5, amount: 1.2, total: 2998.2 },
-  { price: 2498.0, amount: 3.0, total: 7494.0 },
-  { price: 2497.5, amount: 2.0, total: 4995.0 },
-  { price: 2497.0, amount: 1.5, total: 3745.5 },
-  { price: 2496.5, amount: 2.8, total: 6990.2 },
-  { price: 2496.0, amount: 2.2, total: 5491.2 }
-]);
+const sellOrders = ref<Order[]>([]);
+const buyOrders = ref<Order[]>([]);
+const lastUpdate = ref('');
+const loading = ref(false);
 
 const spread = computed(() => {
   const bestSell = sellOrders.value[0]?.price || 0;
@@ -44,94 +23,96 @@ const spread = computed(() => {
 });
 
 const spreadPercent = computed(() => {
-  const mid = (sellOrders.value[0]?.price + buyOrders.value[0]?.price) / 2;
-  return (spread.value / mid) * 100;
+  const bestSell = sellOrders.value[0]?.price || 0;
+  const bestBuy = buyOrders.value[0]?.price || 0;
+  const mid = (bestSell + bestBuy) / 2;
+  return mid > 0 ? (spread.value / mid) * 100 : 0;
 });
 
 const maxTotal = computed(() => {
-  const maxSell = Math.max(...sellOrders.value.map(o => o.total));
-  const maxBuy = Math.max(...buyOrders.value.map(o => o.total));
-  return Math.max(maxSell, maxBuy);
+  const maxSell = Math.max(...sellOrders.value.map(o => o.total), 0);
+  const maxBuy = Math.max(...buyOrders.value.map(o => o.total), 0);
+  return Math.max(maxSell, maxBuy, 1);
 });
 
-const getDepthWidth = (total: number) => {
-  return (total / maxTotal.value) * 100;
+const fetchData = async () => {
+  try {
+    loading.value = true;
+    const data: OrderBookData = await fetchOrderBook(selectedPair.value);
+    
+    sellOrders.value = data.sellOrders.map(o => ({
+      price: parseFloat(o.price),
+      amount: parseFloat(o.amount),
+      total: parseFloat(o.total)
+    }));
+    
+    buyOrders.value = data.buyOrders.map(o => ({
+      price: parseFloat(o.price),
+      amount: parseFloat(o.amount),
+      total: parseFloat(o.total)
+    }));
+    
+    lastUpdate.value = new Date(data.lastUpdate).toLocaleTimeString();
+  } catch (e) {
+    console.error('Failed to fetch order book:', e);
+  } finally {
+    loading.value = false;
+  }
 };
 
-const formatPrice = (price: number) => price.toFixed(1);
-const formatAmount = (amount: number) => amount.toFixed(4);
-const formatTotal = (total: number) => total.toFixed(2);
+onMounted(() => {
+  fetchData();
+  const interval = setInterval(fetchData, 3000);
+  onUnmounted(() => clearInterval(interval));
+});
+
+const getDepthWidth = (total: number) => (total / maxTotal.value) * 100;
 </script>
 
 <template>
-  <div class="overflow-hidden border border-slate-700/50 rounded-2xl bg-slate-800/50 backdrop-blur-xl">
-    <!-- Header -->
-    <div class="border-b border-slate-700/50 p-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold">{{ baseToken }}/{{ quoteToken }}</h2>
-        <span class="text-xs text-slate-500">Order Book</span>
+  <div class="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 overflow-hidden">
+    <div class="p-4 border-b border-slate-700/50">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold">📊 Order Book</h2>
+        <select v-model="selectedPair" @change="fetchData" class="bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-1.5 text-sm">
+          <option v-for="pair in tradingPairs" :key="pair.symbol" :value="pair.symbol">{{ pair.base }}/{{ pair.quote }}</option>
+        </select>
       </div>
-
-      <!-- Spread -->
-      <div class="mt-2 flex items-center gap-2 text-sm">
-        <span class="text-slate-400">Spread:</span>
-        <span class="font-medium">${{ spread.toFixed(2) }}</span>
-        <span class="text-slate-500">({{ spreadPercent.toFixed(3) }}%)</span>
+      <div class="flex items-center justify-between text-sm">
+        <span class="text-slate-400">Spread: <span class="text-white">{{ spread.toFixed(2) }}</span></span>
+        <span class="text-slate-400">{{ spreadPercent.toFixed(3) }}%</span>
+        <span v-if="lastUpdate" class="text-slate-500 text-xs">Updated: {{ lastUpdate }}</span>
       </div>
     </div>
 
-    <!-- Column Headers -->
-    <div class="grid grid-cols-3 gap-2 border-b border-slate-700/50 px-4 py-2 text-xs text-slate-500">
-      <span>Price ({{ quoteToken }})</span>
-      <span class="text-right">Amount ({{ baseToken }})</span>
+    <div class="grid grid-cols-3 px-4 py-2 text-xs text-slate-500 border-b border-slate-700/50">
+      <span>Price (USDT)</span>
+      <span class="text-right">Amount</span>
       <span class="text-right">Total</span>
     </div>
 
-    <!-- Sells (Asks) -->
-    <div class="divide-y divide-slate-700/30">
-      <div
-        v-for="(order, i) in sellOrders.slice().reverse()"
-        :key="'sell-' + i"
-        class="relative grid grid-cols-3 gap-2 px-4 py-1.5 text-sm"
-      >
-        <div class="absolute inset-y-0 right-0 bg-red-500/10" :style="{ width: getDepthWidth(order.total) + '%' }" />
-        <span class="relative z-10 text-red-400">{{ formatPrice(order.price) }}</span>
-        <span class="relative z-10 text-right">{{ formatAmount(order.amount) }}</span>
-        <span class="relative z-10 text-right text-slate-400">{{ formatTotal(order.total) }}</span>
+    <div class="max-h-64 overflow-y-auto">
+      <div v-for="(order, i) in sellOrders.slice(0, 10)" :key="'sell-'+i" class="grid grid-cols-3 px-4 py-1.5 text-sm relative">
+        <div class="absolute right-0 top-0 bottom-0 bg-red-500/20" :style="{ width: getDepthWidth(order.total) + '%' }" />
+        <span class="text-red-400 relative z-10">{{ order.price.toFixed(2) }}</span>
+        <span class="text-right relative z-10">{{ order.amount.toFixed(4) }}</span>
+        <span class="text-right relative z-10">{{ order.total.toFixed(2) }}</span>
       </div>
     </div>
 
-    <!-- Mid Price -->
-    <div class="border-y border-slate-700/50 bg-slate-700/30 px-4 py-3">
-      <div class="text-center">
-        <span class="text-xl text-green-400 font-bold">${{ (sellOrders[0].price + buyOrders[0].price) / 2 }}</span>
-        <span class="ml-2 text-xs text-slate-500">Mid Price</span>
+    <div class="px-4 py-3 bg-slate-900/50 border-y border-slate-700/50">
+      <div class="flex items-center justify-between">
+        <span class="text-xs text-slate-500">Last Price</span>
+        <span class="text-xl font-bold text-green-400">{{ sellOrders[0]?.price.toFixed(2) || '---' }}</span>
       </div>
     </div>
 
-    <!-- Buys (Bids) -->
-    <div class="divide-y divide-slate-700/30">
-      <div
-        v-for="(order, i) in buyOrders"
-        :key="'buy-' + i"
-        class="relative grid grid-cols-3 gap-2 px-4 py-1.5 text-sm"
-      >
-        <div class="absolute inset-y-0 right-0 bg-green-500/10" :style="{ width: getDepthWidth(order.total) + '%' }" />
-        <span class="relative z-10 text-green-400">{{ formatPrice(order.price) }}</span>
-        <span class="relative z-10 text-right">{{ formatAmount(order.amount) }}</span>
-        <span class="relative z-10 text-right text-slate-400">{{ formatTotal(order.total) }}</span>
-      </div>
-    </div>
-
-    <!-- Footer Stats -->
-    <div class="grid grid-cols-2 gap-2 border-t border-slate-700/50 p-3 text-xs">
-      <div class="text-center">
-        <span class="text-slate-500">24h Volume</span>
-        <p class="font-medium">$12.5M</p>
-      </div>
-      <div class="text-center">
-        <span class="text-slate-500">Depth</span>
-        <p class="font-medium">$125K</p>
+    <div class="max-h-64 overflow-y-auto">
+      <div v-for="(order, i) in buyOrders.slice(0, 10)" :key="'buy-'+i" class="grid grid-cols-3 px-4 py-1.5 text-sm relative">
+        <div class="absolute right-0 top-0 bottom-0 bg-green-500/20" :style="{ width: getDepthWidth(order.total) + '%' }" />
+        <span class="text-green-400 relative z-10">{{ order.price.toFixed(2) }}</span>
+        <span class="text-right relative z-10">{{ order.amount.toFixed(4) }}</span>
+        <span class="text-right relative z-10">{{ order.total.toFixed(2) }}</span>
       </div>
     </div>
   </div>

@@ -135,7 +135,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import axios from 'axios';
-import { ElMessage } from 'element-plus';
 
 const searchAddress = ref('');
 const loading = ref(false);
@@ -193,7 +192,7 @@ async function lookupAddress() {
     if (error.response?.status === 404) {
       result.value = null;
     } else {
-      ElMessage.error('Error looking up address');
+      console.error('Error looking up address');
     }
   } finally {
     loading.value = false;
@@ -235,7 +234,7 @@ async function filterByCategory(categoryId: string) {
     const response = await axios.get(`/api/address-label/search?category=${categoryId}`);
     categoryLabels.value = response.data;
   } catch (error) {
-    ElMessage.error('Error loading category');
+    console.error('Error loading category');
   } finally {
     loading.value = false;
   }
@@ -259,9 +258,9 @@ function getCategoryName(id: string): string {
 async function copyAddress(addr: string) {
   try {
     await navigator.clipboard.writeText(addr);
-    ElMessage.success('Address copied!');
+    console.log('Address copied!');
   } catch (error) {
-    ElMessage.error('Failed to copy');
+    console.error('Failed to copy');
   }
 }
 

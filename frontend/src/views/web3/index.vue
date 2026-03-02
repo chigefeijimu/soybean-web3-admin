@@ -75,6 +75,7 @@ import AddressInteractionAnalyzer from '@/components/web3/AddressInteractionAnal
 import ContractStorageViewer from '@/components/web3/ContractStorageViewer.vue';
 import DappBrowser from '@/components/web3/DappBrowser/index.vue';
 import GasPriceWidget from '@/components/web3/GasPriceWidget.vue';
+import GasAlert from '@/components/web3/GasAlert.vue';
 import DexAggregator from '@/components/web3/DexAggregator.vue';
 import PortfolioPerformance from '@/components/web3/PortfolioPerformance.vue';
 import PortfolioRebalancer from '@/components/web3/PortfolioRebalancer.vue';
@@ -174,6 +175,7 @@ const tabs = [
   { id: 'contract-storage', label: 'Storage', icon: '📦' },
   { id: 'dapp-browser', label: 'DApp Browser', icon: '🌐' },
   { id: 'gas-widget', label: 'Gas Widget', icon: '⛽' },
+  { id: 'gas-alert', label: 'Gas Alert', icon: '🔔' },
   { id: 'dex-aggregator', label: 'Dex Agg', icon: '🔄' },
   { id: 'portfolio-performance', label: 'Portfolio', icon: '📈' },
   { id: 'rebalance', label: 'Rebalance', icon: '⚖️' },
@@ -762,6 +764,11 @@ onMounted(() => {
         <!-- Gas Widget Tab -->
         <div v-show="activeTab === 'gas-widget'">
           <GasPriceWidget />
+        </div>
+
+        <!-- Gas Alert Tab -->
+        <div v-show="activeTab === 'gas-alert'">
+          <GasAlert />
         </div>
 
         <!-- Dex Aggregator Tab -->
