@@ -112,6 +112,7 @@ import NetworkStatus from '@/components/web3/NetworkStatus.vue';
 import WalletActivityAnalytics from '@/components/web3/WalletActivityAnalytics.vue';
 import DataExporter from '@/components/web3/DataExporter.vue';
 import SmartOrderManager from '@/components/web3/SmartOrderManager.vue';
+import MarketCapDashboard from '@/components/web3/MarketCapDashboard.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -234,6 +235,7 @@ const tabs = [
   { id: 'wallet-activity', label: 'Activity', icon: '📊' },
   { id: 'data-exporter', label: 'Data Export', icon: '📤' },
   { id: 'smart-order', label: 'Smart Order', icon: '📋' },
+  { id: 'market-cap', label: 'Market Cap', icon: '📈' },
 ];
 
 // Supported networks with logos
@@ -971,6 +973,11 @@ onMounted(() => {
         <!-- Smart Order Manager Tab -->
         <div v-show="activeTab === 'smart-order'">
           <SmartOrderManager />
+        </div>
+
+        <!-- Market Cap Dashboard Tab -->
+        <div v-show="activeTab === 'market-cap'">
+          <MarketCapDashboard />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

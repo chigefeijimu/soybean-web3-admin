@@ -93,6 +93,7 @@ declare module 'vue' {
     LiquidityPoolMonitor: typeof import('./../components/web3/LiquidityPoolMonitor.vue')['default']
     LiquidityPoolScanner: typeof import('./../components/web3/LiquidityPoolScanner.vue')['default']
     LookForward: typeof import('./../components/custom/look-forward.vue')['default']
+    MarketCapDashboard: typeof import('./../components/web3/MarketCapDashboard.vue')['default']
     MarketOverview: typeof import('./../components/web3/MarketOverview.vue')['default']
     MenuToggler: typeof import('./../components/common/menu-toggler.vue')['default']
     MevExplorer: typeof import('./../components/web3/MevExplorer.vue')['default']
