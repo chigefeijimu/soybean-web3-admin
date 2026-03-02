@@ -167,6 +167,7 @@ declare module 'vue' {
     TableHeaderOperation: typeof import('./../components/advanced/table-header-operation.vue')['default']
     TaxCalculator: typeof import('./../components/web3/TaxCalculator.vue')['default']
     TaxLossHarvester: typeof import('./../components/web3/TaxLossHarvester.vue')['default']
+    TaxReportGenerator: typeof import('./../components/web3/TaxReportGenerator.vue')['default']
     ThemeSchemaSwitch: typeof import('./../components/common/theme-schema-switch.vue')['default']
     TokenAnalyzer: typeof import('./../components/web3/TokenAnalyzer.vue')['default']
     TokenApprovalManager: typeof import('./../components/web3/TokenApprovalManager.vue')['default']
