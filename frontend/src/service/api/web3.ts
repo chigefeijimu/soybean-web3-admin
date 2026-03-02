@@ -2773,3 +2773,209 @@ export function getFastestNetworks() {
     method: 'get'
   });
 }
+
+// ==================== Gas Budget Planner API ====================
+
+export interface BudgetChain {
+  chainId: number;
+  name: string;
+  gasUnit: string;
+}
+
+export interface TransactionType {
+  type: string;
+  gasLimit: number;
+  description: string;
+}
+
+export interface BudgetCalculation {
+  chain: string;
+  transactionType: string;
+  gasLimit: number;
+  gasPrice: number;
+  gasPriceUnit: string;
+  estimatedGas: number;
+  ethPrice: number;
+  estimatedUsd: number;
+}
+
+export interface BudgetProjection {
+  date: string;
+  estimatedGas: number;
+  estimatedUsd: number;
+  confidence: string;
+}
+
+export interface BudgetSummary {
+  totalTransactions: number;
+  totalEstimatedGas: number;
+  totalEstimatedUsd: number;
+  averageDailyCost: number;
+}
+
+export interface BudgetBreakdownItem {
+  name: string;
+  type: string;
+  count: number;
+  gasLimit: number;
+  estimatedGas: number;
+  estimatedUsd: number;
+  percentage: number;
+}
+
+export interface ChainComparison {
+  chain: string;
+  chainId: number;
+  gasPrice: number;
+  gasPriceUnit: string;
+  estimatedGas: number;
+  estimatedUsd: number;
+  rank: number;
+}
+
+export interface SavingTip {
+  category: string;
+  title: string;
+  description: string;
+  potentialSavings: string;
+}
+
+/**
+ * Get supported chains for budget planning
+ */
+export function getBudgetChains() {
+  return request<BudgetChain[]>({
+    url: '/gas-budget/chains',
+    method: 'get'
+  });
+}
+
+/**
+ * Get available transaction types
+ */
+export function getBudgetTransactionTypes() {
+  return request<TransactionType[]>({
+    url: '/gas-budget/transaction-types',
+    method: 'get'
+  });
+}
+
+/**
+ * Calculate single transaction budget
+ */
+export function calculateBudget(params: {
+  chainId: number;
+  transactionType: string;
+  gasPrice?: number;
+  count?: number;
+}) {
+  return request<BudgetCalculation>({
+    url: '/gas-budget/calculate',
+    method: 'post',
+    data: params
+  });
+}
+
+/**
+ * Get budget projection for multiple days
+ */
+export function getBudgetProjection(params: {
+  chainId: number;
+  transactions: Array<{
+    type: string;
+    count: number;
+    date?: string;
+  }>;
+  days?: number;
+}) {
+  return request<{
+    summary: BudgetSummary;
+    dailyProjections: BudgetProjection[];
+    recommendations: string[];
+  }>({
+    url: '/gas-budget/projection',
+    method: 'post',
+    data: params
+  });
+}
+
+/**
+ * Get budget breakdown by transaction type
+ */
+export function getBudgetBreakdown(params: {
+  chainId: number;
+  transactions: Array<{
+    name: string;
+    type: string;
+    count: number;
+  }>;
+}) {
+  return request<{
+    breakdown: BudgetBreakdownItem[];
+    total: {
+      totalCount: number;
+      totalGas: number;
+      totalUsd: number;
+    };
+  }>({
+    url: '/gas-budget/breakdown',
+    method: 'post',
+    data: params
+  });
+}
+
+/**
+ * Compare costs across different chains
+ */
+export function compareBudgetChains(transactionType: string, count?: number) {
+  return request<{
+    comparisons: ChainComparison[];
+    recommended: {
+      chain: string;
+      chainId: number;
+      savings: number;
+    };
+  }>({
+    url: '/gas-budget/compare-chains',
+    method: 'get',
+    params: { transactionType, count }
+  });
+}
+
+/**
+ * Get gas saving tips
+ */
+export function getGasSavingTips() {
+  return request<{ tips: SavingTip[] }>({
+    url: '/gas-budget/saving-tips',
+    method: 'get'
+  });
+}
+
+/**
+ * Calculate monthly budget
+ */
+export function calculateMonthlyBudget(params: {
+  chainId: number;
+  monthlyTransactions: Array<{
+    type: string;
+    countPerMonth: number;
+  }>;
+}) {
+  return request<{
+    monthlyBudget: {
+      estimatedUsd: number;
+      estimatedEth: number;
+      breakdown: BudgetBreakdownItem[];
+    };
+    yearlyBudget: {
+      estimatedUsd: number;
+      estimatedEth: number;
+    };
+    recommendations: string[];
+  }>({
+    url: '/gas-budget/monthly-budget',
+    method: 'post',
+    data: params
+  });
+}
