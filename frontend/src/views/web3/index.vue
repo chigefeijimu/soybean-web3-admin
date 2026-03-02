@@ -122,6 +122,7 @@ import DAppInteractionAnalytics from '@/components/web3/DAppInteractionAnalytics
 import PortfolioAlertManager from '@/components/web3/PortfolioAlertManager.vue';
 import TokenDiscovery from '@/components/web3/TokenDiscovery/index.vue';
 import WalletActivityMonitor from '@/components/web3/WalletActivityMonitor.vue';
+import TokenImpersonatorScanner from '@/components/web3/TokenImpersonatorScanner.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -191,6 +192,7 @@ const tabs = [
   { id: 'faucet', label: 'Faucet', icon: '⛽' },
   { id: 'dataviz', label: 'DataViz', icon: '📊' },
   { id: 'rugpull', label: 'RugCheck', icon: '🚨' },
+  { id: 'impersonator', label: 'Impersonator', icon: '🎭' },
   { id: 'flashloan', label: 'Flashloan', icon: '⚡' },
   { id: 'voting', label: 'Voting', icon: '🗳️' },
   { id: 'smart-money', label: 'Smart $', icon: '🐟' },
@@ -752,6 +754,11 @@ onMounted(() => {
         <!-- Rug Pull Detector Tab -->
         <div v-show="activeTab === 'rugpull'">
           <component :is="markRaw(RugPullDetector)" />
+        </div>
+        
+        <!-- Token Impersonator Scanner Tab -->
+        <div v-show="activeTab === 'impersonator'">
+          <TokenImpersonatorScanner />
         </div>
         
         <!-- Flashloan Detector Tab -->
