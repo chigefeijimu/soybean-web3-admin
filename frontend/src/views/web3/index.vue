@@ -145,6 +145,8 @@ import NftPortfolioTracker from '@/components/web3/NftPortfolioTracker.vue';
 import LiquidationScanner from '@/views/web3/LiquidationScanner.vue';
 import DefiPositionManager from '@/views/web3/DefiPositionManager.vue';
 import WalletSocial from '@/views/web3/WalletSocial.vue';
+import UniswapV3PositionManager from '@/components/web3/UniswapV3PositionManager.vue';
+import TokenCorrelationMatrix from '@/components/web3/TokenCorrelationMatrix.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -300,6 +302,7 @@ const tabs = [
   { id: 'nft-portfolio', label: 'NFT Portfolio', icon: '🖼️' },
   { id: 'liquidation-scanner', label: 'Liq Scanner', icon: '🔍' },
   { id: 'wallet-social', label: 'Wallet Social', icon: '👥' },
+  { id: 'token-correlation', label: 'Correlation', icon: '📊' },
 ];
 
 // Supported networks with logos
@@ -1200,6 +1203,11 @@ onMounted(() => {
         <!-- Wallet Social Tab -->
         <div v-show="activeTab === 'wallet-social'">
           <WalletSocial />
+        </div>
+
+        <!-- Token Correlation Matrix Tab -->
+        <div v-show="activeTab === 'token-correlation'">
+          <TokenCorrelationMatrix />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

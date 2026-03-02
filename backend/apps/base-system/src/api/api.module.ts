@@ -15,6 +15,7 @@ import { CrossChainTxTrackerModule } from './web3/cross-chain-tx-tracker.module'
 import { TokenSignalAnalyzerModule } from './web3/token-signal-analyzer.module';
 import { LiquidationScannerModule } from './web3/liquidation-scanner.module';
 import { DefiPositionManagerModule } from './web3/defi-position-manager.module';
+import { TokenCorrelationModule } from './web3/token-correlation.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -39,6 +40,7 @@ import { Controllers as OperationLogRest } from './log-audit/operation-log/rest'
     TokenSignalAnalyzerModule,
     LiquidationScannerModule,
     DefiPositionManagerModule,
+    TokenCorrelationModule,
   ],
   controllers: [
     ...IamRest,
