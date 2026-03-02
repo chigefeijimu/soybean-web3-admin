@@ -137,6 +137,7 @@ import TokenLockTracker from '@/components/web3/TokenLockTracker.vue';
 import TokenHistoryApi from '@/components/web3/TokenHistoryApi/index.vue';
 import TxTimeline from '@/components/web3/TxTimeline.vue';
 import GovernancePowerTracker from '@/components/web3/GovernancePowerTracker.vue';
+import YieldAggregator from '@/components/web3/YieldAggregator/index.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -284,6 +285,7 @@ const tabs = [
   { id: 'tx-timeline', label: 'Tx Timeline', icon: '📊' },
   { id: 'governance-power', label: 'Gov Power', icon: '🗳️' },
   { id: 'defi-compare', label: 'DeFi Compare', icon: '⚖️' },
+  { id: 'yield-aggregator', label: 'Yield Agg', icon: '🌾' },
 ];
 
 // Supported networks with logos
@@ -1146,6 +1148,11 @@ onMounted(() => {
         <!-- DeFi Compare Tab -->
         <div v-show="activeTab === 'defi-compare'">
           <component :is="markRaw(DefiCompare)" />
+        </div>
+
+        <!-- Yield Aggregator Tab -->
+        <div v-show="activeTab === 'yield-aggregator'">
+          <YieldAggregator />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

@@ -250,6 +250,7 @@ declare module 'vue' {
     Web3News: typeof import('./../components/web3/Web3News.vue')['default']
     WhaleAlert: typeof import('./../components/web3/WhaleAlert.vue')['default']
     WhaleTracker: typeof import('./../components/web3/WhaleTracker.vue')['default']
+    YieldAggregator: typeof import('./../components/web3/YieldAggregator/index.vue')['default']
     YieldFarmingDashboard: typeof import('./../components/web3/YieldFarmingDashboard.vue')['default']
     YieldTracker: typeof import('./../components/web3/YieldTracker.vue')['default']
   }
