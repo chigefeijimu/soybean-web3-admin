@@ -97,8 +97,6 @@ import GasPriceApiDashboard from '@/components/web3/GasPriceApiDashboard.vue';
 import DexVolume from '@/components/web3/DexVolume/index.vue';
 import PnLTracker from '@/components/web3/PnLTracker.vue';
 import PriorityFeeEstimator from '@/components/web3/PriorityFeeEstimator.vue';
-import CrossChainBalance from '@/components/web3/CrossChainBalance.vue';
-import TxReceiptAnalyzer from '@/components/web3/TxReceiptAnalyzer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -206,9 +204,6 @@ const tabs = [
   { id: 'dex-volume', label: 'Dex Volume', icon: '📊' },
   { id: 'pnl-tracker', label: 'P&L Tracker', icon: '📈' },
   { id: 'priority-fee', label: 'Priority Fee', icon: '⚡' },
-  { id: 'cross-chain-balance', label: 'Cross-Chain', icon: '🔗' },
-  { id: 'tx-receipt', label: 'Tx Receipt', icon: '🧾' },
-  { id: 'crypto-calendar', label: 'Calendar', icon: '📅' },
 ];
 
 // Supported networks with logos
@@ -271,88 +266,6 @@ const trendingTokens = [
   { symbol: 'SOL', name: 'Solana', price: 120, change: '+5.2%', logo: '🟣' },
   { symbol: 'ARB', name: 'Arbitrum', price: 1.8, change: '+3.1%', logo: '🔵' }
 ];
-
-// Crypto Calendar Data
-const calendarFilter = ref('all');
-const calendarFilters = [
-  { value: 'all', label: 'All Events' },
-  { value: 'token_unlock', label: 'Token Unlocks' },
-  { value: 'dao_vote', label: 'DAO Votes' },
-  { value: 'airdrop', label: 'Airdrops' },
-  { value: 'conference', label: 'Conferences' },
-  { value: 'mainnet', label: 'Mainnet' }
-];
-
-const calendarEvents = ref([
-  { id: '1', title: 'UNI Token Unlock', description: 'Uniswap team and investor token unlock', date: '2026-03-15', type: 'token_unlock', token: 'UNI', chain: 'Ethereum', status: 'upcoming' },
-  { id: '2', title: 'ARB Token Unlock', description: 'Arbitrum DAO treasury and investor token unlock', date: '2026-03-20', type: 'token_unlock', token: 'ARB', chain: 'Arbitrum', status: 'upcoming' },
-  { id: '3', title: 'OP Token Unlock', description: 'OptimismRetroactive Public Goods Funding Round', date: '2026-03-10', type: 'token_unlock', token: 'OP', chain: 'Optimism', status: 'upcoming' },
-  { id: '4', title: 'Aave Governance: V3 Migration', description: 'Aave V3 migration and parameter updates', date: '2026-03-05', endDate: '2026-03-12', type: 'dao_vote', chain: 'Ethereum', status: 'active' },
-  { id: '5', title: 'Uniswap V4 Launch', description: 'Uniswap V4 mainnet deployment announcement', date: '2026-03-25', type: 'mainnet', chain: 'Ethereum', status: 'upcoming' },
-  { id: '6', title: 'zkSync Era Token Launch', description: 'zkSync Era native token generation event', date: '2026-04-01', type: 'token_unlock', chain: 'zkSync', status: 'upcoming' },
-  { id: '7', title: 'Starknet Token Distribution', description: 'STRK token distribution to early participants', date: '2026-03-30', type: 'airdrop', chain: 'Starknet', status: 'upcoming' },
-  { id: '8', title: 'ETH Denver 2026', description: 'Annual Ethereum conference in Denver', date: '2026-03-12', endDate: '2026-03-15', type: 'conference', status: 'upcoming' },
-  { id: '9', title: 'Compound Governance: Rate Updates', description: 'Proposal to update collateral factors for WBTC', date: '2026-03-08', endDate: '2026-03-11', type: 'dao_vote', chain: 'Ethereum', status: 'active' },
-  { id: '10', title: 'LayerZero Airdrop Claim Deadline', description: 'Last day to claim ZRO airdrop', date: '2026-03-31', type: 'airdrop', chain: 'Multi-chain', status: 'upcoming' }
-]);
-
-const calendarStats = computed(() => {
-  const now = new Date().toISOString().split('T')[0];
-  const weekFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-  return {
-    total: calendarEvents.value.length,
-    upcoming: calendarEvents.value.filter(e => e.status === 'upcoming').length,
-    active: calendarEvents.value.filter(e => e.status === 'active').length,
-    tokenUnlocks: calendarEvents.value.filter(e => e.type === 'token_unlock').length,
-    daoVotes: calendarEvents.value.filter(e => e.type === 'dao_vote').length,
-    thisWeek: calendarEvents.value.filter(e => e.date >= now && e.date <= weekFromNow).length
-  };
-});
-
-const filteredCalendarEvents = computed(() => {
-  if (calendarFilter.value === 'all') return calendarEvents.value;
-  return calendarEvents.value.filter(e => e.type === calendarFilter.value);
-});
-
-const formatDate = (date: string) => {
-  const d = new Date(date);
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-};
-
-const getEventTypeIcon = (type: string) => {
-  const icons: Record<string, string> = {
-    token_unlock: '🔐',
-    dao_vote: '🗳️',
-    airdrop: '🎁',
-    conference: '📅',
-    mainnet: '🚀',
-    listing: '📈',
-    upgrade: '⚡'
-  };
-  return icons[type] || '📅';
-};
-
-const getEventTypeLabel = (type: string) => {
-  const labels: Record<string, string> = {
-    token_unlock: 'Token Unlock',
-    dao_vote: 'DAO Vote',
-    airdrop: 'Airdrop',
-    conference: 'Conference',
-    mainnet: 'Mainnet Launch',
-    listing: 'Listing',
-    upgrade: 'Upgrade'
-  };
-  return labels[type] || type;
-};
-
-const getEventStatusClass = (status: string) => {
-  const classes: Record<string, string> = {
-    upcoming: 'bg-blue-500/20 text-blue-400',
-    active: 'bg-green-500/20 text-green-400',
-    completed: 'bg-slate-500/20 text-slate-400'
-  };
-  return classes[status] || '';
-};
 
 // On mount
 onMounted(() => {
@@ -955,16 +868,6 @@ onMounted(() => {
           <PriorityFeeEstimator />
         </div>
 
-        <!-- Cross-chain Balance Tab -->
-        <div v-show="activeTab === 'cross-chain-balance'">
-          <CrossChainBalance />
-        </div>
-
-        <!-- Tx Receipt Analyzer Tab -->
-        <div v-show="activeTab === 'tx-receipt'">
-          <TxReceiptAnalyzer />
-        </div>
-
         <!-- NFT Collection Tracker Tab -->
         <div v-show="activeTab === 'nft-collection'">
           <NftCollectionTracker />
@@ -988,81 +891,6 @@ onMounted(() => {
         <!-- Dex Volume Tab -->
         <div v-show="activeTab === 'dex-volume'">
           <DexVolume />
-        </div>
-
-        <!-- Crypto Calendar Tab -->
-        <div v-show="activeTab === 'crypto-calendar'" class="space-y-6">
-          <div class="rounded-2xl bg-slate-800/50 border border-slate-700/50 p-6 backdrop-blur-xl">
-            <h2 class="text-2xl font-bold mb-4">📅 Crypto Calendar</h2>
-            <p class="text-slate-400 mb-4">Track upcoming token unlocks, DAO votes, airdrops, and crypto events</p>
-            
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div class="bg-slate-700/30 rounded-xl p-4 text-center">
-                <div class="text-2xl font-bold text-blue-400">{{ calendarStats.total }}</div>
-                <div class="text-sm text-slate-400">Total Events</div>
-              </div>
-              <div class="bg-slate-700/30 rounded-xl p-4 text-center">
-                <div class="text-2xl font-bold text-green-400">{{ calendarStats.upcoming }}</div>
-                <div class="text-sm text-slate-400">Upcoming</div>
-              </div>
-              <div class="bg-slate-700/30 rounded-xl p-4 text-center">
-                <div class="text-2xl font-bold text-yellow-400">{{ calendarStats.active }}</div>
-                <div class="text-sm text-slate-400">Active Votes</div>
-              </div>
-              <div class="bg-slate-700/30 rounded-xl p-4 text-center">
-                <div class="text-2xl font-bold text-purple-400">{{ calendarStats.thisWeek }}</div>
-                <div class="text-sm text-slate-400">This Week</div>
-              </div>
-            </div>
-
-            <!-- Filter -->
-            <div class="flex gap-2 mb-4 flex-wrap">
-              <button 
-                v-for="filter in calendarFilters" 
-                :key="filter.value"
-                @click="calendarFilter = filter.value"
-                :class="[
-                  'px-3 py-1.5 rounded-lg text-sm transition-all',
-                  calendarFilter === filter.value 
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' 
-                    : 'bg-slate-700/30 text-slate-400 border border-slate-700/50 hover:bg-slate-700/50'
-                ]"
-              >
-                {{ filter.label }}
-              </button>
-            </div>
-
-            <!-- Events List -->
-            <div class="space-y-3 max-h-[500px] overflow-y-auto">
-              <div 
-                v-for="event in filteredCalendarEvents" 
-                :key="event.id"
-                class="bg-slate-700/20 rounded-xl p-4 border border-slate-700/30 hover:border-slate-600/50 transition-all"
-              >
-                <div class="flex items-start justify-between">
-                  <div class="flex items-center gap-3">
-                    <span :class="getEventTypeIcon(event.type)" class="text-2xl">{{ getEventTypeIcon(event.type) }}</span>
-                    <div>
-                      <div class="font-semibold text-white">{{ event.title }}</div>
-                      <div class="text-sm text-slate-400">{{ event.description }}</div>
-                    </div>
-                  </div>
-                  <div class="text-right">
-                    <div :class="getEventStatusClass(event.status)" class="text-xs px-2 py-0.5 rounded-full">
-                      {{ event.status }}
-                    </div>
-                    <div class="text-sm text-slate-400 mt-1">{{ formatDate(event.date) }}</div>
-                  </div>
-                </div>
-                <div class="flex gap-4 mt-3 text-sm">
-                  <span v-if="event.chain" class="text-slate-400">�.chain: {{ event.chain }}</span>
-                  <span v-if="event.token" class="text-slate-400">🪙 Token: {{ event.token }}</span>
-                  <span class="text-slate-400">📅 {{ getEventTypeLabel(event.type) }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

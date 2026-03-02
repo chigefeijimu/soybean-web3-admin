@@ -129,7 +129,7 @@ import { ref, computed } from 'vue';
 import { 
   NCard, NButton, NInput, NSelect, NSpace, NIcon, NAlert, 
   NStatistic, NProgress, NText, NGrid, NGi, NDivider,
-  NChart, NTable, NTag
+  NTable, NTag
 } from 'naive-ui';
 import { SearchOutline } from '@vicons/ionicons5';
 import { getCrossChainBalance } from '@/service/api/web3';
