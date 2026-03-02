@@ -4248,3 +4248,78 @@ export function fetchLiveTradingSignals(params?: {
     params
   });
 }
+
+// ==================== Portfolio Health API ====================
+
+export interface PortfolioHealthMetrics {
+  diversificationScore: number;
+  concentrationRisk: number;
+  gasEfficiency: number;
+  defiExposure: number;
+  stablecoinRatio: number;
+  volatilityScore: number;
+}
+
+export interface TokenBreakdown {
+  category: string;
+  value: number;
+  percentage: number;
+}
+
+export interface PortfolioHealth {
+  address: string;
+  overallScore: number;
+  overallGrade: string;
+  metrics: PortfolioHealthMetrics;
+  recommendations: string[];
+  tokenBreakdown: TokenBreakdown[];
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+}
+
+/**
+ * 获取钱包投资组合健康评分
+ * @param address 钱包地址
+ * @param chainId 链ID (默认1)
+ */
+export function fetchPortfolioHealth(address: string, chainId?: number) {
+  return request<PortfolioHealth>({
+    url: `/web3/portfolio-health/${address}`,
+    method: 'get',
+    params: { chainId }
+  });
+}
+
+/**
+ * 批量分析多个钱包
+ * @param addresses 钱包地址列表
+ * @param chainId 链ID
+ */
+export function batchAnalyzePortfolioHealth(addresses: string[], chainId?: number) {
+  return request<{ wallets: PortfolioHealth[] }>({
+    url: '/web3/portfolio-health/batch',
+    method: 'post',
+    data: { addresses, chainId }
+  });
+}
+
+/**
+ * 对比多个钱包健康状况
+ * @param addresses 逗号分隔的钱包地址列表
+ * @param chainId 链ID
+ */
+export function comparePortfolioHealth(addresses: string, chainId?: number) {
+  return request<{
+    wallets: PortfolioHealth[];
+    comparison: {
+      averageScore: number;
+      bestPerformer: string;
+      bestScore: number;
+      worstPerformer: string;
+      worstScore: number;
+    };
+  }>({
+    url: `/web3/portfolio-health/compare/${addresses}`,
+    method: 'get',
+    params: { chainId }
+  });
+}

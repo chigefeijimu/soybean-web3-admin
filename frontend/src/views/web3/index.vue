@@ -147,6 +147,7 @@ import DefiPositionManager from '@/views/web3/DefiPositionManager.vue';
 import WalletSocial from '@/views/web3/WalletSocial.vue';
 import UniswapV3PositionManager from '@/components/web3/UniswapV3PositionManager.vue';
 import TokenCorrelationMatrix from '@/components/web3/TokenCorrelationMatrix.vue';
+import PortfolioHealth from '@/views/web3/PortfolioHealth.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -197,6 +198,7 @@ const tabs = [
   { id: 'signature', label: 'Signature', icon: '🔏' },
   { id: 'approvals', label: 'Approvals', icon: '🔐' },
   { id: 'health', label: 'Health', icon: '🛡️' },
+  { id: 'portfolio-score', label: 'Score', icon: '💊' },
   { id: 'yield', label: 'Yield', icon: '🌾' },
   { id: 'rarity', label: 'Rarity', icon: '💎' },
   { id: 'onchain', label: 'On-chain', icon: '🔗' },
@@ -706,6 +708,11 @@ onMounted(() => {
         <!-- Wallet Health Tab -->
         <div v-show="activeTab === 'health'">
           <WalletHealthAnalyzer />
+        </div>
+
+        <!-- Portfolio Health Score Tab -->
+        <div v-show="activeTab === 'portfolio-score'">
+          <PortfolioHealth />
         </div>
 
         <!-- Yield Tracker Tab -->
