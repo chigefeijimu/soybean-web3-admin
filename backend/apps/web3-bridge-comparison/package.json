@@ -1,0 +1,6 @@
+{
+  "name": "@apps/web3-bridge-comparison",
+  "version": "1.0.0",
+  "description": "Web3 Bridge Comparison API",
+  "private": true
+}
