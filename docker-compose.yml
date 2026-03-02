@@ -123,6 +123,27 @@ services:
       timeout: 5s
       retries: 5
 
+  # Real-time WebSocket Price Feed API
+  web3-price-websocket:
+    build:
+      context: backend/
+    working_dir: /app/apps/web3-price-websocket
+    command: sh -c "pnpm install && pnpm start"
+    environment:
+      TZ: Asia/Shanghai
+      NODE_ENV: production
+    ports:
+      - "3022:3022"
+    networks:
+      - soybean-admin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3022/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - redis
+
 volumes:
   soybean-admin-postgres_data:
   soybean-admin-redis_data:

@@ -79,6 +79,8 @@ import { WalletSnapshotController } from './wallet-snapshot.controller';
 import { TokenInflationController } from './token-inflation.controller';
 import { TokenInflationService } from './token-inflation.service';
 import { TxQueueController } from './tx-queue.controller';
+import { LiquidationScannerController } from './liquidation-scanner.controller';
+import { LiquidationScannerService } from './liquidation-scanner.service';
 
 @Module({
   imports: [HttpModule],
@@ -132,7 +134,8 @@ import { TxQueueController } from './tx-queue.controller';
     WalletSnapshotController,
     TokenInflationController,
     TxQueueController,
+    LiquidationScannerController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService,  DefiYieldCompareService, TokenInflationService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService,  DefiYieldCompareService, TokenInflationService, LiquidationScannerService],
 })
 export class Web3PortfolioModule {}

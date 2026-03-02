@@ -140,6 +140,7 @@ import GovernancePowerTracker from '@/components/web3/GovernancePowerTracker.vue
 import YieldAggregator from '@/components/web3/YieldAggregator/index.vue';
 import ValidatorTracker from '@/components/web3/ValidatorTracker.vue';
 import NftPortfolioTracker from '@/components/web3/NftPortfolioTracker.vue';
+import LiquidationScanner from '@/views/web3/LiquidationScanner.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -290,6 +291,7 @@ const tabs = [
   { id: 'yield-aggregator', label: 'Yield Agg', icon: '🌾' },
   { id: 'validator-tracker', label: 'Validator', icon: '🔒' },
   { id: 'nft-portfolio', label: 'NFT Portfolio', icon: '🖼️' },
+  { id: 'liquidation-scanner', label: 'Liq Scanner', icon: '🔍' },
 ];
 
 // Supported networks with logos
@@ -1165,6 +1167,11 @@ onMounted(() => {
         </div>
         <div v-show="activeTab === 'nft-portfolio'">
           <NftPortfolioTracker />
+        </div>
+
+        <!-- Liquidation Scanner Tab -->
+        <div v-show="activeTab === 'liquidation-scanner'">
+          <LiquidationScanner />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
