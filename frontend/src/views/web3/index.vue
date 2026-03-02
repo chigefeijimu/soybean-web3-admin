@@ -98,6 +98,7 @@ import DexVolume from '@/components/web3/DexVolume/index.vue';
 import PnLTracker from '@/components/web3/PnLTracker.vue';
 import PriorityFeeEstimator from '@/components/web3/PriorityFeeEstimator.vue';
 import TxAccelerator from '@/components/web3/TxAccelerator.vue';
+import YieldFarmingDashboard from '@/components/web3/YieldFarmingDashboard.vue';
 import PortfolioExport from '@/components/web3/PortfolioExport.vue';
 import GasHistory from '@/components/web3/GasHistory.vue';
 import GasComparison from '@/components/web3/GasComparison.vue';
@@ -245,6 +246,7 @@ const tabs = [
   { id: 'portfolio-export', label: 'Export', icon: '📤' },
   { id: 'gas-history', label: 'Gas History', icon: '📊' },
   { id: 'tx-accelerator', label: 'Tx Accelerator', icon: '🚀' },
+  { id: 'yield-farming', label: 'Yield Farming', icon: '🌾' },
   { id: 'defi-insurance', label: 'Insurance', icon: '🛡️' },
   { id: 'defi-alerts', label: 'Alerts', icon: '🚨' },
   { id: 'tx-bundle', label: 'Tx Bundle', icon: '📦' },
@@ -969,6 +971,11 @@ onMounted(() => {
         <!-- Transaction Accelerator Tab -->
         <div v-show="activeTab === 'tx-accelerator'">
           <TxAccelerator />
+        </div>
+
+        <!-- Yield Farming Dashboard Tab -->
+        <div v-show="activeTab === 'yield-farming'">
+          <YieldFarmingDashboard />
         </div>
 
         <!-- DeFi Insurance Tab -->
