@@ -203,6 +203,7 @@ declare module 'vue' {
     TransactionScheduler: typeof import('./../components/web3/TransactionScheduler.vue')['default']
     TransactionSimulator: typeof import('./../components/web3/TransactionSimulator.vue')['default']
     TxAccelerator: typeof import('./../components/web3/TxAccelerator.vue')['default']
+    TxBundle: typeof import('./../components/web3/TxBundle/index.vue')['default']
     TxDecoder: typeof import('./../components/web3/TxDecoder.vue')['default']
     TxReceiptAnalyzer: typeof import('./../components/web3/TxReceiptAnalyzer.vue')['default']
     VotingTracker: typeof import('./../components/web3/VotingTracker.vue')['default']
