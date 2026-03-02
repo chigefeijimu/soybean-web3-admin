@@ -72,8 +72,6 @@ import { PortfolioExportService } from './portfolio-export.service';
 import { TransactionSchedulerController } from './web3-transaction-scheduler.controller';
 import { ContractMethodSelectorController } from './contract-method-selector.controller';
 import { NetworkStatusController } from './network-status.controller';
-import { WalletGroupController } from './wallet-group/wallet-group.controller';
-import { WalletGroupService } from './wallet-group/wallet-group.service';
 import { TokenInsiderTrackerController } from './token-insider-tracker.controller';
 import { DefiYieldCompareController } from './defi-yield-compare.controller';
 import { DefiYieldCompareService } from './defi-yield-compare.service';
@@ -128,13 +126,13 @@ import { TxQueueController } from './tx-queue.controller';
     TransactionSchedulerController,
     ContractMethodSelectorController,
     NetworkStatusController,
-    WalletGroupController,
+    
     TokenInsiderTrackerController,
     DefiYieldCompareController,
     WalletSnapshotController,
     TokenInflationController,
     TxQueueController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService, WalletGroupService, DefiYieldCompareService, TokenInflationService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService,  DefiYieldCompareService, TokenInflationService],
 })
 export class Web3PortfolioModule {}

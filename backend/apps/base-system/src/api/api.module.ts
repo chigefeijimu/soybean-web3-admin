@@ -11,6 +11,7 @@ import { LoginLogInfraModule } from '@app/base-system/infra/bounded-contexts/log
 import { OperationLogInfraModule } from '@app/base-system/infra/bounded-contexts/log-audit/operation-log/operation-log.infra.module';
 import { Web3PortfolioModule } from './web3/web3-portfolio.module';
 import { WalletGroupModule } from './web3/wallet-group/wallet-group.module';
+import { CrossChainTxTrackerModule } from './web3/cross-chain-tx-tracker.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -31,6 +32,7 @@ import { Controllers as OperationLogRest } from './log-audit/operation-log/rest'
     AccessKeyInfraModule,
     Web3PortfolioModule,
     WalletGroupModule,
+    CrossChainTxTrackerModule,
   ],
   controllers: [
     ...IamRest,
