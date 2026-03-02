@@ -110,6 +110,7 @@ import PortfolioPro from '@/components/web3/PortfolioPro.vue';
 import TxFailureAnalyzer from '@/components/web3/TxFailureAnalyzer.vue';
 import NetworkStatus from '@/components/web3/NetworkStatus.vue';
 import WalletActivityAnalytics from '@/components/web3/WalletActivityAnalytics.vue';
+import DataExporter from '@/components/web3/DataExporter.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -230,6 +231,7 @@ const tabs = [
   { id: 'tx-failure', label: 'Tx Failure', icon: '🔍' },
   { id: 'network-status', label: 'Network Status', icon: '🌐' },
   { id: 'wallet-activity', label: 'Activity', icon: '📊' },
+  { id: 'data-exporter', label: 'Data Export', icon: '📤' },
 ];
 
 // Supported networks with logos
@@ -957,6 +959,11 @@ onMounted(() => {
         <!-- Wallet Activity Tab -->
         <div v-show="activeTab === 'wallet-activity'">
           <WalletActivityAnalytics />
+        </div>
+
+        <!-- Data Exporter Tab -->
+        <div v-show="activeTab === 'data-exporter'">
+          <DataExporter />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
