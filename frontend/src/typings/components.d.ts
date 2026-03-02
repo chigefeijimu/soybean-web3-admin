@@ -43,6 +43,7 @@ declare module 'vue' {
     FeeTracker: typeof import('./../components/web3/FeeTracker.vue')['default']
     FlashloanDetector: typeof import('./../components/web3/FlashloanDetector.vue')['default']
     FullScreen: typeof import('./../components/common/full-screen.vue')['default']
+    FundFlowAnalyzer: typeof import('./../components/web3/FundFlowAnalyzer.vue')['default']
     GasAnalyzer: typeof import('./../components/web3/GasAnalyzer.vue')['default']
     GasFaucet: typeof import('./../components/web3/GasFaucet.vue')['default']
     GasOptimizer: typeof import('./../components/web3/GasOptimizer.vue')['default']

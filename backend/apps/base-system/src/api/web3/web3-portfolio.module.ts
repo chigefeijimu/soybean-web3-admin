@@ -51,6 +51,8 @@ import { DappBrowserController } from './dapp-browser.controller';
 import { DappBrowserService } from './dapp-browser.service';
 import { DexAggregatorController } from './dex-aggregator.controller';
 import { DexAggregatorService } from './dex-aggregator.service';
+import { FundFlowAnalyzerController } from './fund-flow-analyzer.controller';
+import { FundFlowAnalyzerService } from './fund-flow-analyzer.service';
 
 @Module({
   imports: [HttpModule],
@@ -85,7 +87,8 @@ import { DexAggregatorService } from './dex-aggregator.service';
     CrossChainTransferController,
     DappBrowserController,
     DexAggregatorController,
+    FundFlowAnalyzerController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService],
 })
 export class Web3PortfolioModule {}

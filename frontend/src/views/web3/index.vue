@@ -80,6 +80,7 @@ import PortfolioPerformance from '@/components/web3/PortfolioPerformance.vue';
 import PortfolioRebalancer from '@/components/web3/PortfolioRebalancer.vue';
 import OptionsTracker from '@/components/web3/OptionsTracker.vue';
 import CryptoSentiment from '@/components/web3/CryptoSentiment.vue';
+import FundFlowAnalyzer from '@/components/web3/FundFlowAnalyzer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -170,6 +171,7 @@ const tabs = [
   { id: 'tax-loss', label: 'Tax Loss', icon: '🌾' },
   { id: 'options', label: 'Options', icon: '📊' },
   { id: 'sentiment', label: 'Sentiment', icon: '💭' },
+  { id: 'fund-flow', label: 'Fund Flow', icon: '🔄' },
 ];
 
 // Supported networks with logos
@@ -772,6 +774,11 @@ onMounted(() => {
         <!-- Sentiment Tab -->
         <div v-show="activeTab === 'sentiment'">
           <CryptoSentiment />
+        </div>
+
+        <!-- Fund Flow Tab -->
+        <div v-show="activeTab === 'fund-flow'">
+          <FundFlowAnalyzer />
         </div>
       </div>
 
