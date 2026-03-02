@@ -3044,3 +3044,119 @@ export function getExchangePrices(chainId?: number) {
     params: { chainId }
   });
 }
+
+// ============ Token Insider Tracker Types ============
+
+export interface InsiderWallet {
+  address: string;
+  label: string;
+  type: 'founder' | 'team' | 'investor' | 'advisor' | 'exchange';
+  tokens: string[];
+  firstSeen: number;
+  transactionCount: number;
+}
+
+export interface InsiderTransaction {
+  hash: string;
+  from: string;
+  to: string;
+  tokenAddress: string;
+  tokenSymbol: string;
+  amount: number;
+  valueUSD: number;
+  timestamp: number;
+  type: 'transfer' | 'sale' | 'unlock' | 'staking_reward';
+}
+
+export interface TokenInsiderData {
+  tokenAddress: string;
+  tokenName: string;
+  tokenSymbol: string;
+  insiderWallets: InsiderWallet[];
+  totalInsiderHoldings: number;
+  totalSupply: number;
+  insiderPercentage: number;
+  dumpRiskScore: number;
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  recentInsiderTransactions: InsiderTransaction[];
+  lastUpdated: number;
+}
+
+export interface TopInsiderToken {
+  token: string;
+  insiderCount: number;
+  riskLevel: string;
+}
+
+/**
+ * Get token insider data
+ */
+export function getTokenInsiderData(params: {
+  tokenAddress: string;
+  chainId?: number;
+}) {
+  return request<TokenInsiderData>({
+    url: '/token-insider-tracker/token-data',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * Search insider wallets
+ */
+export function searchInsiders(params: {
+  query: string;
+  chainId?: number;
+}) {
+  return request<InsiderWallet[]>({
+    url: '/token-insider-tracker/search',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * Get insider transactions
+ */
+export function getInsiderTransactions(params?: {
+  tokenAddress?: string;
+  address?: string;
+  chainId?: number;
+  startTime?: number;
+  endTime?: number;
+  limit?: number;
+}) {
+  return request<InsiderTransaction[]>({
+    url: '/token-insider-tracker/transactions',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * Track new insider wallet
+ */
+export function trackInsider(data: {
+  address: string;
+  label: string;
+  type: 'founder' | 'team' | 'investor' | 'advisor' | 'exchange';
+  chainId?: number;
+}) {
+  return request<InsiderWallet>({
+    url: '/token-insider-tracker/track',
+    method: 'post',
+    data
+  });
+}
+
+/**
+ * Get top tokens by insider activity
+ */
+export function getTopInsiderTokens(chainId?: number) {
+  return request<TopInsiderToken[]>({
+    url: '/token-insider-tracker/top-tokens',
+    method: 'get',
+    params: { chainId }
+  });
+}

@@ -74,6 +74,7 @@ import { ContractMethodSelectorController } from './contract-method-selector.con
 import { NetworkStatusController } from './network-status.controller';
 import { WalletGroupController } from './wallet-group/wallet-group.controller';
 import { WalletGroupService } from './wallet-group/wallet-group.service';
+import { TokenInsiderTrackerController } from './token-insider-tracker.controller';
 
 @Module({
   imports: [HttpModule],
@@ -122,6 +123,7 @@ import { WalletGroupService } from './wallet-group/wallet-group.service';
     ContractMethodSelectorController,
     NetworkStatusController,
     WalletGroupController,
+    TokenInsiderTrackerController,
   ],
   providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService, WalletGroupService],
 })
