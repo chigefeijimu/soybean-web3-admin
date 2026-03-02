@@ -14,6 +14,7 @@ declare module 'vue' {
     AddTokenModal: typeof import('./../components/web3/AddTokenModal.vue')['default']
     AirdropTracker: typeof import('./../components/web3/AirdropTracker.vue')['default']
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
+    ArbitrageScanner: typeof import('./../components/web3/ArbitrageScanner.vue')['default']
     BatchTransfer: typeof import('./../components/web3/BatchTransfer.vue')['default']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
     BlockchainHeatmap: typeof import('./../components/web3/BlockchainHeatmap.vue')['default']

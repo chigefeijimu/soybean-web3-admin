@@ -116,6 +116,7 @@ import MarketCapDashboard from '@/components/web3/MarketCapDashboard.vue';
 import WalletGroupAnalyzer from '@/components/web3/WalletGroupAnalyzer/index.vue';
 import DaoTreasury from '@/components/web3/DaoTreasury/index.vue';
 import GasFeeAnalytics from '@/components/web3/GasFeeAnalytics.vue';
+import ArbitrageScanner from '@/components/web3/ArbitrageScanner.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -242,6 +243,7 @@ const tabs = [
   { id: 'market-cap', label: 'Market Cap', icon: '📈' },
   { id: 'dao-treasury', label: 'Treasury', icon: '🏛️' },
   { id: 'gas-fee-analytics', label: 'Gas Analytics', icon: '⛽' },
+  { id: 'arbitrage', label: 'Arbitrage', icon: '💱' },
 ];
 
 // Supported networks with logos
@@ -999,6 +1001,11 @@ onMounted(() => {
         <!-- Gas Fee Analytics Tab -->
         <div v-show="activeTab === 'gas-fee-analytics'">
           <GasFeeAnalytics />
+        </div>
+
+        <!-- Arbitrage Scanner Tab -->
+        <div v-show="activeTab === 'arbitrage'">
+          <ArbitrageScanner />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

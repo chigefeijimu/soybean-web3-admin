@@ -2979,3 +2979,68 @@ export function calculateMonthlyBudget(params: {
     data: params
   });
 }
+
+// ============ Arbitrage Scanner API ============
+
+export interface ArbitrageOpportunity {
+  id: string;
+  token: string;
+  buyExchange: string;
+  sellExchange: string;
+  buyPrice: number;
+  sellPrice: number;
+  priceDiff: number;
+  priceDiffPercent: number;
+  estimatedProfit: number;
+  volume: number;
+  risk: 'low' | 'medium' | 'high';
+  timestamp: number;
+}
+
+export interface ArbitrageOverview {
+  totalOpportunities: number;
+  avgProfit: number;
+  topTokens: { token: string; opportunities: number }[];
+  byRisk: { low: number; medium: number; high: number };
+}
+
+/**
+ * Scan for arbitrage opportunities
+ */
+export function scanArbitrageOpportunities(params?: {
+  minProfit?: number;
+  volume?: number;
+}) {
+  return request<ArbitrageOpportunity[]>({
+    url: '/arbitrage/scan',
+    method: 'get',
+    params
+  });
+}
+
+/**
+ * Get market overview
+ */
+export function getArbitrageOverview() {
+  return request<ArbitrageOverview>({
+    url: '/arbitrage/overview',
+    method: 'get'
+  });
+}
+
+/**
+ * Get exchange prices
+ */
+export function getExchangePrices(chainId?: number) {
+  return request<Array<{
+    exchange: string;
+    pair: string;
+    price: number;
+    liquidity: number;
+    timestamp: number;
+  }>>({
+    url: '/arbitrage/prices',
+    method: 'get',
+    params: { chainId }
+  });
+}
