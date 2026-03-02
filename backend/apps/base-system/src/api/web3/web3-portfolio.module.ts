@@ -78,6 +78,8 @@ import { TokenInsiderTrackerController } from './token-insider-tracker.controlle
 import { DefiYieldCompareController } from './defi-yield-compare.controller';
 import { DefiYieldCompareService } from './defi-yield-compare.service';
 import { WalletSnapshotController } from './wallet-snapshot.controller';
+import { TokenInflationController } from './token-inflation.controller';
+import { TokenInflationService } from './token-inflation.service';
 
 @Module({
   imports: [HttpModule],
@@ -129,7 +131,8 @@ import { WalletSnapshotController } from './wallet-snapshot.controller';
     TokenInsiderTrackerController,
     DefiYieldCompareController,
     WalletSnapshotController,
+    TokenInflationController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService, WalletGroupService, DefiYieldCompareService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService, WalletGroupService, DefiYieldCompareService, TokenInflationService],
 })
 export class Web3PortfolioModule {}

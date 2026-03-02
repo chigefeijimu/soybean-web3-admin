@@ -3285,3 +3285,88 @@ export function checkWhaleMovements() {
     method: 'post'
   });
 }
+
+// Token Inflation Tracker
+export interface TokenInflationData {
+  address: string;
+  symbol: string;
+  name: string;
+  chain: string;
+  totalSupply: string;
+  circulatingSupply: string;
+  maxSupply: string | null;
+  inflationRate: number;
+  lastUpdated: number;
+}
+
+export interface TokenSupplyHistory {
+  timestamp: number;
+  date: string;
+  totalSupply: string;
+  change: number;
+  changePercent: number;
+}
+
+export interface InflationAnalysis {
+  address: string;
+  symbol: string;
+  name: string;
+  chain: string;
+  currentSupply: string;
+  supplyChange24h: number;
+  supplyChange7d: number;
+  supplyChange30d: number;
+  inflationRate24h: number;
+  inflationRate7d: number;
+  inflationRate30d: number;
+  isDeflationary: boolean;
+  riskLevel: 'low' | 'medium' | 'high';
+  analysis: string;
+  recommendations: string[];
+}
+
+export function getTokenSupply(chain: string, address: string) {
+  return request<TokenInflationData>({
+    url: `/web3/token-inflation/supply/${chain}/${address}`,
+    method: 'get'
+  });
+}
+
+export function getSupplyHistory(chain: string, address: string, days: number = 30) {
+  return request<TokenSupplyHistory[]>({
+    url: `/web3/token-inflation/history/${chain}/${address}`,
+    method: 'get',
+    params: { days }
+  });
+}
+
+export function getInflationAnalysis(chain: string, address: string) {
+  return request<InflationAnalysis>({
+    url: `/web3/token-inflation/analysis/${chain}/${address}`,
+    method: 'get'
+  });
+}
+
+export function getTrendingInflation(chain: string = 'eth', limit: number = 10) {
+  return request<any[]>({
+    url: '/web3/token-inflation/trending',
+    method: 'get',
+    params: { chain, limit }
+  });
+}
+
+export function compareTokens(chain: string, addresses: string[]) {
+  return request<InflationAnalysis[]>({
+    url: '/web3/token-inflation/compare',
+    method: 'get',
+    params: { addresses: addresses.join(','), chain }
+  });
+}
+
+export function getInflationRate(chain: string, address: string, period: number = 30) {
+  return request<{ dailyRate: number; weeklyRate: number; monthlyRate: number; yearlyRate: number }>({
+    url: `/web3/token-inflation/inflation-rate/${chain}/${address}`,
+    method: 'get',
+    params: { period }
+  });
+}
