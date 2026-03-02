@@ -2138,3 +2138,42 @@ export function getTradingPairs() {
     { symbol: 'SOLUSDT', base: 'SOL', quote: 'USDT' },
   ];
 }
+
+/** K-line (candlestick) data */
+export interface KLine {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+/**
+ * Fetch K-line (candlestick) data from Binance
+ */
+export async function fetchKLines(symbol: string = 'ETHUSDT', interval: string = '1h', limit: number = 100): Promise<KLine[]> {
+  const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
+  const data = await response.json();
+  
+  return data.map((item: any[]) => ({
+    time: item[0],
+    open: parseFloat(item[1]),
+    high: parseFloat(item[2]),
+    low: parseFloat(item[3]),
+    close: parseFloat(item[4]),
+    volume: parseFloat(item[5])
+  }));
+}
+
+/**
+ * Fetch current price from Binance
+ */
+export async function fetchCurrentPrice(symbol: string = 'ETHUSDT'): Promise<{ price: string; change: string }> {
+  const response = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`);
+  const data = await response.json();
+  return {
+    price: data.lastPrice || '0',
+    change: data.priceChange || '0'
+  };
+}
