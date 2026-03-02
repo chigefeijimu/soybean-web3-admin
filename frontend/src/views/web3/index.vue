@@ -229,6 +229,7 @@ const tabs = [
   { id: 'portfolio-pro', label: 'Portfolio Pro', icon: '💼' },
   { id: 'tx-failure', label: 'Tx Failure', icon: '🔍' },
   { id: 'network-status', label: 'Network Status', icon: '🌐' },
+  { id: 'wallet-activity', label: 'Activity', icon: '📊' },
 ];
 
 // Supported networks with logos
@@ -951,6 +952,11 @@ onMounted(() => {
         <!-- Network Status Tab -->
         <div v-show="activeTab === 'network-status'">
           <NetworkStatus />
+        </div>
+
+        <!-- Wallet Activity Tab -->
+        <div v-show="activeTab === 'wallet-activity'">
+          <WalletActivityAnalytics />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

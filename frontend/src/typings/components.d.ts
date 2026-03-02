@@ -211,6 +211,7 @@ declare module 'vue' {
     TxFailureAnalyzer: typeof import('./../components/web3/TxFailureAnalyzer.vue')['default']
     TxReceiptAnalyzer: typeof import('./../components/web3/TxReceiptAnalyzer.vue')['default']
     VotingTracker: typeof import('./../components/web3/VotingTracker.vue')['default']
+    WalletActivityAnalytics: typeof import('./../components/web3/WalletActivityAnalytics.vue')['default']
     WalletAnalyzer: typeof import('./../components/web3/WalletAnalyzer.vue')['default']
     WalletConnect: typeof import('./../components/web3/WalletConnect.vue')['default']
     WalletHealthAnalyzer: typeof import('./../components/web3/WalletHealthAnalyzer.vue')['default']
