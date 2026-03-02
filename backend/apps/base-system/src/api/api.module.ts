@@ -13,6 +13,7 @@ import { Web3PortfolioModule } from './web3/web3-portfolio.module';
 import { WalletGroupModule } from './web3/wallet-group/wallet-group.module';
 import { CrossChainTxTrackerModule } from './web3/cross-chain-tx-tracker.module';
 import { TokenSignalAnalyzerModule } from './web3/token-signal-analyzer.module';
+import { LiquidationScannerModule } from './web3/liquidation-scanner.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -35,6 +36,7 @@ import { Controllers as OperationLogRest } from './log-audit/operation-log/rest'
     WalletGroupModule,
     CrossChainTxTrackerModule,
     TokenSignalAnalyzerModule,
+    LiquidationScannerModule,
   ],
   controllers: [
     ...IamRest,
