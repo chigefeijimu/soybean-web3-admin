@@ -100,6 +100,7 @@ import PriorityFeeEstimator from '@/components/web3/PriorityFeeEstimator.vue';
 import TxAccelerator from '@/components/web3/TxAccelerator.vue';
 import PortfolioExport from '@/components/web3/PortfolioExport.vue';
 import GasHistory from '@/components/web3/GasHistory.vue';
+import GasComparison from '@/components/web3/GasComparison.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -185,6 +186,7 @@ const tabs = [
   { id: 'dapp-browser', label: 'DApp Browser', icon: '🌐' },
   { id: 'gas-widget', label: 'Gas Widget', icon: '⛽' },
   { id: 'gas-alert', label: 'Gas Alert', icon: '🔔' },
+  { id: 'gas-comparison', label: 'Gas Compare', icon: '🔥' },
   { id: 'dex-aggregator', label: 'Dex Agg', icon: '🔄' },
   { id: 'portfolio-performance', label: 'Portfolio', icon: '📈' },
   { id: 'rebalance', label: 'Rebalance', icon: '⚖️' },
@@ -882,6 +884,11 @@ onMounted(() => {
         <!-- Gas History Tab -->
         <div v-show="activeTab === 'gas-history'">
           <GasHistory />
+        </div>
+
+        <!-- Gas Comparison Tab -->
+        <div v-show="activeTab === 'gas-comparison'">
+          <GasComparison />
         </div>
 
         <!-- Transaction Accelerator Tab -->
