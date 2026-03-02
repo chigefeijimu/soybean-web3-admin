@@ -211,6 +211,7 @@ declare module 'vue' {
     TokenInsiderTracker: typeof import('./../components/web3/TokenInsiderTracker.vue')['default']
     TokenLaunchCalendar: typeof import('./../components/web3/TokenLaunchCalendar.vue')['default']
     TokenLaunchSniper: typeof import('./../components/web3/TokenLaunchSniper.vue')['default']
+    TokenLockTracker: typeof import('./../components/web3/TokenLockTracker.vue')['default']
     TokenMomentumScanner: typeof import('./../components/web3/TokenMomentumScanner/index.vue')['default']
     TokenPriceChart: typeof import('./../components/web3/TokenPriceChart.vue')['default']
     TokenSafetyChecker: typeof import('./../components/web3/TokenSafetyChecker.vue')['default']

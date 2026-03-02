@@ -132,6 +132,7 @@ import TokenInflationTracker from '@/components/web3/TokenInflationTracker.vue';
 import TxQueue from '@/components/web3/TxQueue/index.vue';
 import CrossChainSwapAggregator from '@/components/web3/CrossChainSwapAggregator.vue';
 import PortfolioAlertApi from '@/components/web3/PortfolioAlertApi/index.vue';
+import TokenLockTracker from '@/components/web3/TokenLockTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -274,6 +275,7 @@ const tabs = [
   { id: 'tx-queue', label: 'Tx Queue', icon: '📋' },
   { id: 'cross-chain-swap', label: 'Cross Swap', icon: '🔄' },
   { id: 'portfolio-alert-api', label: 'Alert API', icon: '📡' },
+  { id: 'token-lock', label: 'Token Lock', icon: '🔒' },
 ];
 
 // Supported networks with logos
@@ -1111,6 +1113,11 @@ onMounted(() => {
         <!-- Portfolio Alert API Tab -->
         <div v-show="activeTab === 'portfolio-alert-api'">
           <PortfolioAlertApi />
+        </div>
+
+        <!-- Token Lock Tracker Tab -->
+        <div v-show="activeTab === 'token-lock'">
+          <TokenLockTracker />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
