@@ -2251,3 +2251,30 @@ export async function fetchEthBalance(address: string): Promise<string> {
   }
   return '0';
 }
+
+/**
+ * Fetch transactions for an address
+ */
+export async function fetchTransactions(address: string, page: number = 1): Promise<any[]> {
+  try {
+    const response = await fetch(
+      `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=20&sort=desc&apikey=YourApiKeyToken`
+    );
+    const data = await response.json();
+    if (data.status === '1') {
+      return data.result.map((tx: any) => ({
+        hash: tx.hash,
+        from: tx.from,
+        to: tx.to,
+        value: (parseFloat(tx.value) / 1e18).toFixed(6),
+        gasPrice: tx.gasPrice,
+        gasUsed: tx.gasUsed,
+        timestamp: parseInt(tx.timeStamp) * 1000,
+        isError: tx.isError === '1'
+      }));
+    }
+  } catch (e) {
+    console.error('Failed to fetch transactions:', e);
+  }
+  return [];
+}
