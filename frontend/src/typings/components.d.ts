@@ -80,6 +80,7 @@ declare module 'vue' {
     IpfsUpload: typeof import('./../components/web3/IpfsUpload.vue')['default']
     LangSwitch: typeof import('./../components/common/lang-switch.vue')['default']
     LiquidationAlert: typeof import('./../components/web3/LiquidationAlert.vue')['default']
+    LiquidityPoolMonitor: typeof import('./../components/web3/LiquidityPoolMonitor.vue')['default']
     LiquidityPoolScanner: typeof import('./../components/web3/LiquidityPoolScanner.vue')['default']
     LookForward: typeof import('./../components/custom/look-forward.vue')['default']
     MarketOverview: typeof import('./../components/web3/MarketOverview.vue')['default']

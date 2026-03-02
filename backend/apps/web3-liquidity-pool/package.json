@@ -1,0 +1,12 @@
+{
+  "name": "web3-liquidity-pool",
+  "version": "1.0.0",
+  "description": "Uniswap V3 Liquidity Pool Monitor",
+  "private": true,
+  "scripts": {
+    "build": "nest build web3-liquidity-pool",
+    "start": "nest start web3-liquidity-pool",
+    "dev": "nest start web3-liquidity-pool --watch"
+  },
+  "dependencies": {}
+}
