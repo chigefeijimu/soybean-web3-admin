@@ -3370,3 +3370,94 @@ export function getInflationRate(chain: string, address: string, period: number 
     params: { period }
   });
 }
+
+// ============ Volatility Analyzer API ============
+
+export interface VolatilityResult {
+  token: string;
+  chain: string;
+  timeframe: string;
+  currentPrice: number;
+  priceChange24h: number;
+  volatility: {
+    daily: number;
+    weekly: number;
+    monthly: number;
+    annualized: number;
+  };
+  riskMetrics: {
+    score: number;
+    level: 'low' | 'medium' | 'high' | 'extreme';
+    sharpeRatio: number;
+    maxDrawdown: number;
+    var95: number;
+  };
+  trend: 'bullish' | 'bearish' | 'neutral' | 'volatile';
+  timestamp: number;
+}
+
+export interface VolatilityHistory {
+  prices: Array<{ timestamp: number; price: number }>;
+  volatilities: number[];
+}
+
+export interface RiskAssessment {
+  address: string;
+  chain: string;
+  riskScore: number;
+  riskLevel: string;
+  factors: string[];
+  recommendation: string;
+  volatilityHistory: number[];
+}
+
+export interface VolatilityRanking {
+  tokens: Array<{
+    symbol: string;
+    name: string;
+    volatility: number;
+    riskLevel: string;
+    price: number;
+    change24h: number;
+  }>;
+}
+
+export function analyzeTokenVolatility(address: string, chain: string = 'ethereum', timeframe: string = '30d') {
+  return request<VolatilityResult>({
+    url: '/web3/volatility/analyze',
+    method: 'get',
+    params: { address, chain, timeframe }
+  });
+}
+
+export function getVolatilityHistory(address: string, chain: string = 'ethereum', days: number = 30) {
+  return request<VolatilityHistory>({
+    url: '/web3/volatility/history',
+    method: 'get',
+    params: { address, chain, days }
+  });
+}
+
+export function compareTokenVolatility(addresses: string[], chain: string = 'ethereum', timeframe: string = '30d') {
+  return request<VolatilityResult[]>({
+    url: '/web3/volatility/compare',
+    method: 'get',
+    params: { addresses: addresses.join(','), chain, timeframe }
+  });
+}
+
+export function getVolatilityRankings(chain: string = 'ethereum', sort: string = 'volatility', limit: number = 20) {
+  return request<VolatilityRanking>({
+    url: '/web3/volatility/rankings',
+    method: 'get',
+    params: { chain, sort, limit }
+  });
+}
+
+export function getRiskAssessment(address: string, chain: string = 'ethereum') {
+  return request<RiskAssessment>({
+    url: '/web3/volatility/risk-assessment',
+    method: 'get',
+    params: { address, chain }
+  });
+}

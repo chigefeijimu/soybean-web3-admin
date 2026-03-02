@@ -1,0 +1,25 @@
+{
+  "name": "web3-volatility-analyzer",
+  "version": "1.0.0",
+  "description": "Token Volatility Analyzer - Analyze token price volatility and risk",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "nest start web3-volatility-analyzer",
+    "start:dev": "nest start web3-volatility-analyzer --watch",
+    "build": "nest build web3-volatility-analyzer"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/platform-express": "^10.3.0",
+    "axios": "^1.6.5",
+    "reflect-metadata": "^0.2.1",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.3.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  }
+}
