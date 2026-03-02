@@ -94,6 +94,7 @@ import NftCollectionTracker from '@/components/web3/NftCollectionTracker.vue';
 import StrategyBacktester from '@/components/web3/StrategyBacktester.vue';
 import LiquidityPoolMonitor from '@/components/web3/LiquidityPoolMonitor.vue';
 import GasPriceApiDashboard from '@/components/web3/GasPriceApiDashboard.vue';
+import DexVolume from '@/components/web3/DexVolume/index.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -198,6 +199,7 @@ const tabs = [
   { id: 'strategy-backtest', label: 'Backtest', icon: '📈' },
   { id: 'liquidity-pool', label: 'Liquidity Pool', icon: '🦄' },
   { id: 'gas-price-api', label: 'Gas API', icon: '⛽' },
+  { id: 'dex-volume', label: 'Dex Volume', icon: '📊' },
 ];
 
 // Supported networks with logos
@@ -870,6 +872,11 @@ onMounted(() => {
         <!-- Gas Price API Dashboard Tab -->
         <div v-show="activeTab === 'gas-price-api'">
           <GasPriceApiDashboard />
+        </div>
+
+        <!-- Dex Volume Tab -->
+        <div v-show="activeTab === 'dex-volume'">
+          <DexVolume />
         </div>
       </div>
 

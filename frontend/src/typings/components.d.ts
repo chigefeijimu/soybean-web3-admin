@@ -38,6 +38,7 @@ declare module 'vue' {
     DefiSimulator: typeof import('./../components/web3/DefiSimulator.vue')['default']
     DefiTvlTracker: typeof import('./../components/web3/DefiTvlTracker.vue')['default']
     DexAggregator: typeof import('./../components/web3/DexAggregator.vue')['default']
+    DexVolume: typeof import('./../components/web3/DexVolume/index.vue')['default']
     EnsLookup: typeof import('./../components/web3/EnsLookup.vue')['default']
     ENSLookup: typeof import('./../components/web3/ENSLookup.vue')['default']
     EventExplorer: typeof import('./../components/web3/EventExplorer.vue')['default']
