@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/web3-tx-accelerator/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": false,
+    "tsConfigPath": "apps/web3-tx-accelerator/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/web3-tx-accelerator",
+  "entryFile": "main",
+  "assets": ["**/*.json"]
+}
