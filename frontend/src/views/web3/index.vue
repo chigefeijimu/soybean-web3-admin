@@ -87,6 +87,7 @@ import TokenApprovalRevoker from '@/components/web3/TokenApprovalRevoker.vue';
 import TokenEconomics from '@/components/web3/TokenEconomics/index.vue';
 import DefiTvlTracker from '@/components/web3/DefiTvlTracker.vue';
 import PortfolioComparator from '@/components/web3/PortfolioComparator.vue';
+import TokenTransferAnalyzer from '@/components/web3/TokenTransferAnalyzer.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -184,6 +185,7 @@ const tabs = [
   { id: 'approval-revoker', label: 'Approval Revoker', icon: '🔐' },
   { id: 'token-economics', label: 'Token Economics', icon: '📊' },
   { id: 'defi-tvl', label: 'DeFi TVL', icon: '📊' },
+  { id: 'token-transfer', label: 'Transfer', icon: '🔄' },
 ];
 
 // Supported networks with logos
@@ -821,6 +823,11 @@ onMounted(() => {
         <!-- DeFi TVL Tracker Tab -->
         <div v-show="activeTab === 'defi-tvl'">
           <DefiTvlTracker />
+        </div>
+
+        <!-- Token Transfer Analyzer Tab -->
+        <div v-show="activeTab === 'token-transfer'">
+          <TokenTransferAnalyzer />
         </div>
       </div>
 
