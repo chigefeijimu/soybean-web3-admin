@@ -179,6 +179,7 @@ import AiPortfolioAdvisor from './AiPortfolioAdvisor.vue';
 import CrossChainTokenMapper from './CrossChainTokenMapper.vue';
 import DefiRevenueTracker from './DefiRevenueTracker.vue';
 import DefiUserAnalytics from './DefiUserAnalytics.vue';
+import DexTradingJournal from './DexTradingJournal.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -359,6 +360,7 @@ const tabs = [
   { id: 'portfolio-advisor', label: 'AI Advisor', icon: '🤖' },
   { id: 'defi-revenue', label: 'Revenue Tracker', icon: '💹' },
   { id: 'defi-user-analytics', label: 'User Analytics', icon: '📊' },
+  { id: 'dex-trading-journal', label: 'Trading Journal', icon: '📝' },
 ];
 
 // Supported networks with logos
@@ -1378,6 +1380,11 @@ onMounted(() => {
         <!-- Defi User Analytics Tab -->
         <div v-show="activeTab === 'defi-user-analytics'">
           <DefiUserAnalytics />
+        </div>
+
+        <!-- DEX Trading Journal Tab -->
+        <div v-show="activeTab === 'dex-trading-journal'">
+          <DexTradingJournal />
         </div>
 
         <!-- AI Portfolio Advisor Tab -->

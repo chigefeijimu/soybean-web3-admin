@@ -44,6 +44,10 @@ import { YieldFarmingController } from './api/web3/yield-farming.controller';
 import { YieldFarmingService } from './api/web3/yield-farming.service';
 import { OnchainDataQueryController } from './api/web3/onchain-data-query/onchain-data-query.controller';
 import { OnchainDataQueryService } from './api/web3/onchain-data-query/onchain-data-query.service';
+import { DexTradingJournalController } from './api/web3/dex-trading-journal.controller';
+import { DexTradingJournalService } from './api/web3/dex-trading-journal.service';
+import { DefiAnomalyDetectorController } from './api/web3/defi-anomaly-detector.controller';
+import { DefiAnomalyDetectorService } from './api/web3/defi-anomaly-detector.service';
 
 const strategies = [JwtStrategy];
 
@@ -169,7 +173,7 @@ class ThrottlerStorageAdapter implements ThrottlerStorage {
     ApiKeyModule,
     BootstrapModule,
   ],
-  controllers: [AppController, MevExplorerController, VotingTrackerController, OptionsTrackerController, GovernanceExplorerController, YieldFarmingController, OnchainDataQueryController],
+  controllers: [AppController, MevExplorerController, VotingTrackerController, OptionsTrackerController, GovernanceExplorerController, YieldFarmingController, OnchainDataQueryController, DexTradingJournalController, DefiAnomalyDetectorController],
   providers: [
     AppService,
     MevExplorerService,
@@ -177,6 +181,8 @@ class ThrottlerStorageAdapter implements ThrottlerStorage {
     GovernanceExplorerService,
     YieldFarmingService,
     OnchainDataQueryService,
+    DexTradingJournalService,
+    DefiAnomalyDetectorService,
 
     ...strategies,
 
