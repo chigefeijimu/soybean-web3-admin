@@ -163,6 +163,17 @@ export const generatedRoutes: GeneratedRoute[] = [
     meta: {
       title: 'web3',
       i18nKey: 'route.web3'
-    }
+    },
+    children: [
+      {
+        name: 'web3-intent-solver',
+        path: '/web3/intent-solver',
+        component: 'view.web3-intent-solver',
+        meta: {
+          title: 'Intent Solver',
+          i18nKey: 'route.web3-intent-solver'
+        }
+      }
+    ]
   }
 ];
