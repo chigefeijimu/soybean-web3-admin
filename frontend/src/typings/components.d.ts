@@ -135,6 +135,7 @@ declare module 'vue' {
     NDynamicInput: typeof import('naive-ui')['NDynamicInput']
     NEmpty: typeof import('naive-ui')['NEmpty']
     NetworkStatus: typeof import('./../components/web3/NetworkStatus.vue')['default']
+    NetWorthTracker: typeof import('./../components/web3/NetWorthTracker/index.vue')['default']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
     NFormItemGi: typeof import('naive-ui')['NFormItemGi']

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/apps/web3-strategy-backtester-pro",
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "target": "ES2021"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+}

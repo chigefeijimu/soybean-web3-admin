@@ -254,6 +254,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-wallet-behavior-pattern/tsconfig.app.json"
       }
+    },
+    "web3-strategy-backtester-pro": {
+      "type": "application",
+      "root": "apps/web3-strategy-backtester-pro",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-strategy-backtester-pro/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-strategy-backtester-pro/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
