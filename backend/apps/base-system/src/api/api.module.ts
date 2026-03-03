@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 
 import { AccessKeyInfraModule } from '@app/base-system/infra/bounded-contexts/access-key/access_key.infra.module';
 import { ApiEndpointInfraModule } from '@app/base-system/infra/bounded-contexts/api-endpoint/api-endpoint/api-endpoint.infra.module';
@@ -26,6 +27,8 @@ import { TxSimulatorModule } from './web3/tx-simulator.module';
 import { TokenLaunchScannerModule } from './web3/token-launch-scanner/token-launch-scanner.module';
 import { DefiRiskCalculatorModule } from './web3/defi-risk-calculator.module';
 import { ContractSecurityAuditModule } from './web3/contract-security-audit.module';
+import { DefiTvlHistoryModule } from './web3-defi-tvl-history/defi-tvl-history.module';
+import { DefiTvlHistoryController } from './web3-defi-tvl-history/defi-tvl-history.controller';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -45,6 +48,7 @@ import { ContractSecurityAuditController } from './web3/contract-security-audit.
 
 @Module({
   imports: [
+    HttpModule,
     IamModule,
     MenuInfraModule,
     RoleInfraModule,
@@ -71,6 +75,7 @@ import { ContractSecurityAuditController } from './web3/contract-security-audit.
     TokenLaunchScannerModule,
     DefiRiskCalculatorModule,
     ContractSecurityAuditModule,
+    DefiTvlHistoryModule,
   ],
   controllers: [
     ...IamRest,
@@ -88,6 +93,7 @@ import { ContractSecurityAuditController } from './web3/contract-security-audit.
     TokenLaunchScannerController,
     DefiRiskCalculatorController,
     ContractSecurityAuditController,
+    DefiTvlHistoryController,
   ],
 })
 export class ApiModule {}
