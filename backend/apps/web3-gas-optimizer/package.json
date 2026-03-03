@@ -1,0 +1,17 @@
+{
+  "name": "web3-gas-optimizer",
+  "version": "1.0.0",
+  "description": "Cross-chain Gas Optimizer API - AI-powered gas price prediction and optimization",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "node --watch src/main.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/config": "^3.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
+  }
+}
