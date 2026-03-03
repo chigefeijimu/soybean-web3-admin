@@ -17,6 +17,7 @@ import OrderBook from '@/components/web3/OrderBook.vue';
 import TokenSearch from '@/components/web3/TokenSearch.vue';
 import WhaleTracker from '@/components/web3/WhaleTracker.vue';
 import SmartMoneyFlow from '@/components/web3/SmartMoneyFlow.vue';
+import SmartMoneyAlert from '@/views/web3/SmartMoneyAlert.vue';
 import NotificationCenter from '@/components/web3/NotificationCenter.vue';
 import GasTracker from '@/components/web3/GasTracker.vue';
 import BridgePanel from '@/components/web3/BridgePanel.vue';
@@ -232,6 +233,7 @@ const tabs = [
   { id: 'flashloan', label: 'Flashloan', icon: '⚡' },
   { id: 'voting', label: 'Voting', icon: '🗳️' },
   { id: 'smart-money', label: 'Smart $', icon: '🐟' },
+  { id: 'smart-money-alert', label: 'Smart Alert', icon: '🔔' },
   { id: 'chainlink', label: 'Oracle', icon: '⛓️' },
   { id: 'defi-portfolio', label: 'DeFi Portfolio', icon: '💼' },
   { id: 'fear-greed', label: 'Sentiment', icon: '😱' },
@@ -850,6 +852,10 @@ onMounted(() => {
 
         <div v-show="activeTab === 'smart-money'">
           <SmartMoneyFlow />
+        </div>
+
+        <div v-show="activeTab === 'smart-money-alert'">
+          <SmartMoneyAlert />
         </div>
 
         <!-- Chainlink Price Tracker Tab -->
