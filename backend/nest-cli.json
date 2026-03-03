@@ -335,6 +335,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-defi-user-analytics/tsconfig.json"
       }
+    },
+    "web3-nft-bridge-api": {
+      "type": "application",
+      "root": "apps/web3-nft-bridge-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-nft-bridge-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-nft-bridge-api/tsconfig.json"
+      }
     }
   },
   "monorepo": true,
