@@ -392,6 +392,14 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-smart-contract-monitor/tsconfig.app.json"
       }
+    },
+    "web3-multisig-health-monitor": {
+      "root": "apps/web3-multisig-health-monitor",
+      "sourceRoot": "apps/web3-multisig-health-monitor/src",
+      "entryFile": "main",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-multisig-health-monitor/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

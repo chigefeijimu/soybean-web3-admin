@@ -58,6 +58,16 @@ const customRoutes: CustomRoute[] = [
       i18nKey: 'route.web3_token-balance-history',
       icon: 'mdi:history'
     }
+  },
+  {
+    name: 'web3_multisig-health-monitor',
+    path: '/web3/multisig-health-monitor',
+    component: 'view.web3_multisig-health-monitor',
+    meta: {
+      title: 'Multi-sig Health Monitor',
+      i18nKey: 'route.web3_multisig-health-monitor',
+      icon: 'mdi:shield-check'
+    }
   }
 ];
 
