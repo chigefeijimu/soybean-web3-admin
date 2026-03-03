@@ -272,6 +272,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-contract-deployer/tsconfig.app.json"
       }
+    },
+    "web3-portfolio-backup": {
+      "type": "application",
+      "root": "apps/web3-portfolio-backup",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-portfolio-backup/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-portfolio-backup/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
