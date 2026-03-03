@@ -82,6 +82,7 @@ import { TxQueueController } from './tx-queue.controller';
 import { LiquidationScannerController } from './liquidation-scanner.controller';
 import { LiquidationScannerService } from './liquidation-scanner.service';
 import { Web3TransactionAnalyticsController } from './web3-transaction-analytics.controller';
+import { PortfolioHistoryController } from './portfolio-history.controller';
 
 @Module({
   imports: [HttpModule],
@@ -137,6 +138,7 @@ import { Web3TransactionAnalyticsController } from './web3-transaction-analytics
     TxQueueController,
     LiquidationScannerController,
     Web3TransactionAnalyticsController,
+    PortfolioHistoryController,
   ],
   providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService,  DefiYieldCompareService, TokenInflationService, LiquidationScannerService,
   ],
