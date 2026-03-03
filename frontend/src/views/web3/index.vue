@@ -175,6 +175,7 @@ import StrategyBacktesterPro from './StrategyBacktesterPro.vue';
 import TokenLaunchScanner from './TokenLaunchScanner.vue';
 import GasOptimizerView from './GasOptimizer.vue';
 import AiPortfolioAdvisor from './AiPortfolioAdvisor.vue';
+import CrossChainTokenMapper from './CrossChainTokenMapper.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -204,6 +205,7 @@ const tabs = [
   { id: 'analyzer', label: 'Analyzer', icon: '🔍' },
   { id: 'gas', label: 'Gas', icon: '⏳' },
   { id: 'gas-optimizer', label: 'Gas Opt', icon: '🎯' },
+  { id: 'token-mapper', label: 'Token Mapper', icon: '🔗' },
   { id: 'mev', label: 'MEV', icon: '🛡️' },
   { id: 'mev-explorer', label: 'MEV Explorer', icon: '🔍' },
   { id: 'safety', label: 'Safety', icon: '✅' },
@@ -679,6 +681,11 @@ onMounted(() => {
         <!-- Gas Optimizer Tab -->
         <div v-show="activeTab === 'gas-optimizer'">
           <GasOptimizerView />
+        </div>
+
+        <!-- Token Mapper Tab -->
+        <div v-show="activeTab === 'token-mapper'">
+          <CrossChainTokenMapper />
         </div>
 
         <!-- MEV Tab -->

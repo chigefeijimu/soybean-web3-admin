@@ -299,6 +299,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-ai-portfolio-advisor/tsconfig.app.json"
       }
+    },
+    "web3-cross-chain-token-mapper": {
+      "type": "application",
+      "root": "apps/web3-cross-chain-token-mapper",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-cross-chain-token-mapper/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-cross-chain-token-mapper/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
