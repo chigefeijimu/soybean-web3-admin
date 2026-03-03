@@ -1,0 +1,6 @@
+{
+  "name": "@apps/web3-bridge-status",
+  "version": "1.0.0",
+  "description": "Cross-Chain Bridge Status & Analytics API",
+  "private": true
+}

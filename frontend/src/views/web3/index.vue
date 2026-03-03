@@ -159,6 +159,7 @@ import ContractSecurityAudit from '@/components/web3/ContractSecurityAudit.vue';
 import MultisigTxBuilder from '@/views/web3/MultisigTxBuilder.vue';
 import DefiAutoCompound from '@/views/web3/DefiAutoCompound.vue';
 import ContractVerifier from '@/views/web3/ContractVerifier.vue';
+import NftWashTradeDetector from '@/components/web3/NftWashTradeDetector.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -321,6 +322,7 @@ const tabs = [
   { id: 'nft-portfolio', label: 'NFT Portfolio', icon: '🖼️' },
   { id: 'liquidation-scanner', label: 'Liq Scanner', icon: '🔍' },
   { id: 'wallet-social', label: 'Wallet Social', icon: '👥' },
+  { id: 'nft-wash-trade', label: 'NFT Wash Trade', icon: '🧼' },
   { id: 'token-correlation', label: 'Correlation', icon: '📊' },
   { id: 'tx-analytics', label: 'Tx Analytics', icon: '📈' },
   { id: 'defi-gas-estimator', label: 'Gas Estimator', icon: '⛽' },
@@ -1261,6 +1263,11 @@ onMounted(() => {
         <!-- Wallet Social Tab -->
         <div v-show="activeTab === 'wallet-social'">
           <WalletSocial />
+        </div>
+
+        <!-- NFT Wash Trade Detector Tab -->
+        <div v-show="activeTab === 'nft-wash-trade'">
+          <NftWashTradeDetector />
         </div>
 
         <!-- Token Correlation Matrix Tab -->
