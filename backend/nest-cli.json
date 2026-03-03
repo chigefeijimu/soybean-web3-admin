@@ -383,6 +383,15 @@
       "root": "apps/web3-flashloan-arbitrage",
       "entryFile": "main",
       "sourceRoot": "apps/web3-flashloan-arbitrage/src"
+    },
+    "web3-smart-contract-monitor": {
+      "type": "application",
+      "root": "apps/web3-smart-contract-monitor",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-smart-contract-monitor/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-smart-contract-monitor/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
