@@ -21,6 +21,7 @@ import { CrossChainPriceApiModule } from './web3/cross-chain-price-api.module';
 import { EventMonitorModule } from './web3/event-monitor/event-monitor.module';
 import { CrossChainRebalancerModule } from './web3/cross-chain-rebalancer/cross-chain-rebalancer.module';
 import { DefiStrategyBuilderModule } from './web3/defi-strategy-builder.module';
+import { TokenSentimentApiModule } from './web3/token-sentiment-api.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -31,6 +32,7 @@ import { Web3DefiAnalyticsController } from './web3/web3-defi-analytics.controll
 import { EventMonitorController } from './web3/event-monitor/event-monitor.controller';
 import { CrossChainRebalancerController } from './web3/cross-chain-rebalancer/cross-chain-rebalancer.controller';
 import { DefiStrategyBuilderController } from './web3/defi-strategy-builder.controller';
+import { TokenSentimentController } from './web3/token-sentiment.controller';
 
 @Module({
   imports: [
@@ -55,6 +57,7 @@ import { DefiStrategyBuilderController } from './web3/defi-strategy-builder.cont
     CrossChainRebalancerModule,
     Web3DefiAnalyticsModule,
     DefiStrategyBuilderModule,
+    TokenSentimentApiModule,
   ],
   controllers: [
     ...IamRest,
@@ -66,6 +69,7 @@ import { DefiStrategyBuilderController } from './web3/defi-strategy-builder.cont
     EventMonitorController,
     CrossChainRebalancerController,
     DefiStrategyBuilderController,
+    TokenSentimentController,
   ],
 })
 export class ApiModule {}
