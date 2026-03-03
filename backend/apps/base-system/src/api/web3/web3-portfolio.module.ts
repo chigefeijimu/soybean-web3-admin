@@ -81,6 +81,7 @@ import { TokenInflationService } from './token-inflation.service';
 import { TxQueueController } from './tx-queue.controller';
 import { LiquidationScannerController } from './liquidation-scanner.controller';
 import { LiquidationScannerService } from './liquidation-scanner.service';
+import { Web3TransactionAnalyticsController } from './web3-transaction-analytics.controller';
 
 @Module({
   imports: [HttpModule],
@@ -135,7 +136,9 @@ import { LiquidationScannerService } from './liquidation-scanner.service';
     TokenInflationController,
     TxQueueController,
     LiquidationScannerController,
+    Web3TransactionAnalyticsController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService,  DefiYieldCompareService, TokenInflationService, LiquidationScannerService],
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService,  DefiYieldCompareService, TokenInflationService, LiquidationScannerService,
+  ],
 })
 export class Web3PortfolioModule {}

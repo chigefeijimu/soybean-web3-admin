@@ -147,6 +147,7 @@ import DefiPositionManager from '@/views/web3/DefiPositionManager.vue';
 import WalletSocial from '@/views/web3/WalletSocial.vue';
 import UniswapV3PositionManager from '@/components/web3/UniswapV3PositionManager.vue';
 import TokenCorrelationMatrix from '@/components/web3/TokenCorrelationMatrix.vue';
+import TransactionAnalytics from '@/views/web3/TransactionAnalytics.vue';
 import PortfolioHealth from '@/views/web3/PortfolioHealth.vue';
 import CrossChainPrice from '@/components/web3/CrossChainPrice.vue';
 import DefiGasEstimator from '@/components/web3/DefiGasEstimator.vue';
@@ -308,6 +309,7 @@ const tabs = [
   { id: 'liquidation-scanner', label: 'Liq Scanner', icon: '🔍' },
   { id: 'wallet-social', label: 'Wallet Social', icon: '👥' },
   { id: 'token-correlation', label: 'Correlation', icon: '📊' },
+  { id: 'tx-analytics', label: 'Tx Analytics', icon: '📈' },
   { id: 'defi-gas-estimator', label: 'Gas Estimator', icon: '⛽' },
 ];
 
@@ -1224,6 +1226,11 @@ onMounted(() => {
         <!-- Token Correlation Matrix Tab -->
         <div v-show="activeTab === 'token-correlation'">
           <TokenCorrelationMatrix />
+        </div>
+
+        <!-- Transaction Analytics Tab -->
+        <div v-show="activeTab === 'tx-analytics'">
+          <TransactionAnalytics />
         </div>
 
         <!-- DeFi Gas Estimator Tab -->

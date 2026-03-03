@@ -4565,3 +4565,38 @@ export function getDefiRiskAnalysis() {
     method: 'get'
   });
 }
+
+/**
+ * 交易分析API
+ */
+export function transactionAnalytics(address: string, chainId: number = 1, days: number = 30) {
+  return request({
+    url: '/web3/transaction-analytics',
+    method: 'get',
+    params: { address, chainId, days }
+  });
+}
+
+export function transactionTimeline(address: string, chainId: number = 1, days: number = 30) {
+  return request({
+    url: '/web3/transaction-timeline',
+    method: 'get',
+    params: { address, chainId, days }
+  });
+}
+
+export function gasAnalysis(address: string, chainId: number = 1, days: number = 30) {
+  return request({
+    url: '/web3/gas-analysis',
+    method: 'get',
+    params: { address, chainId, days }
+  });
+}
+
+export function activityPattern(address: string, chainId: number = 1, days: number = 90) {
+  return request({
+    url: '/web3/activity-pattern',
+    method: 'get',
+    params: { address, chainId, days }
+  });
+}
