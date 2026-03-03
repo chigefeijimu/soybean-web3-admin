@@ -28,6 +28,16 @@ const customRoutes: CustomRoute[] = [
       i18nKey: 'route.web3_dao-treasury-manager',
       icon: 'mdi:treasure-chest'
     }
+  },
+  {
+    name: 'web3_token-transfer-tracker',
+    path: '/web3/token-transfer-tracker',
+    component: 'view.web3_token-transfer-tracker',
+    meta: {
+      title: 'Token Transfer Tracker',
+      i18nKey: 'route.web3_token-transfer-tracker',
+      icon: 'mdi:swap-horizontal'
+    }
   }
 ];
 
