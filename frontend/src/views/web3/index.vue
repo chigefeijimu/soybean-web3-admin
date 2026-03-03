@@ -157,6 +157,7 @@ import CrossChainPrice from '@/components/web3/CrossChainPrice.vue';
 import DefiGasEstimator from '@/components/web3/DefiGasEstimator.vue';
 import DefiDashboard from '@/views/web3/DefiDashboard.vue';
 import ContractSecurityAudit from '@/components/web3/ContractSecurityAudit.vue';
+import ContractSecurityScanner from './ContractSecurityScanner.vue';
 import MultisigTxBuilder from '@/views/web3/MultisigTxBuilder.vue';
 import DefiAutoCompound from '@/views/web3/DefiAutoCompound.vue';
 import ContractVerifier from '@/views/web3/ContractVerifier.vue';
@@ -287,6 +288,7 @@ const tabs = [
   { id: 'token-economics', label: 'Token Economics', icon: '📊' },
   { id: 'defi-tvl', label: 'DeFi TVL', icon: '📊' },
   { id: 'contract-audit', label: 'Contract Audit', icon: '🔍' },
+  { id: 'contract-scanner', label: 'Security Scanner', icon: '🔒' },
   { id: 'contract-verifier', label: 'Contract Verifier', icon: '📜' },
   { id: 'contract-abi', label: 'ABI Manager', icon: '📋' },
   { id: 'token-transfer', label: 'Transfer', icon: '🔄' },
@@ -1037,6 +1039,11 @@ onMounted(() => {
         <!-- Contract Security Audit Tab -->
         <div v-show="activeTab === 'contract-audit'">
           <ContractSecurityAudit />
+        </div>
+
+        <!-- Contract Security Scanner Tab -->
+        <div v-show="activeTab === 'contract-scanner'">
+          <ContractSecurityScanner />
         </div>
 
         <!-- Contract Verifier Tab -->
