@@ -184,6 +184,15 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       },
       {
+        name: 'web3_defi-integration-hub',
+        path: '/web3/defi-integration-hub',
+        component: 'view.web3_defi-integration-hub',
+        meta: {
+          title: 'web3_defi-integration-hub',
+          i18nKey: 'route.web3_defi-integration-hub'
+        }
+      },
+      {
         name: 'web3_definews',
         path: '/web3/definews',
         component: 'view.web3_definews',
