@@ -1,15 +1,15 @@
 {
-  "name": "@cellard/web3-dao-proposal-scanner",
+  "name": "@pod/web3-dao-proposal-scanner",
   "version": "1.0.0",
   "description": "DAO Proposal Scanner & Alert System",
   "author": "Web3 Team",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "nest build web3-dao-proposal-scanner',
-    "start": 'nest start web3-dao-proposal-scanner',
-    "start:dev": 'nest start web3-dao-proposal-scanner --watch',
-    "start:prod": 'node dist/apps/web3-dao-proposal-scanner/main'
+    "build": "nest build web3-dao-proposal-scanner",
+    "start": "nest start web3-dao-proposal-scanner",
+    "start:dev": "nest start web3-dao-proposal-scanner --watch",
+    "start:prod": "node dist/apps/web3-dao-proposal-scanner/main"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
