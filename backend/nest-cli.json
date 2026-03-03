@@ -308,6 +308,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-cross-chain-token-mapper/tsconfig.app.json"
       }
+    },
+    "web3-defi-revenue-tracker": {
+      "type": "application",
+      "root": "apps/web3-defi-revenue-tracker",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-defi-revenue-tracker/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-defi-revenue-tracker/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

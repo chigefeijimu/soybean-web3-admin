@@ -176,6 +176,7 @@ import TokenLaunchScanner from './TokenLaunchScanner.vue';
 import GasOptimizerView from './GasOptimizer.vue';
 import AiPortfolioAdvisor from './AiPortfolioAdvisor.vue';
 import CrossChainTokenMapper from './CrossChainTokenMapper.vue';
+import DefiRevenueTracker from './DefiRevenueTracker.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -353,6 +354,7 @@ const tabs = [
   { id: 'defi-rewards-claimer', label: 'Rewards Claimer', icon: '🎯' },
   { id: 'delegate-leaderboard', label: 'Delegate Leaderboard', icon: '🏆' },
   { id: 'portfolio-advisor', label: 'AI Advisor', icon: '🤖' },
+  { id: 'defi-revenue', label: 'Revenue Tracker', icon: '💹' },
 ];
 
 // Supported networks with logos
@@ -1357,6 +1359,11 @@ onMounted(() => {
         <!-- Delegate Leaderboard Tab -->
         <div v-show="activeTab === 'delegate-leaderboard'">
           <DaoDelegateLeaderboard />
+        </div>
+
+        <!-- Defi Revenue Tracker Tab -->
+        <div v-show="activeTab === 'defi-revenue'">
+          <DefiRevenueTracker />
         </div>
 
         <!-- AI Portfolio Advisor Tab -->
