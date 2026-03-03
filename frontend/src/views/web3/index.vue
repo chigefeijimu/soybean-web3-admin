@@ -159,6 +159,7 @@ import ContractSecurityAudit from '@/components/web3/ContractSecurityAudit.vue';
 import MultisigTxBuilder from '@/views/web3/MultisigTxBuilder.vue';
 import DefiAutoCompound from '@/views/web3/DefiAutoCompound.vue';
 import ContractVerifier from '@/views/web3/ContractVerifier.vue';
+import ContractAbiManager from '@/views/web3/ContractAbiManager.vue';
 import NftWashTradeDetector from '@/components/web3/NftWashTradeDetector.vue';
 import SocialGraph from './SocialGraph.vue';
 import DefiRoiCalculator from './DefiRoiCalculator.vue';
@@ -270,6 +271,7 @@ const tabs = [
   { id: 'defi-tvl', label: 'DeFi TVL', icon: '📊' },
   { id: 'contract-audit', label: 'Contract Audit', icon: '🔍' },
   { id: 'contract-verifier', label: 'Contract Verifier', icon: '📜' },
+  { id: 'contract-abi', label: 'ABI Manager', icon: '📋' },
   { id: 'token-transfer', label: 'Transfer', icon: '🔄' },
   { id: 'address-label', label: 'Address Label', icon: '🏷️' },
   { id: 'nft-collection', label: 'NFT Tracker', icon: '🎨' },
@@ -1011,6 +1013,11 @@ onMounted(() => {
         <!-- Contract Verifier Tab -->
         <div v-show="activeTab === 'contract-verifier'">
           <ContractVerifier />
+        </div>
+
+        <!-- ABI Manager Tab -->
+        <div v-show="activeTab === 'contract-abi'">
+          <ContractAbiManager />
         </div>
 
         <!-- Token Transfer Analyzer Tab -->
