@@ -34,6 +34,7 @@ declare module "@elegant-router/types" {
     "manage_user": "/manage/user";
     "manage_user-detail": "/manage/user-detail/:id";
     "web3": "/web3";
+    "web3_cross-chain-bridge-analytics": "/web3/cross-chain-bridge-analytics";
     "web3_cross-chain-gas-station": "/web3/cross-chain-gas-station";
     "web3_crosschainswapaggregator": "/web3/crosschainswapaggregator";
     "web3_daotreasurymanager": "/web3/daotreasurymanager";
@@ -121,6 +122,7 @@ declare module "@elegant-router/types" {
     | "web3_definews"
     | "web3_defiprotocolgraph"
     | "web3_domainservice"
+    | "web3_cross-chain-bridge-analytics"
     | "web3_cross-chain-gas-station"
     | "web3_defi-integration-hub"
     | "web3"

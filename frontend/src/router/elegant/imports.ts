@@ -35,6 +35,7 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   web3_definews: () => import("@/views/web3/DefiNews/index.vue"),
   web3_defiprotocolgraph: () => import("@/views/web3/DefiProtocolGraph/index.vue"),
   web3_domainservice: () => import("@/views/web3/DomainService/index.vue"),
+  "web3_cross-chain-bridge-analytics": () => import("@/views/web3/cross-chain-bridge-analytics/index.vue"),
   "web3_cross-chain-gas-station": () => import("@/views/web3/cross-chain-gas-station/index.vue"),
   "web3_defi-integration-hub": () => import("@/views/web3/defi-integration-hub/index.vue"),
   web3: () => import("@/views/web3/index.vue"),

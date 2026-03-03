@@ -175,6 +175,15 @@ export const generatedRoutes: GeneratedRoute[] = [
     },
     children: [
       {
+        name: 'web3_cross-chain-bridge-analytics',
+        path: '/web3/cross-chain-bridge-analytics',
+        component: 'view.web3_cross-chain-bridge-analytics',
+        meta: {
+          title: 'web3_cross-chain-bridge-analytics',
+          i18nKey: 'route.web3_cross-chain-bridge-analytics'
+        }
+      },
+      {
         name: 'web3_cross-chain-gas-station',
         path: '/web3/cross-chain-gas-station',
         component: 'view.web3_cross-chain-gas-station',
