@@ -184,6 +184,15 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       },
       {
+        name: 'web3_crosschainswapaggregator',
+        path: '/web3/crosschainswapaggregator',
+        component: 'view.web3_crosschainswapaggregator',
+        meta: {
+          title: 'web3_crosschainswapaggregator',
+          i18nKey: 'route.web3_crosschainswapaggregator'
+        }
+      },
+      {
         name: 'web3_daotreasurymanager',
         path: '/web3/daotreasurymanager',
         component: 'view.web3_daotreasurymanager',

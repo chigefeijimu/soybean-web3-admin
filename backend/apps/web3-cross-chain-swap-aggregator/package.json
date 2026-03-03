@@ -1,0 +1,5 @@
+{
+  "name": "web3-cross-chain-swap-aggregator",
+  "version": "1.0.0",
+  "description": "Cross-chain DEX Swap Aggregator - Find best swap routes across multiple DEXs"
+}
