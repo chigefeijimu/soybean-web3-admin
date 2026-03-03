@@ -1,0 +1,18 @@
+{
+  "name": "web3-smart-account-tracker",
+  "version": "1.0.0",
+  "description": "Smart Account (ERC-4337) Tracker - Track smart accounts, UserOperations, bundlers, and paymasters",
+  "scripts": {
+    "build": "nest build web3-smart-account-tracker",
+    "start": "nest start web3-smart-account-tracker",
+    "dev": "nest start web3-smart-account-tracker --watch"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "axios": "^1.6.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
+  }
+}

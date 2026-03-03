@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/@nestjs/cli/lib/config/schema.json",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": false,
+    "tsConfigPath": "apps/web3-smart-account-tracker/tsconfig.app.json"
+  },
+  "root": "apps/web3-smart-account-tracker",
+  "entryFile": "main",
+  "strict": true
+}

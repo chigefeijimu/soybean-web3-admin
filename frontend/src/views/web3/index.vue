@@ -148,6 +148,7 @@ import WalletSocial from '@/views/web3/WalletSocial.vue';
 import UniswapV3PositionManager from '@/components/web3/UniswapV3PositionManager.vue';
 import TokenCorrelationMatrix from '@/components/web3/TokenCorrelationMatrix.vue';
 import TransactionAnalytics from '@/views/web3/TransactionAnalytics.vue';
+import SmartAccountTracker from '@/views/web3/SmartAccountTracker.vue';
 import PortfolioHealth from '@/views/web3/PortfolioHealth.vue';
 import CrossChainPrice from '@/components/web3/CrossChainPrice.vue';
 import DefiGasEstimator from '@/components/web3/DefiGasEstimator.vue';
@@ -311,6 +312,7 @@ const tabs = [
   { id: 'token-correlation', label: 'Correlation', icon: '📊' },
   { id: 'tx-analytics', label: 'Tx Analytics', icon: '📈' },
   { id: 'defi-gas-estimator', label: 'Gas Estimator', icon: '⛽' },
+  { id: 'smart-account', label: 'Smart Account', icon: '🔐' },
 ];
 
 // Supported networks with logos
@@ -1236,6 +1238,11 @@ onMounted(() => {
         <!-- DeFi Gas Estimator Tab -->
         <div v-show="activeTab === 'defi-gas-estimator'">
           <DefiGasEstimator />
+        </div>
+
+        <!-- Smart Account Tracker Tab -->
+        <div v-show="activeTab === 'smart-account'">
+          <SmartAccountTracker />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
