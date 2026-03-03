@@ -229,6 +229,15 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       },
       {
+        name: 'web3_defiprotocolgraph',
+        path: '/web3/defiprotocolgraph',
+        component: 'view.web3_defiprotocolgraph',
+        meta: {
+          title: 'web3_defiprotocolgraph',
+          i18nKey: 'route.web3_defiprotocolgraph'
+        }
+      },
+      {
         name: 'web3_domainservice',
         path: '/web3/domainservice',
         component: 'view.web3_domainservice',

@@ -54,6 +54,8 @@ import { Web3DefiRewardsController } from './web3/web3-defi-rewards.controller';
 import { Web3DefiRiskRadarController } from './web3/web3-defi-risk-radar.controller';
 import { MultisigHealthMonitorModule } from './web3/multisig-health-monitor.module';
 import { MultisigHealthMonitorController } from './web3/multisig-health-monitor.controller';
+import { DefiProtocolGraphModule } from './web3/defi-protocol-graph.module';
+import { DefiProtocolGraphController } from './web3/defi-protocol-graph.controller';
 
 @Module({
   imports: [
@@ -89,6 +91,7 @@ import { MultisigHealthMonitorController } from './web3/multisig-health-monitor.
     AiMarketPredictionModule,
     Web3DefiRiskRadarModule,
     MultisigHealthMonitorModule,
+    DefiProtocolGraphModule,
   ],
   controllers: [
     ...IamRest,
@@ -112,6 +115,7 @@ import { MultisigHealthMonitorController } from './web3/multisig-health-monitor.
     Web3DefiRewardsController,
     Web3DefiRiskRadarController,
     MultisigHealthMonitorController,
+    DefiProtocolGraphController,
   ],
 })
 export class ApiModule {}
