@@ -4869,5 +4869,99 @@ export const multisigTxBuilder = {
         method: 'get'
       });
     }
+  },
+
+  // Governance Voting Advisor
+  votingAdvisor: {
+    // Get supported DAOs
+    getSupportedDAOs: () => {
+      return request({
+        url: '/governance/voting-advisor/daos',
+        method: 'get'
+      });
+    },
+
+    // Analyze a proposal
+    analyzeProposal: (dao: string, proposalId: string) => {
+      return request({
+        url: `/governance/voting-advisor/proposal/${dao}/${proposalId}`,
+        method: 'get'
+      });
+    },
+
+    // Get voting recommendation
+    getVotingRecommendation: (dao: string, proposalId: string, walletAddress: string) => {
+      return request({
+        url: '/governance/voting-advisor/recommendation',
+        method: 'post',
+        data: { dao, proposalId, walletAddress }
+      });
+    },
+
+    // Create voting strategy
+    createVotingStrategy: (strategy: {
+      name: string;
+      description: string;
+      daoPreferences: { dao: string; weight: number }[];
+      riskTolerance: string;
+      votingFactors: string[];
+    }) => {
+      return request({
+        url: '/governance/voting-advisor/strategy',
+        method: 'post',
+        data: strategy
+      });
+    },
+
+    // Get voting strategy
+    getVotingStrategy: (id: string) => {
+      return request({
+        url: `/governance/voting-advisor/strategy/${id}`,
+        method: 'get'
+      });
+    },
+
+    // Get all voting strategies
+    getAllVotingStrategies: () => {
+      return request({
+        url: '/governance/voting-advisor/strategies',
+        method: 'get'
+      });
+    },
+
+    // Get voting history
+    getVotingHistory: (dao: string, limit: number = 20) => {
+      return request({
+        url: `/governance/voting-advisor/voting-history/${dao}`,
+        method: 'get',
+        params: { limit }
+      });
+    },
+
+    // Get delegate insights
+    getDelegateInsights: (dao: string, delegate: string) => {
+      return request({
+        url: `/governance/voting-advisor/delegate-insights/${dao}/${delegate}`,
+        method: 'get'
+      });
+    },
+
+    // Get proposal impact
+    getProposalImpact: (dao: string, proposalId: string, walletAddress: string) => {
+      return request({
+        url: `/governance/voting-advisor/proposal-impact/${dao}/${proposalId}`,
+        method: 'get',
+        params: { walletAddress }
+      });
+    },
+
+    // Get dashboard
+    getVotingAdvisorDashboard: (walletAddress?: string) => {
+      return request({
+        url: '/governance/voting-advisor/dashboard',
+        method: 'get',
+        params: { walletAddress }
+      });
+    }
   }
 };
