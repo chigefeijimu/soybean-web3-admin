@@ -19,6 +19,7 @@ import { TokenCorrelationModule } from './web3/token-correlation.module';
 import { Web3DefiAnalyticsModule } from './web3/web3-defi-analytics.module';
 import { CrossChainPriceApiModule } from './web3/cross-chain-price-api.module';
 import { EventMonitorModule } from './web3/event-monitor/event-monitor.module';
+import { CrossChainRebalancerModule } from './web3/cross-chain-rebalancer/cross-chain-rebalancer.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -27,6 +28,7 @@ import { Controllers as LoginLogRest } from './log-audit/login-log/rest';
 import { Controllers as OperationLogRest } from './log-audit/operation-log/rest';
 import { Web3DefiAnalyticsController } from './web3/web3-defi-analytics.controller';
 import { EventMonitorController } from './web3/event-monitor/event-monitor.controller';
+import { CrossChainRebalancerController } from './web3/cross-chain-rebalancer/cross-chain-rebalancer.controller';
 
 @Module({
   imports: [
@@ -48,6 +50,7 @@ import { EventMonitorController } from './web3/event-monitor/event-monitor.contr
     TokenCorrelationModule,
     CrossChainPriceApiModule,
     EventMonitorModule,
+    CrossChainRebalancerModule,
     Web3DefiAnalyticsModule,
   ],
   controllers: [
@@ -58,6 +61,7 @@ import { EventMonitorController } from './web3/event-monitor/event-monitor.contr
     ...AccessKeyRest,
     Web3DefiAnalyticsController,
     EventMonitorController,
+    CrossChainRebalancerController,
   ],
 })
 export class ApiModule {}

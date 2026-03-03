@@ -127,6 +127,7 @@ import PortfolioAlertManager from '@/components/web3/PortfolioAlertManager.vue';
 import TokenDiscovery from '@/components/web3/TokenDiscovery/index.vue';
 import WalletActivityMonitor from '@/components/web3/WalletActivityMonitor.vue';
 import TokenImpersonatorScanner from '@/components/web3/TokenImpersonatorScanner.vue';
+import CrossChainRebalancer from '@/components/web3/CrossChainRebalancer.vue';
 import TokenMomentumScanner from '@/components/web3/TokenMomentumScanner/index.vue';
 import WhaleAlert from '@/components/web3/WhaleAlert.vue';
 import DefiYieldCompare from '@/components/web3/DefiYieldCompare.vue';
@@ -292,6 +293,7 @@ const tabs = [
   { id: 'wallet-monitor', label: 'Wallet Monitor', icon: '👀' },
   { id: 'whale-alert', label: 'Whale Alert', icon: '🔔' },
   { id: 'token-momentum', label: 'Momentum', icon: '📈' },
+  { id: 'cross-chain-rebalancer', label: 'Rebalancer', icon: '🔄' },
   { id: 'defi-yield-compare', label: 'Yield Compare', icon: '🧪' },
   { id: 'wallet-snapshot', label: 'Snapshot', icon: '📸' },
   { id: 'token-inflation', label: 'Inflation', icon: '💰' },
@@ -1137,6 +1139,11 @@ onMounted(() => {
         <!-- Token Momentum Scanner Tab -->
         <div v-show="activeTab === 'token-momentum'">
           <TokenMomentumScanner />
+        </div>
+
+        <!-- Cross-chain Rebalancer Tab -->
+        <div v-show="activeTab === 'cross-chain-rebalancer'">
+          <CrossChainRebalancer />
         </div>
 
         <!-- Defi Yield Compare Tab -->
