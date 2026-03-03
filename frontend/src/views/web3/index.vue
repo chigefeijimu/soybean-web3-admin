@@ -156,6 +156,7 @@ import DefiGasEstimator from '@/components/web3/DefiGasEstimator.vue';
 import DefiDashboard from '@/views/web3/DefiDashboard.vue';
 import ContractSecurityAudit from '@/components/web3/ContractSecurityAudit.vue';
 import MultisigTxBuilder from '@/views/web3/MultisigTxBuilder.vue';
+import DefiAutoCompound from '@/views/web3/DefiAutoCompound.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -309,6 +310,7 @@ const tabs = [
   { id: 'governance-power', label: 'Gov Power', icon: '🗳️' },
   { id: 'defi-compare', label: 'DeFi Compare', icon: '⚖️' },
   { id: 'yield-aggregator', label: 'Yield Agg', icon: '🌾' },
+  { id: 'auto-compound', label: 'Auto Compound', icon: '🔄' },
   { id: 'defi-position-manager', label: 'Position Mgr', icon: '🎯' },
   { id: 'trading-bot-simulator', label: 'Trading Bot', icon: '🤖' },
   { id: 'validator-tracker', label: 'Validator', icon: '🔒' },
@@ -1213,6 +1215,11 @@ onMounted(() => {
         <!-- Yield Aggregator Tab -->
         <div v-show="activeTab === 'yield-aggregator'">
           <YieldAggregator />
+        </div>
+
+        <!-- Auto Compound Tab -->
+        <div v-show="activeTab === 'auto-compound'">
+          <DefiAutoCompound />
         </div>
 
         <!-- DeFi Position Manager Tab -->
