@@ -446,8 +446,8 @@ export class Web3EnsService {
   async querySpaceID(domain: string, chainId: number = 56): Promise<any> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`https://api.space.id/v3/registrant/${domain}`, { timeout: 10000 }).catch(() => ({ data: null })),
-      );
+        this.httpService.get(`https://api.space.id/v3/registrant/${domain}`, { timeout: 10000 }),
+      ).catch(() => ({ data: null }));
       if (response?.data) {
         return { name: domain, type: 'SPACE_ID', owner: response.data.owner || response.data.registrant || '', resolver: response.data.resolver || '', expiryDate: response.data.expiryDate, registrationDate: response.data.registrationDate, chainId };
       }
@@ -463,8 +463,8 @@ export class Web3EnsService {
   async queryUNS(domain: string, chainId: number = 1): Promise<any> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`https://api.unstoppabledomains.com/v1/domains/${domain}`, { headers: { Accept: 'application/json' }, timeout: 10000 }).catch(() => ({ data: null })),
-      );
+        this.httpService.get(`https://api.unstoppabledomains.com/v1/domains/${domain}`, { headers: { Accept: 'application/json' }, timeout: 10000 }),
+      ).catch(() => ({ data: null }));
       if (response?.data) {
         return { name: domain, type: 'UNS', owner: response.data.owner || '', resolver: response.data.resolver || '', address: response.data.crypto?.ETH?.address, expiryDate: response.data.expiryDate, registrationDate: response.data.registrationDate, chainId };
       }
@@ -481,8 +481,8 @@ export class Web3EnsService {
     try {
       const cleanDomain = domain.replace('.sol', '');
       const response = await firstValueFrom(
-        this.httpService.get(`https://sns-sdk-api.bonfida.com/resolve/${cleanDomain}`, { timeout: 10000 }).catch(() => ({ data: null })),
-      );
+        this.httpService.get(`https://sns-sdk-api.bonfida.com/resolve/${cleanDomain}`, { timeout: 10000 }),
+      ).catch(() => ({ data: null }));
       if (response?.data) {
         return { name: domain, type: 'SOL', owner: response.data.owner || '', address: response.data.sol_address || response.data.pubkey, chainId: 101 };
       }
@@ -500,18 +500,18 @@ export class Web3EnsService {
       let available = false;
       if (type === 'ENS') {
         const response = await firstValueFrom(
-          this.httpService.get(`https://api.ens.vision/domains/search?query=${domain}&tld=eth`, { timeout: 10000 }).catch(() => ({ data: null })),
-        );
+          this.httpService.get(`https://api.ens.vision/domains/search?query=${domain}&tld=eth`, { timeout: 10000 }),
+        ).catch(() => ({ data: null }));
         if (response?.data?.domains?.[0]) available = response.data.domains[0].available || false;
       } else if (type === 'SPACE_ID') {
         const response = await firstValueFrom(
-          this.httpService.get(`https://api.space.id/v3/domains/${domain}/availability`, { timeout: 10000 }).catch(() => ({ data: null })),
-        );
+          this.httpService.get(`https://api.space.id/v3/domains/${domain}/availability`, { timeout: 10000 }),
+        ).catch(() => ({ data: null }));
         available = response?.data?.available || false;
       } else if (type === 'UNS') {
         const response = await firstValueFrom(
-          this.httpService.get(`https://api.unstoppabledomains.com/v1/domains/${domain}/availability`, { headers: { Accept: 'application/json' }, timeout: 10000 }).catch(() => ({ data: null })),
-        );
+          this.httpService.get(`https://api.unstoppabledomains.com/v1/domains/${domain}/availability`, { headers: { Accept: 'application/json' }, timeout: 10000 }),
+        ).catch(() => ({ data: null }));
         available = response?.data?.available || false;
       }
       return { name: domain, available, type };
@@ -527,15 +527,15 @@ export class Web3EnsService {
     try {
       if (type === 'ENS') {
         const response = await firstValueFrom(
-          this.httpService.get(`https://api.ens.vision/domains/price?name=${domain}&years=${years}`, { timeout: 10000 }).catch(() => ({ data: null })),
-        );
+          this.httpService.get(`https://api.ens.vision/domains/price?name=${domain}&years=${years}`, { timeout: 10000 }),
+        ).catch(() => ({ data: null }));
         if (response?.data) return { name: domain, type: 'ENS', price: response.data.price || 0, currency: 'USD', period: years };
       } else if (type === 'SPACE_ID') {
         return { name: domain, type: 'SPACE_ID', price: years * 5, currency: 'USD', period: years };
       } else if (type === 'UNS') {
         const response = await firstValueFrom(
-          this.httpService.get(`https://api.unstoppabledomains.com/v1/domains/${domain}/price?years=${years}`, { headers: { Accept: 'application/json' }, timeout: 10000 }).catch(() => ({ data: null })),
-        );
+          this.httpService.get(`https://api.unstoppabledomains.com/v1/domains/${domain}/price?years=${years}`, { headers: { Accept: 'application/json' }, timeout: 10000 }),
+        ).catch(() => ({ data: null }));
         if (response?.data) return { name: domain, type: 'UNS', price: response.data.price || 0, currency: 'USD', period: years };
       }
       return null;
@@ -550,8 +550,8 @@ export class Web3EnsService {
   async getDomainStats(): Promise<any> {
     try {
       const ensStatsResponse = await firstValueFrom(
-        this.httpService.get('https://ens.vision/api/stats', { timeout: 10000 }).catch(() => ({ data: null })),
-      );
+        this.httpService.get('https://ens.vision/api/stats', { timeout: 10000 }),
+      ).catch(() => ({ data: null }));
       return {
         ens: { totalDomains: ensStatsResponse?.data?.total_registrations || 2500000, renewalRate: ensStatsResponse?.data?.renewal_rate || 75 },
         spaceId: { totalDomains: 2500000 },

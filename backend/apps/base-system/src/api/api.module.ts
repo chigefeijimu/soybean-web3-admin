@@ -27,6 +27,7 @@ import { TxSimulatorModule } from './web3/tx-simulator.module';
 import { TokenLaunchScannerModule } from './web3/token-launch-scanner/token-launch-scanner.module';
 import { DefiRiskCalculatorModule } from './web3/defi-risk-calculator.module';
 import { ContractSecurityAuditModule } from './web3/contract-security-audit.module';
+import { Web3DefiRiskRadarModule } from './web3/defi-risk-radar.module';
 import { DefiTvlHistoryModule } from './web3-defi-tvl-history/defi-tvl-history.module';
 import { DefiTvlHistoryController } from './web3-defi-tvl-history/defi-tvl-history.controller';
 import { DefiMarketOverviewModule } from './web3-defi-market-overview/defi-market-overview.module';
@@ -50,6 +51,7 @@ import { ContractSecurityAuditController } from './web3/contract-security-audit.
 import { AiMarketPredictionModule } from './web3/ai-market-prediction.module';
 import { AiMarketPredictionController } from './web3/ai-market-prediction.controller';
 import { Web3DefiRewardsController } from './web3/web3-defi-rewards.controller';
+import { Web3DefiRiskRadarController } from './web3/web3-defi-risk-radar.controller';
 
 @Module({
   imports: [
@@ -83,6 +85,7 @@ import { Web3DefiRewardsController } from './web3/web3-defi-rewards.controller';
     DefiTvlHistoryModule,
     DefiMarketOverviewModule,
     AiMarketPredictionModule,
+    Web3DefiRiskRadarModule,
   ],
   controllers: [
     ...IamRest,
@@ -104,6 +107,7 @@ import { Web3DefiRewardsController } from './web3/web3-defi-rewards.controller';
     DefiMarketOverviewController,
     AiMarketPredictionController,
     Web3DefiRewardsController,
+    Web3DefiRiskRadarController,
   ],
 })
 export class ApiModule {}
