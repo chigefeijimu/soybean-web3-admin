@@ -368,6 +368,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-liquidity-heatmap/tsconfig.json"
       }
+    },
+    "web3-nft-royalty-tracker": {
+      "type": "application",
+      "root": "apps/web3-nft-royalty-tracker",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-nft-royalty-tracker/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-nft-royalty-tracker/tsconfig.json"
+      }
     }
   },
   "monorepo": true,

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 // Marketplace royalty info
-interface MarketplaceInfo {
+export interface MarketplaceInfo {
   name: string;
   defaultRoyalty: number;
   maxRoyalty: number;
@@ -9,7 +9,7 @@ interface MarketplaceInfo {
 }
 
 // Collection royalty data
-interface RoyaltyData {
+export interface RoyaltyData {
   collectionAddress: string;
   chain: string;
   name: string;
@@ -24,7 +24,7 @@ interface RoyaltyData {
 }
 
 // Royalty history entry
-interface RoyaltyHistoryEntry {
+export interface RoyaltyHistoryEntry {
   date: string;
   volume: number;
   royalties: number;
@@ -32,7 +32,7 @@ interface RoyaltyHistoryEntry {
 }
 
 // Alert configuration
-interface Alert {
+export interface Alert {
   id: string;
   collectionAddress: string;
   chain: string;
@@ -43,7 +43,7 @@ interface Alert {
 }
 
 // Tracked collection
-interface TrackedCollection {
+export interface TrackedCollection {
   address: string;
   chain: string;
   name: string;
