@@ -165,6 +165,7 @@ import SocialGraph from './SocialGraph.vue';
 import DefiRoiCalculator from './DefiRoiCalculator.vue';
 import NetWorthTracker from '@/components/web3/NetWorthTracker/index.vue';
 import DefiRewardsClaimer from './DefiRewardsClaimer.vue';
+import DaoDelegateLeaderboard from './DaoDelegateLeaderboard.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -339,6 +340,7 @@ const tabs = [
   { id: 'defi-roi', label: 'ROI Calculator', icon: '🧮' },
   { id: 'net-worth', label: 'Net Worth', icon: '💰' },
   { id: 'defi-rewards-claimer', label: 'Rewards Claimer', icon: '🎯' },
+  { id: 'delegate-leaderboard', label: 'Delegate Leaderboard', icon: '🏆' },
 ];
 
 // Supported networks with logos
@@ -1333,6 +1335,11 @@ onMounted(() => {
         <!-- Defi Rewards Claimer Tab -->
         <div v-show="activeTab === 'defi-rewards-claimer'">
           <DefiRewardsClaimer />
+        </div>
+
+        <!-- Delegate Leaderboard Tab -->
+        <div v-show="activeTab === 'delegate-leaderboard'">
+          <DaoDelegateLeaderboard />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

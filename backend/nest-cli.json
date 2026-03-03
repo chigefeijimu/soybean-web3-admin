@@ -281,6 +281,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-portfolio-backup/tsconfig.app.json"
       }
+    },
+    "web3-dao-delegate-leaderboard": {
+      "type": "application",
+      "root": "apps/web3-dao-delegate-leaderboard",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-dao-delegate-leaderboard/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-dao-delegate-leaderboard/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
