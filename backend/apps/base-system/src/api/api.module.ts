@@ -35,6 +35,7 @@ import { CrossChainRebalancerController } from './web3/cross-chain-rebalancer/cr
 import { DefiStrategyBuilderController } from './web3/defi-strategy-builder.controller';
 import { TokenSentimentController } from './web3/token-sentiment.controller';
 import { TxSimulatorController } from './web3/tx-simulator.controller';
+import { NftCollectionAnalyticsController } from './web3/nft-collection-analytics.controller';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { TxSimulatorController } from './web3/tx-simulator.controller';
     DefiStrategyBuilderController,
     TokenSentimentController,
     TxSimulatorController,
+    NftCollectionAnalyticsController,
   ],
 })
 export class ApiModule {}
