@@ -1,0 +1,25 @@
+{
+  "name": "@soyabean/web3-tx-pattern-analyzer",
+  "version": "1.0.0",
+  "description": "Cross-chain Transaction Pattern Analyzer",
+  "scripts": {
+    "start": "nest start web3-tx-pattern-analyzer",
+    "start:dev": "nest start web3-tx-pattern-analyzer --watch",
+    "build": "nest build web3-tx-pattern-analyzer"
+  },
+  "dependencies": {
+    "@nestjs/axios": "^3.0.0",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "axios": "^1.6.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
