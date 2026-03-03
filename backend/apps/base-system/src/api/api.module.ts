@@ -24,6 +24,7 @@ import { DefiStrategyBuilderModule } from './web3/defi-strategy-builder.module';
 import { TokenSentimentApiModule } from './web3/token-sentiment-api.module';
 import { TxSimulatorModule } from './web3/tx-simulator.module';
 import { TokenLaunchScannerModule } from './web3/token-launch-scanner/token-launch-scanner.module';
+import { DefiRiskCalculatorModule } from './web3/defi-risk-calculator.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -38,6 +39,7 @@ import { TokenSentimentController } from './web3/token-sentiment.controller';
 import { TxSimulatorController } from './web3/tx-simulator.controller';
 import { NftCollectionAnalyticsController } from './web3/nft-collection-analytics.controller';
 import { TokenLaunchScannerController } from './web3/token-launch-scanner/token-launch-scanner.controller';
+import { DefiRiskCalculatorController } from './web3/defi-risk-calculator.controller';
 
 @Module({
   imports: [
@@ -65,6 +67,7 @@ import { TokenLaunchScannerController } from './web3/token-launch-scanner/token-
     TokenSentimentApiModule,
     TxSimulatorModule,
     TokenLaunchScannerModule,
+    DefiRiskCalculatorModule,
   ],
   controllers: [
     ...IamRest,
@@ -80,6 +83,7 @@ import { TokenLaunchScannerController } from './web3/token-launch-scanner/token-
     TxSimulatorController,
     NftCollectionAnalyticsController,
     TokenLaunchScannerController,
+    DefiRiskCalculatorController,
   ],
 })
 export class ApiModule {}
