@@ -162,6 +162,7 @@ import ContractVerifier from '@/views/web3/ContractVerifier.vue';
 import NftWashTradeDetector from '@/components/web3/NftWashTradeDetector.vue';
 import SocialGraph from './SocialGraph.vue';
 import DefiRoiCalculator from './DefiRoiCalculator.vue';
+import NetWorthTracker from '@/components/web3/NetWorthTracker/index.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -333,6 +334,7 @@ const tabs = [
   { id: 'defi-dashboard', label: 'DeFi Dashboard', icon: '📊' },
   { id: 'multisig-tx', label: 'Multi-sig', icon: '🔐' },
   { id: 'defi-roi', label: 'ROI Calculator', icon: '🧮' },
+  { id: 'net-worth', label: 'Net Worth', icon: '💰' },
 ];
 
 // Supported networks with logos
@@ -1312,6 +1314,11 @@ onMounted(() => {
         <!-- DeFi ROI Calculator Tab -->
         <div v-show="activeTab === 'defi-roi'">
           <DefiRoiCalculator />
+        </div>
+
+        <!-- Net Worth Tracker Tab -->
+        <div v-show="activeTab === 'net-worth'">
+          <NetWorthTracker />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
