@@ -4752,5 +4752,52 @@ export const multisigTxBuilder = {
       method: 'get',
       params: { chain }
     });
+  },
+
+  // NFT Rarity Calculator APIs
+  nftRarity: {
+    // Calculate rarity for a single NFT
+    calculate: (params: {
+      collectionAddress: string;
+      chain: string;
+      tokenId?: string;
+    }) => {
+      return request({
+        url: '/api/nft-rarity/calculate',
+        method: 'post',
+        data: params
+      });
+    },
+
+    // Get collection rarity statistics
+    getCollectionStats: (address: string, chain: string, limit?: number) => {
+      return request({
+        url: `/api/nft-rarity/collection/${address}`,
+        method: 'get',
+        params: { chain, limit }
+      });
+    },
+
+    // Batch calculate rarity for multiple NFTs
+    batchCalculate: (params: {
+      collectionAddress: string;
+      chain: string;
+      tokenIds: string[];
+    }) => {
+      return request({
+        url: '/api/nft-rarity/batch',
+        method: 'post',
+        data: params
+      });
+    },
+
+    // Find rare traits in a collection
+    findRareTraits: (address: string, chain: string) => {
+      return request({
+        url: `/api/nft-rarity/rare-traits/${address}`,
+        method: 'get',
+        params: { chain }
+      });
+    }
   }
 };
