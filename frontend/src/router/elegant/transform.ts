@@ -167,6 +167,7 @@ const routeMap: RouteMap = {
   "404": "/404",
   "500": "/500",
   "access-key": "/access-key",
+  "dao-proposal-scanner": "/dao-proposal-scanner",
   "home": "/home",
   "iframe-page": "/iframe-page/:url",
   "log": "/log",

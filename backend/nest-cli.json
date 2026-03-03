@@ -263,6 +263,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-strategy-backtester-pro/tsconfig.app.json"
       }
+    },
+    "web3-contract-deployer": {
+      "type": "application",
+      "root": "apps/web3-contract-deployer",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-contract-deployer/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-contract-deployer/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

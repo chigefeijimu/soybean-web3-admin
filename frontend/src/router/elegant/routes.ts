@@ -45,6 +45,15 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'dao-proposal-scanner',
+    path: '/dao-proposal-scanner',
+    component: 'layout.base$view.dao-proposal-scanner',
+    meta: {
+      title: 'dao-proposal-scanner',
+      i18nKey: 'route.dao-proposal-scanner'
+    }
+  },
+  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',

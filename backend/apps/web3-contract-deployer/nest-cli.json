@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/nest-cli/schema.json",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "assets": ["**/*.json"],
+    "watchAssets": true
+  },
+  "monorepo": true,
+  "root": "apps/web3-contract-deployer",
+  "entryFile": "src/main",
+  "project": "web3-contract-deployer"
+}

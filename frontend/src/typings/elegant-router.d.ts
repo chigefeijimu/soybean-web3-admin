@@ -21,6 +21,7 @@ declare module "@elegant-router/types" {
     "404": "/404";
     "500": "/500";
     "access-key": "/access-key";
+    "dao-proposal-scanner": "/dao-proposal-scanner";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
     "log": "/log";
@@ -68,6 +69,7 @@ declare module "@elegant-router/types" {
     | "404"
     | "500"
     | "access-key"
+    | "dao-proposal-scanner"
     | "home"
     | "iframe-page"
     | "log"
@@ -96,6 +98,7 @@ declare module "@elegant-router/types" {
     | "iframe-page"
     | "login"
     | "access-key"
+    | "dao-proposal-scanner"
     | "home"
     | "log_login"
     | "log_operation"
