@@ -326,6 +326,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-onchain-data-query/tsconfig.app.json"
       }
+    },
+    "web3-defi-user-analytics": {
+      "type": "application",
+      "root": "apps/web3-defi-user-analytics",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-defi-user-analytics/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-defi-user-analytics/tsconfig.json"
+      }
     }
   },
   "monorepo": true,
