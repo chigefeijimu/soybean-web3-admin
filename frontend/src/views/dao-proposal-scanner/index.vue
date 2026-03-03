@@ -141,7 +141,7 @@ import {
   type ProposalStats,
   type TrendingDao,
   type Alert
-} from '../service/daoProposalScanner';
+} from '../../service/daoProposalScanner';
 
 const supportedDaos = ref<Dao[]>([]);
 const proposals = ref<DaoProposal[]>([]);

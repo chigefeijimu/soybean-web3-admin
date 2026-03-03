@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@better-scroll/core": "2.5.1",
+    "@element-plus/icons-vue": "^2.3.2",
     "@iconify/vue": "4.3.0",
     "@sa/axios": "workspace:*",
     "@sa/color": "workspace:*",
@@ -65,6 +66,7 @@
     "dayjs": "1.11.13",
     "defu": "6.1.4",
     "echarts": "5.6.0",
+    "element-plus": "^2.13.3",
     "ethers": "^6.16.0",
     "json5": "2.2.3",
     "naive-ui": "2.41.0",
