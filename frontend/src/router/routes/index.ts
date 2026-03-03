@@ -18,6 +18,16 @@ const customRoutes: CustomRoute[] = [
       i18nKey: 'route.web3_nft-floor-price-oracle',
       icon: 'mdi:nft'
     }
+  },
+  {
+    name: 'web3_dao-treasury-manager',
+    path: '/web3/dao-treasury-manager',
+    component: 'view.web3_dao-treasury-manager',
+    meta: {
+      title: 'DAO Treasury Manager',
+      i18nKey: 'route.web3_dao-treasury-manager',
+      icon: 'mdi:treasure-chest'
+    }
   }
 ];
 

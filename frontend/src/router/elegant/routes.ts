@@ -184,6 +184,15 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       },
       {
+        name: 'web3_daotreasurymanager',
+        path: '/web3/daotreasurymanager',
+        component: 'view.web3_daotreasurymanager',
+        meta: {
+          title: 'web3_daotreasurymanager',
+          i18nKey: 'route.web3_daotreasurymanager'
+        }
+      },
+      {
         name: 'web3_defi-integration-hub',
         path: '/web3/defi-integration-hub',
         component: 'view.web3_defi-integration-hub',
