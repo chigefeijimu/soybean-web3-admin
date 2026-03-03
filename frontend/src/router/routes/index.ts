@@ -38,6 +38,26 @@ const customRoutes: CustomRoute[] = [
       i18nKey: 'route.web3_token-transfer-tracker',
       icon: 'mdi:swap-horizontal'
     }
+  },
+  {
+    name: 'web3_defi-usage-analytics',
+    path: '/web3/defi-usage-analytics',
+    component: 'view.web3_defi-usage-analytics',
+    meta: {
+      title: 'DeFi Usage Analytics',
+      i18nKey: 'route.web3_defi-usage-analytics',
+      icon: 'mdi:chart-areaspline'
+    }
+  },
+  {
+    name: 'web3_token-balance-history',
+    path: '/web3/token-balance-history',
+    component: 'view.web3_token-balance-history',
+    meta: {
+      title: 'Token Balance History',
+      i18nKey: 'route.web3_token-balance-history',
+      icon: 'mdi:history'
+    }
   }
 ];
 
