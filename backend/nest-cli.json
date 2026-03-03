@@ -245,6 +245,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-portfolio-insights/tsconfig.app.json"
       }
+    },
+    "web3-wallet-behavior-pattern": {
+      "type": "application",
+      "root": "apps/web3-wallet-behavior-pattern",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-wallet-behavior-pattern/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-wallet-behavior-pattern/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
