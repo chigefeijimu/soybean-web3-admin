@@ -49,6 +49,7 @@ import { DefiRiskCalculatorController } from './web3/defi-risk-calculator.contro
 import { ContractSecurityAuditController } from './web3/contract-security-audit.controller';
 import { AiMarketPredictionModule } from './web3/ai-market-prediction.module';
 import { AiMarketPredictionController } from './web3/ai-market-prediction.controller';
+import { Web3DefiRewardsController } from './web3/web3-defi-rewards.controller';
 
 @Module({
   imports: [
@@ -102,6 +103,7 @@ import { AiMarketPredictionController } from './web3/ai-market-prediction.contro
     DefiTvlHistoryController,
     DefiMarketOverviewController,
     AiMarketPredictionController,
+    Web3DefiRewardsController,
   ],
 })
 export class ApiModule {}
