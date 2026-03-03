@@ -377,6 +377,12 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-nft-royalty-tracker/tsconfig.json"
       }
+    },
+    "web3-flashloan-arbitrage": {
+      "type": "application",
+      "root": "apps/web3-flashloan-arbitrage",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-flashloan-arbitrage/src"
     }
   },
   "monorepo": true,

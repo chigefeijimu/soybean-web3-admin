@@ -144,6 +144,28 @@ services:
     depends_on:
       - redis
 
+  # Flashloan Arbitrage Scanner
+  web3-flashloan-arbitrage:
+    build:
+      context: backend/
+    working_dir: /app/apps/web3-flashloan-arbitrage
+    command: sh -c "pnpm install && pnpm start"
+    environment:
+      TZ: Asia/Shanghai
+      NODE_ENV: production
+      PORT: 3030
+    ports:
+      - "3030:3030"
+    networks:
+      - soybean-admin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3030/flashloan-arbitrage/stats"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - redis
+
 volumes:
   soybean-admin-postgres_data:
   soybean-admin-redis_data:
