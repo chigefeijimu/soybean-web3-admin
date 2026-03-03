@@ -33,5 +33,6 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   web3_domainservice: () => import("@/views/web3/DomainService/index.vue"),
   "web3_cross-chain-gas-station": () => import("@/views/web3/cross-chain-gas-station/index.vue"),
   "web3_defi-integration-hub": () => import("@/views/web3/defi-integration-hub/index.vue"),
+  "web3_staking-rewards-tracker": () => import("@/views/web3/StakingRewardsTracker.vue"),
   web3: () => import("@/views/web3/index.vue"),
 };
