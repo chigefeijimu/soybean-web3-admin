@@ -1,0 +1,25 @@
+{
+  "name": "web3-mempool-monitor",
+  "version": "1.0.0",
+  "description": "Mempool Monitor API Service",
+  "private": true,
+  "scripts": {
+    "build": "nest build web3-mempool-monitor",
+    "start": "nest start web3-mempool-monitor",
+    "start:dev": "nest start web3-mempool-monitor --watch"
+  },
+  "dependencies": {
+    "@nestjs/axios": "^3.0.0",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-fastify": "^10.0.0",
+    "axios": "^1.6.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "@types/node": "^20.3.1",
+    "typescript": "^5.1.3"
+  }
+}
