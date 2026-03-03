@@ -408,6 +408,14 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-activity-feed/tsconfig.app.json"
       }
+    },
+    "web3-token-health-score": {
+      "root": "apps/web3-token-health-score",
+      "sourceRoot": "apps/web3-token-health-score/src",
+      "entryFile": "main",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-token-health-score/tsconfig.json"
+      }
     }
   },
   "monorepo": true,
