@@ -350,6 +350,15 @@
       "root": "apps/web3-yield-farming-optimizer",
       "entryFile": "main",
       "sourceRoot": "apps/web3-yield-farming-optimizer/src"
+    },
+    "web3-address-clustering": {
+      "type": "application",
+      "root": "apps/web3-address-clustering",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-address-clustering/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-address-clustering/tsconfig.json"
+      }
     }
   },
   "monorepo": true,
