@@ -49,6 +49,7 @@ declare module 'vue' {
     DefiPortfolio: typeof import('./../components/web3/DefiPortfolio.vue')['default']
     DefiPortfolioTracker: typeof import('./../components/web3/DefiPortfolioTracker.vue')['default']
     DefiPositions: typeof import('./../components/web3/DefiPositions.vue')['default']
+    DefiRiskCalculator: typeof import('./../components/web3/DefiRiskCalculator.vue')['default']
     DefiSimulator: typeof import('./../components/web3/DefiSimulator.vue')['default']
     DefiTvlTracker: typeof import('./../components/web3/DefiTvlTracker.vue')['default']
     DefiYieldCompare: typeof import('./../components/web3/DefiYieldCompare.vue')['default']
