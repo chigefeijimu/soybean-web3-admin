@@ -29,5 +29,6 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   manage_role: () => import("@/views/manage/role/index.vue"),
   "manage_user-detail": () => import("@/views/manage/user-detail/[id].vue"),
   manage_user: () => import("@/views/manage/user/index.vue"),
+  web3_definews: () => import("@/views/web3/DefiNews/index.vue"),
   web3: () => import("@/views/web3/index.vue"),
 };

@@ -168,28 +168,19 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'web3',
     path: '/web3',
-    component: 'layout.base$view.web3',
+    component: 'layout.base',
     meta: {
       title: 'web3',
       i18nKey: 'route.web3'
     },
     children: [
       {
-        name: 'web3-intent-solver',
-        path: '/web3/intent-solver',
-        component: 'view.web3-intent-solver',
+        name: 'web3_definews',
+        path: '/web3/definews',
+        component: 'view.web3_definews',
         meta: {
-          title: 'Intent Solver',
-          i18nKey: 'route.web3-intent-solver'
-        }
-      },
-      {
-        name: 'web3-ai-market-prediction',
-        path: '/web3/ai-market-prediction',
-        component: 'view.web3-ai-market-prediction',
-        meta: {
-          title: 'AI Market Prediction',
-          i18nKey: 'route.web3-ai-market-prediction'
+          title: 'web3_definews',
+          i18nKey: 'route.web3_definews'
         }
       }
     ]

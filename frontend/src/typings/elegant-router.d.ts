@@ -34,6 +34,7 @@ declare module "@elegant-router/types" {
     "manage_user": "/manage/user";
     "manage_user-detail": "/manage/user-detail/:id";
     "web3": "/web3";
+    "web3_definews": "/web3/definews";
   };
 
   /**
@@ -106,6 +107,7 @@ declare module "@elegant-router/types" {
     | "manage_role"
     | "manage_user-detail"
     | "manage_user"
+    | "web3_definews"
     | "web3"
   >;
 

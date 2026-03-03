@@ -179,7 +179,8 @@ const routeMap: RouteMap = {
   "manage_role": "/manage/role",
   "manage_user": "/manage/user",
   "manage_user-detail": "/manage/user-detail/:id",
-  "web3": "/web3"
+  "web3": "/web3",
+  "web3_definews": "/web3/definews"
 };
 
 /**
