@@ -83,6 +83,8 @@ import { LiquidationScannerController } from './liquidation-scanner.controller';
 import { LiquidationScannerService } from './liquidation-scanner.service';
 import { Web3TransactionAnalyticsController } from './web3-transaction-analytics.controller';
 import { PortfolioHistoryController } from './portfolio-history.controller';
+import { TreasuryAnalyticsController } from './treasury-analytics.controller';
+import { TreasuryAnalyticsService } from './treasury-analytics.service';
 
 @Module({
   imports: [HttpModule],
@@ -139,8 +141,9 @@ import { PortfolioHistoryController } from './portfolio-history.controller';
     LiquidationScannerController,
     Web3TransactionAnalyticsController,
     PortfolioHistoryController,
+    TreasuryAnalyticsController,
   ],
-  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService,  DefiYieldCompareService, TokenInflationService, LiquidationScannerService,
+  providers: [Web3PriceAlertService, Web3GasService, Web3HealthService, Web3AnalyticsService, Web3ContractService, Web3LaunchService, Web3GasOptimizerService, Web3EnsService, TokenPriceService, DataVizService, Web3RugpullService, WhaleTrackerService, AirdropTrackerService, DefiPortfolioService, FearGreedService, FlashloanDetectorService, TokenVestingService, AddressInteractionService, DappBrowserService, DexAggregatorService, FundFlowAnalyzerService, NftPortfolioService, DefiTvlService, AddressLabelService, TaxReportService, LiquidityPoolService, MevProtectService, PortfolioExportService,  DefiYieldCompareService, TokenInflationService, LiquidationScannerService, TreasuryAnalyticsService,
   ],
 })
 export class Web3PortfolioModule {}

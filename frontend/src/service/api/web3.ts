@@ -4799,5 +4799,75 @@ export const multisigTxBuilder = {
         params: { chain }
       });
     }
+  },
+
+  // Treasury Analytics APIs
+  treasury: {
+    // Get treasury overview for a DAO
+    getTreasuryOverview: (dao: string) => {
+      return request({
+        url: `/api/web3/treasury-analytics/overview/${dao}`,
+        method: 'get'
+      });
+    },
+
+    // Get all treasuries comparison
+    getAllTreasuries: () => {
+      return request({
+        url: '/api/web3/treasury-analytics/list',
+        method: 'get'
+      });
+    },
+
+    // Get treasury history
+    getTreasuryHistory: (dao: string, days: number = 30) => {
+      return request({
+        url: `/api/web3/treasury-analytics/history/${dao}`,
+        method: 'get',
+        params: { days }
+      });
+    },
+
+    // Get treasury flows
+    getTreasuryFlows: (dao: string, days: number = 7) => {
+      return request({
+        url: `/api/web3/treasury-analytics/flows/${dao}`,
+        method: 'get',
+        params: { days }
+      });
+    },
+
+    // Get asset allocation
+    getAssetAllocation: (dao: string) => {
+      return request({
+        url: `/api/web3/treasury-analytics/allocation/${dao}`,
+        method: 'get'
+      });
+    },
+
+    // Compare treasuries
+    compareTreasuries: (daos: string[]) => {
+      return request({
+        url: '/api/web3/treasury-analytics/compare',
+        method: 'get',
+        params: { daos: daos.join(',') }
+      });
+    },
+
+    // Get treasury alerts
+    getTreasuryAlerts: (dao: string) => {
+      return request({
+        url: `/api/web3/treasury-analytics/alerts/${dao}`,
+        method: 'get'
+      });
+    },
+
+    // Get supported DAOs
+    getSupportedDaos: () => {
+      return request({
+        url: '/api/web3/treasury-analytics/supported-daos',
+        method: 'get'
+      });
+    }
   }
 };
