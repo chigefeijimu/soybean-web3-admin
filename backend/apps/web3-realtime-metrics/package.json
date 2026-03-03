@@ -1,0 +1,16 @@
+{
+  "name": "web3-realtime-metrics",
+  "version": "1.0.0",
+  "description": "Real-time On-chain Metrics WebSocket API",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "node --watch src/main.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5"
+  }
+}

@@ -158,6 +158,7 @@ import DefiDashboard from '@/views/web3/DefiDashboard.vue';
 import ContractSecurityAudit from '@/components/web3/ContractSecurityAudit.vue';
 import MultisigTxBuilder from '@/views/web3/MultisigTxBuilder.vue';
 import DefiAutoCompound from '@/views/web3/DefiAutoCompound.vue';
+import ContractVerifier from '@/views/web3/ContractVerifier.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -264,6 +265,7 @@ const tabs = [
   { id: 'token-economics', label: 'Token Economics', icon: '📊' },
   { id: 'defi-tvl', label: 'DeFi TVL', icon: '📊' },
   { id: 'contract-audit', label: 'Contract Audit', icon: '🔍' },
+  { id: 'contract-verifier', label: 'Contract Verifier', icon: '📜' },
   { id: 'token-transfer', label: 'Transfer', icon: '🔄' },
   { id: 'address-label', label: 'Address Label', icon: '🏷️' },
   { id: 'nft-collection', label: 'NFT Tracker', icon: '🎨' },
@@ -996,6 +998,11 @@ onMounted(() => {
         <!-- Contract Security Audit Tab -->
         <div v-show="activeTab === 'contract-audit'">
           <ContractSecurityAudit />
+        </div>
+
+        <!-- Contract Verifier Tab -->
+        <div v-show="activeTab === 'contract-verifier'">
+          <ContractVerifier />
         </div>
 
         <!-- Token Transfer Analyzer Tab -->
