@@ -1,0 +1,26 @@
+{
+  "name": "web3-defi-roi-calculator",
+  "version": "1.0.0",
+  "description": "DeFi ROI Calculator - Calculate returns for staking, lending, liquidity provision, and impermanent loss",
+  "private": true,
+  "scripts": {
+    "build": "nest build web3-defi-roi-calculator",
+    "start": "nest start web3-defi-roi-calculator",
+    "start:dev": "nest start web3-defi-roi-calculator --watch",
+    "start:prod": "node dist/apps/web3-defi-roi-calculator/src/main.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.1.3",
+    "@nestjs/core": "11.1.3",
+    "@nestjs/platform-fastify": "11.1.3",
+    "@nestjs/swagger": "8.0.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "11.0.0",
+    "@nestjs/schematics": "11.0.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.2"
+  }
+}

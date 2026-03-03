@@ -161,6 +161,7 @@ import DefiAutoCompound from '@/views/web3/DefiAutoCompound.vue';
 import ContractVerifier from '@/views/web3/ContractVerifier.vue';
 import NftWashTradeDetector from '@/components/web3/NftWashTradeDetector.vue';
 import SocialGraph from './SocialGraph.vue';
+import DefiRoiCalculator from './DefiRoiCalculator.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -331,6 +332,7 @@ const tabs = [
   { id: 'smart-account', label: 'Smart Account', icon: '🔐' },
   { id: 'defi-dashboard', label: 'DeFi Dashboard', icon: '📊' },
   { id: 'multisig-tx', label: 'Multi-sig', icon: '🔐' },
+  { id: 'defi-roi', label: 'ROI Calculator', icon: '🧮' },
 ];
 
 // Supported networks with logos
@@ -1305,6 +1307,11 @@ onMounted(() => {
         <!-- Multi-sig Transaction Builder Tab -->
         <div v-show="activeTab === 'multisig-tx'">
           <MultisigTxBuilder />
+        </div>
+
+        <!-- DeFi ROI Calculator Tab -->
+        <div v-show="activeTab === 'defi-roi'">
+          <DefiRoiCalculator />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
