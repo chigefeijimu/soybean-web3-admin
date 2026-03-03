@@ -100,6 +100,7 @@ declare module 'vue' {
     IconMdiKeyboardReturn: typeof import('~icons/mdi/keyboard-return')['default']
     IconMdiRefresh: typeof import('~icons/mdi/refresh')['default']
     IconUilSearch: typeof import('~icons/uil/search')['default']
+    IdentityReputation: typeof import('./../components/web3/IdentityReputation/index.vue')['default']
     IpfsUpload: typeof import('./../components/web3/IpfsUpload.vue')['default']
     LangSwitch: typeof import('./../components/common/lang-switch.vue')['default']
     LiquidationAlert: typeof import('./../components/web3/LiquidationAlert.vue')['default']

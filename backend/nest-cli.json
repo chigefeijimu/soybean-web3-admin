@@ -236,6 +236,15 @@
         ],
         "watchAssets": true
       }
+    },
+    "web3-portfolio-insights": {
+      "type": "application",
+      "root": "apps/web3-portfolio-insights",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-portfolio-insights/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-portfolio-insights/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
