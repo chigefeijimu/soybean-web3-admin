@@ -152,6 +152,7 @@ import SmartAccountTracker from '@/views/web3/SmartAccountTracker.vue';
 import PortfolioHealth from '@/views/web3/PortfolioHealth.vue';
 import CrossChainPrice from '@/components/web3/CrossChainPrice.vue';
 import DefiGasEstimator from '@/components/web3/DefiGasEstimator.vue';
+import DefiDashboard from '@/views/web3/DefiDashboard.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -313,6 +314,7 @@ const tabs = [
   { id: 'tx-analytics', label: 'Tx Analytics', icon: '📈' },
   { id: 'defi-gas-estimator', label: 'Gas Estimator', icon: '⛽' },
   { id: 'smart-account', label: 'Smart Account', icon: '🔐' },
+  { id: 'defi-dashboard', label: 'DeFi Dashboard', icon: '📊' },
 ];
 
 // Supported networks with logos
@@ -1243,6 +1245,11 @@ onMounted(() => {
         <!-- Smart Account Tracker Tab -->
         <div v-show="activeTab === 'smart-account'">
           <SmartAccountTracker />
+        </div>
+
+        <!-- DeFi Dashboard Tab -->
+        <div v-show="activeTab === 'defi-dashboard'">
+          <DefiDashboard />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
