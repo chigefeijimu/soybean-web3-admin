@@ -1,0 +1,21 @@
+{
+  "name": "web3-token-launch-scanner",
+  "version": "1.0.0",
+  "description": "Token Launch Scanner - Monitor new token launches on DEX",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "nest start web3-token-launch-scanner --watch",
+    "build": "nest build web3-token-launch-scanner"
+  },
+  "dependencies": {
+    "@nestjs/axios": "^3.0.0",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}

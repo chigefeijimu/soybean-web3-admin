@@ -23,6 +23,7 @@ import { CrossChainRebalancerModule } from './web3/cross-chain-rebalancer/cross-
 import { DefiStrategyBuilderModule } from './web3/defi-strategy-builder.module';
 import { TokenSentimentApiModule } from './web3/token-sentiment-api.module';
 import { TxSimulatorModule } from './web3/tx-simulator.module';
+import { TokenLaunchScannerModule } from './web3/token-launch-scanner/token-launch-scanner.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -36,6 +37,7 @@ import { DefiStrategyBuilderController } from './web3/defi-strategy-builder.cont
 import { TokenSentimentController } from './web3/token-sentiment.controller';
 import { TxSimulatorController } from './web3/tx-simulator.controller';
 import { NftCollectionAnalyticsController } from './web3/nft-collection-analytics.controller';
+import { TokenLaunchScannerController } from './web3/token-launch-scanner/token-launch-scanner.controller';
 
 @Module({
   imports: [
@@ -62,6 +64,7 @@ import { NftCollectionAnalyticsController } from './web3/nft-collection-analytic
     DefiStrategyBuilderModule,
     TokenSentimentApiModule,
     TxSimulatorModule,
+    TokenLaunchScannerModule,
   ],
   controllers: [
     ...IamRest,
@@ -76,6 +79,7 @@ import { NftCollectionAnalyticsController } from './web3/nft-collection-analytic
     TokenSentimentController,
     TxSimulatorController,
     NftCollectionAnalyticsController,
+    TokenLaunchScannerController,
   ],
 })
 export class ApiModule {}
