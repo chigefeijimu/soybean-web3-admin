@@ -42,6 +42,8 @@ import { GovernanceExplorerController } from './api/web3/governance-explorer.con
 import { GovernanceExplorerService } from './api/web3/governance-explorer.service';
 import { YieldFarmingController } from './api/web3/yield-farming.controller';
 import { YieldFarmingService } from './api/web3/yield-farming.service';
+import { OnchainDataQueryController } from './api/web3/onchain-data-query/onchain-data-query.controller';
+import { OnchainDataQueryService } from './api/web3/onchain-data-query/onchain-data-query.service';
 
 const strategies = [JwtStrategy];
 
@@ -167,13 +169,14 @@ class ThrottlerStorageAdapter implements ThrottlerStorage {
     ApiKeyModule,
     BootstrapModule,
   ],
-  controllers: [AppController, MevExplorerController, VotingTrackerController, OptionsTrackerController, GovernanceExplorerController, YieldFarmingController],
+  controllers: [AppController, MevExplorerController, VotingTrackerController, OptionsTrackerController, GovernanceExplorerController, YieldFarmingController, OnchainDataQueryController],
   providers: [
     AppService,
     MevExplorerService,
     OptionsTrackerService,
     GovernanceExplorerService,
     YieldFarmingService,
+    OnchainDataQueryService,
 
     ...strategies,
 

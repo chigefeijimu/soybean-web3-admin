@@ -317,6 +317,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-defi-revenue-tracker/tsconfig.app.json"
       }
+    },
+    "web3-onchain-data-query": {
+      "type": "application",
+      "root": "apps/web3-onchain-data-query",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-onchain-data-query/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-onchain-data-query/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
