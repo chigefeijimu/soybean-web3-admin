@@ -170,6 +170,7 @@ import DefiRewardsClaimer from './DefiRewardsClaimer.vue';
 import DaoDelegateLeaderboard from './DaoDelegateLeaderboard.vue';
 import DaoDelegation from './DaoDelegation.vue';
 import IdentityAggregator from './IdentityAggregator.vue';
+import GovernanceVotingSimulator from './GovernanceVotingSimulator.vue';
 import PortfolioBackup from './PortfolioBackup.vue';
 import PortfolioInsights from './PortfolioInsights.vue';
 import WalletReputation from './WalletReputation.vue';
@@ -365,6 +366,7 @@ const tabs = [
   { id: 'defi-user-analytics', label: 'User Analytics', icon: '📊' },
   { id: 'dex-trading-journal', label: 'Trading Journal', icon: '📝' },
   { id: 'identity-aggregator', label: 'Identity', icon: '🌐' },
+  { id: 'governance-voting-simulator', label: 'Voting Simulator', icon: '🎯' },
 ];
 
 // Supported networks with logos
@@ -1399,6 +1401,11 @@ onMounted(() => {
         <!-- Identity Aggregator Tab -->
         <div v-show="activeTab === 'identity-aggregator'">
           <IdentityAggregator />
+        </div>
+
+        <!-- Governance Voting Simulator Tab -->
+        <div v-show="activeTab === 'governance-voting-simulator'">
+          <GovernanceVotingSimulator />
         </div>
 
         <!-- AI Portfolio Advisor Tab -->
