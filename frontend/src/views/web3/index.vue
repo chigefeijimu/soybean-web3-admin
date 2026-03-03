@@ -166,6 +166,15 @@ import DefiRoiCalculator from './DefiRoiCalculator.vue';
 import NetWorthTracker from '@/components/web3/NetWorthTracker/index.vue';
 import DefiRewardsClaimer from './DefiRewardsClaimer.vue';
 import DaoDelegateLeaderboard from './DaoDelegateLeaderboard.vue';
+import DaoDelegation from './DaoDelegation.vue';
+import PortfolioBackup from './PortfolioBackup.vue';
+import PortfolioInsights from './PortfolioInsights.vue';
+import WalletReputation from './WalletReputation.vue';
+import IntentSolver from './IntentSolver.vue';
+import StrategyBacktesterPro from './StrategyBacktesterPro.vue';
+import TokenLaunchScanner from './TokenLaunchScanner.vue';
+import GasOptimizerView from './GasOptimizer.vue';
+import AiPortfolioAdvisor from './AiPortfolioAdvisor.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -341,6 +350,7 @@ const tabs = [
   { id: 'net-worth', label: 'Net Worth', icon: '💰' },
   { id: 'defi-rewards-claimer', label: 'Rewards Claimer', icon: '🎯' },
   { id: 'delegate-leaderboard', label: 'Delegate Leaderboard', icon: '🏆' },
+  { id: 'portfolio-advisor', label: 'AI Advisor', icon: '🤖' },
 ];
 
 // Supported networks with logos
@@ -668,7 +678,7 @@ onMounted(() => {
 
         <!-- Gas Optimizer Tab -->
         <div v-show="activeTab === 'gas-optimizer'">
-          <GasOptimizer />
+          <GasOptimizerView />
         </div>
 
         <!-- MEV Tab -->
@@ -1340,6 +1350,11 @@ onMounted(() => {
         <!-- Delegate Leaderboard Tab -->
         <div v-show="activeTab === 'delegate-leaderboard'">
           <DaoDelegateLeaderboard />
+        </div>
+
+        <!-- AI Portfolio Advisor Tab -->
+        <div v-show="activeTab === 'portfolio-advisor'">
+          <AiPortfolioAdvisor />
         </div>
 
         <!-- NFT Collection Tracker Tab -->

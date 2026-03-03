@@ -175,12 +175,30 @@ export const generatedRoutes: GeneratedRoute[] = [
     },
     children: [
       {
+        name: 'web3_cross-chain-gas-station',
+        path: '/web3/cross-chain-gas-station',
+        component: 'view.web3_cross-chain-gas-station',
+        meta: {
+          title: 'web3_cross-chain-gas-station',
+          i18nKey: 'route.web3_cross-chain-gas-station'
+        }
+      },
+      {
         name: 'web3_definews',
         path: '/web3/definews',
         component: 'view.web3_definews',
         meta: {
           title: 'web3_definews',
           i18nKey: 'route.web3_definews'
+        }
+      },
+      {
+        name: 'web3_domainservice',
+        path: '/web3/domainservice',
+        component: 'view.web3_domainservice',
+        meta: {
+          title: 'web3_domainservice',
+          i18nKey: 'route.web3_domainservice'
         }
       }
     ]

@@ -105,4 +105,98 @@ export class Web3EnsController {
   ) {
     return this.ensService.getPopularEns(limit);
   }
+
+  // ============== Web3 Domain Service - Multi-chain Support ==============
+
+  @Get('domain/query')
+  @ApiOperation({ summary: '查询Web3域名 - 支持ENS/Space ID/UNS/Solana' })
+  async queryDomain(
+    @Query('domain') domain: string,
+    @Query('chainId') chainId: number = 1,
+  ) {
+    if (!domain) {
+      throw new Error('Domain name is required');
+    }
+    return this.ensService.queryDomain(domain, chainId);
+  }
+
+  @Get('domain/spaceid')
+  @ApiOperation({ summary: '查询Space ID域名' })
+  async querySpaceID(
+    @Query('domain') domain: string,
+    @Query('chainId') chainId: number = 56,
+  ) {
+    if (!domain) {
+      throw new Error('Space ID domain is required');
+    }
+    return this.ensService.querySpaceID(domain, chainId);
+  }
+
+  @Get('domain/uns')
+  @ApiOperation({ summary: '查询Unstoppable Domains域名' })
+  async queryUNS(
+    @Query('domain') domain: string,
+    @Query('chainId') chainId: number = 1,
+  ) {
+    if (!domain) {
+      throw new Error('UNS domain is required');
+    }
+    return this.ensService.queryUNS(domain, chainId);
+  }
+
+  @Get('domain/solana')
+  @ApiOperation({ summary: '查询Solana域名' })
+  async querySolanaDomain(
+    @Query('domain') domain: string,
+  ) {
+    if (!domain) {
+      throw new Error('Solana domain is required');
+    }
+    return this.ensService.querySolanaDomain(domain);
+  }
+
+  @Get('domain/type')
+  @ApiOperation({ summary: '检测域名类型' })
+  async getDomainType(
+    @Query('domain') domain: string,
+  ) {
+    if (!domain) {
+      throw new Error('Domain is required');
+    }
+    return {
+      domain,
+      type: this.ensService.detectDomainType(domain),
+    };
+  }
+
+  @Get('domain/availability')
+  @ApiOperation({ summary: '检查域名可用性' })
+  async checkAvailability(
+    @Query('domain') domain: string,
+    @Query('type') type: string = 'ENS',
+  ) {
+    if (!domain) {
+      throw new Error('Domain is required');
+    }
+    return this.ensService.checkDomainAvailability(domain, type as any);
+  }
+
+  @Get('domain/price')
+  @ApiOperation({ summary: '查询域名价格' })
+  async getDomainPrice(
+    @Query('domain') domain: string,
+    @Query('type') type: string = 'ENS',
+    @Query('years') years: number = 1,
+  ) {
+    if (!domain) {
+      throw new Error('Domain is required');
+    }
+    return this.ensService.getDomainPrice(domain, type as any, years);
+  }
+
+  @Get('domain/stats')
+  @ApiOperation({ summary: '获取域名统计' })
+  async getDomainStats() {
+    return this.ensService.getDomainStats();
+  }
 }

@@ -290,6 +290,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-dao-delegate-leaderboard/tsconfig.app.json"
       }
+    },
+    "web3-ai-portfolio-advisor": {
+      "type": "application",
+      "root": "apps/web3-ai-portfolio-advisor",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-ai-portfolio-advisor/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-ai-portfolio-advisor/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

@@ -30,5 +30,7 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   "manage_user-detail": () => import("@/views/manage/user-detail/[id].vue"),
   manage_user: () => import("@/views/manage/user/index.vue"),
   web3_definews: () => import("@/views/web3/DefiNews/index.vue"),
+  web3_domainservice: () => import("@/views/web3/DomainService/index.vue"),
+  "web3_cross-chain-gas-station": () => import("@/views/web3/cross-chain-gas-station/index.vue"),
   web3: () => import("@/views/web3/index.vue"),
 };

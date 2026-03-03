@@ -180,7 +180,9 @@ const routeMap: RouteMap = {
   "manage_user": "/manage/user",
   "manage_user-detail": "/manage/user-detail/:id",
   "web3": "/web3",
-  "web3_definews": "/web3/definews"
+  "web3_cross-chain-gas-station": "/web3/cross-chain-gas-station",
+  "web3_definews": "/web3/definews",
+  "web3_domainservice": "/web3/domainservice"
 };
 
 /**
