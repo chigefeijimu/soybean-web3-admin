@@ -29,6 +29,8 @@ import { DefiRiskCalculatorModule } from './web3/defi-risk-calculator.module';
 import { ContractSecurityAuditModule } from './web3/contract-security-audit.module';
 import { DefiTvlHistoryModule } from './web3-defi-tvl-history/defi-tvl-history.module';
 import { DefiTvlHistoryController } from './web3-defi-tvl-history/defi-tvl-history.controller';
+import { DefiMarketOverviewModule } from './web3-defi-market-overview/defi-market-overview.module';
+import { DefiMarketOverviewController } from './web3-defi-market-overview/defi-market-overview.controller';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -76,6 +78,7 @@ import { ContractSecurityAuditController } from './web3/contract-security-audit.
     DefiRiskCalculatorModule,
     ContractSecurityAuditModule,
     DefiTvlHistoryModule,
+    DefiMarketOverviewModule,
   ],
   controllers: [
     ...IamRest,
@@ -94,6 +97,7 @@ import { ContractSecurityAuditController } from './web3/contract-security-audit.
     DefiRiskCalculatorController,
     ContractSecurityAuditController,
     DefiTvlHistoryController,
+    DefiMarketOverviewController,
   ],
 })
 export class ApiModule {}
