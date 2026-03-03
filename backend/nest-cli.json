@@ -400,6 +400,14 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-multisig-health-monitor/tsconfig.app.json"
       }
+    },
+    "web3-activity-feed": {
+      "root": "apps/web3-activity-feed",
+      "sourceRoot": "apps/web3-activity-feed/src",
+      "entryFile": "main",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-activity-feed/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

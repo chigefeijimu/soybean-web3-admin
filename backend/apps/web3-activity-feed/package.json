@@ -1,0 +1,24 @@
+{
+  "name": "@soya/web3-activity-feed",
+  "version": "1.0.0",
+  "description": "Cross-chain Wallet Activity Feed API - Unified activity feed across multiple chains",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "nest start web3-activity-feed",
+    "start:dev": "nest start web3-activity-feed --watch",
+    "build": "nest build web3-activity-feed"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/platform-express": "^10.3.0",
+    "@nestjs/schedule": "^4.0.0",
+    "reflect-metadata": "^0.2.1",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.3.0",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  }
+}
