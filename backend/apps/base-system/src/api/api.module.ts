@@ -47,6 +47,8 @@ import { NftCollectionAnalyticsController } from './web3/nft-collection-analytic
 import { TokenLaunchScannerController } from './web3/token-launch-scanner/token-launch-scanner.controller';
 import { DefiRiskCalculatorController } from './web3/defi-risk-calculator.controller';
 import { ContractSecurityAuditController } from './web3/contract-security-audit.controller';
+import { AiMarketPredictionModule } from './web3/ai-market-prediction.module';
+import { AiMarketPredictionController } from './web3/ai-market-prediction.controller';
 
 @Module({
   imports: [
@@ -79,6 +81,7 @@ import { ContractSecurityAuditController } from './web3/contract-security-audit.
     ContractSecurityAuditModule,
     DefiTvlHistoryModule,
     DefiMarketOverviewModule,
+    AiMarketPredictionModule,
   ],
   controllers: [
     ...IamRest,
@@ -98,6 +101,7 @@ import { ContractSecurityAuditController } from './web3/contract-security-audit.
     ContractSecurityAuditController,
     DefiTvlHistoryController,
     DefiMarketOverviewController,
+    AiMarketPredictionController,
   ],
 })
 export class ApiModule {}

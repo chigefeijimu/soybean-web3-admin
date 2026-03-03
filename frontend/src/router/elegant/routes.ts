@@ -173,6 +173,15 @@ export const generatedRoutes: GeneratedRoute[] = [
           title: 'Intent Solver',
           i18nKey: 'route.web3-intent-solver'
         }
+      },
+      {
+        name: 'web3-ai-market-prediction',
+        path: '/web3/ai-market-prediction',
+        component: 'view.web3-ai-market-prediction',
+        meta: {
+          title: 'AI Market Prediction',
+          i18nKey: 'route.web3-ai-market-prediction'
+        }
       }
     ]
   }
