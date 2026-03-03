@@ -18,6 +18,7 @@ import { DefiPositionManagerModule } from './web3/defi-position-manager.module';
 import { TokenCorrelationModule } from './web3/token-correlation.module';
 import { Web3DefiAnalyticsModule } from './web3/web3-defi-analytics.module';
 import { CrossChainPriceApiModule } from './web3/cross-chain-price-api.module';
+import { EventMonitorModule } from './web3/event-monitor/event-monitor.module';
 
 import { Controllers as AccessKeyRest } from './access-key/rest';
 import { Controllers as EndpointRest } from './endpoint/rest';
@@ -25,6 +26,7 @@ import { Controllers as IamRest } from './iam/rest';
 import { Controllers as LoginLogRest } from './log-audit/login-log/rest';
 import { Controllers as OperationLogRest } from './log-audit/operation-log/rest';
 import { Web3DefiAnalyticsController } from './web3/web3-defi-analytics.controller';
+import { EventMonitorController } from './web3/event-monitor/event-monitor.controller';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import { Web3DefiAnalyticsController } from './web3/web3-defi-analytics.controll
     DefiPositionManagerModule,
     TokenCorrelationModule,
     CrossChainPriceApiModule,
+    EventMonitorModule,
     Web3DefiAnalyticsModule,
   ],
   controllers: [
@@ -54,6 +57,7 @@ import { Web3DefiAnalyticsController } from './web3/web3-defi-analytics.controll
     ...OperationLogRest,
     ...AccessKeyRest,
     Web3DefiAnalyticsController,
+    EventMonitorController,
   ],
 })
 export class ApiModule {}
