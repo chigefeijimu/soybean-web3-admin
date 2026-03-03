@@ -4600,3 +4600,157 @@ export function activityPattern(address: string, chainId: number = 1, days: numb
     params: { address, chainId, days }
   });
 }
+
+/**
+ * Contract Security Audit API
+ */
+export const contractSecurityAuditApi = {
+  auditContract: (params: { address: string; chain: string }) => {
+    return request({
+      url: '/api/web3/contract-security-audit/audit',
+      method: 'post',
+      data: params
+    });
+  },
+  
+  batchAudit: (params: { addresses: string[]; chain: string }) => {
+    return request({
+      url: '/api/web3/contract-security-audit/batch-audit',
+      method: 'post',
+      data: params
+    });
+  },
+  
+  getAuditHistory: (address: string, chain: string) => {
+    return request({
+      url: '/api/web3/contract-security-audit/history',
+      method: 'get',
+      params: { address, chain }
+    });
+  },
+  
+  getVulnerabilityPatterns: (category?: string) => {
+    return request({
+      url: '/api/web3/contract-security-audit/vulnerabilities',
+      method: 'get',
+      params: { category }
+    });
+  },
+  
+  getCommonIssues: (chain: string) => {
+    return request({
+      url: `/api/web3/contract-security-audit/common-issues/${chain}`,
+      method: 'get'
+    });
+  }
+};
+
+/** Multisig Transaction Builder API */
+export const multisigTxBuilder = {
+  // Create a new multisig wallet
+  createWallet: (params: {
+    name: string;
+    threshold: number;
+    owners: string[];
+  }) => {
+    return request({
+      url: '/api/web3/multisig-tx-builder/wallets',
+      method: 'post',
+      data: params
+    });
+  },
+
+  // Get all wallets
+  listWallets: () => {
+    return request({
+      url: '/api/web3/multisig-tx-builder/wallets',
+      method: 'get'
+    });
+  },
+
+  // Get wallet by address
+  getWallet: (address: string) => {
+    return request({
+      url: `/api/web3/multisig-tx-builder/wallets/${address}`,
+      method: 'get'
+    });
+  },
+
+  // Create a new transaction
+  createTransaction: (params: {
+    walletAddress: string;
+    to: string;
+    value?: string;
+    data?: string;
+    nonce?: number;
+  }) => {
+    return request({
+      url: '/api/web3/multisig-tx-builder/transactions',
+      method: 'post',
+      data: params
+    });
+  },
+
+  // Get transactions for a wallet
+  getTransactions: (params: {
+    walletAddress: string;
+    status?: 'pending' | 'executed';
+    limit?: number;
+  }) => {
+    return request({
+      url: '/api/web3/multisig-tx-builder/transactions',
+      method: 'get',
+      params
+    });
+  },
+
+  // Get single transaction
+  getTransaction: (txHash: string) => {
+    return request({
+      url: `/api/web3/multisig-tx-builder/transactions/${txHash}`,
+      method: 'get'
+    });
+  },
+
+  // Sign a transaction
+  signTransaction: (params: {
+    txHash: string;
+    signerAddress: string;
+    signature: string;
+  }) => {
+    return request({
+      url: '/api/web3/multisig-tx-builder/transactions/sign',
+      method: 'post',
+      data: params
+    });
+  },
+
+  // Execute a transaction
+  executeTransaction: (params: {
+    txHash: string;
+    executorAddress: string;
+  }) => {
+    return request({
+      url: '/api/web3/multisig-tx-builder/transactions/execute',
+      method: 'post',
+      data: params
+    });
+  },
+
+  // Simulate execution
+  simulateExecution: (txHash: string) => {
+    return request({
+      url: `/api/web3/multisig-tx-builder/transactions/${txHash}/simulate`,
+      method: 'post'
+    });
+  },
+
+  // Get on-chain multisig info
+  getOnChainInfo: (address: string, chain?: string) => {
+    return request({
+      url: `/api/web3/multisig-tx-builder/onchain/${address}`,
+      method: 'get',
+      params: { chain }
+    });
+  }
+};

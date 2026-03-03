@@ -25,6 +25,7 @@ declare module 'vue' {
     ContractCall: typeof import('./../components/web3/ContractCall.vue')['default']
     ContractDeployer: typeof import('./../components/web3/ContractDeployer.vue')['default']
     ContractMethodSelector: typeof import('./../components/web3/ContractMethodSelector.vue')['default']
+    ContractSecurityAudit: typeof import('./../components/web3/ContractSecurityAudit.vue')['default']
     ContractStorageViewer: typeof import('./../components/web3/ContractStorageViewer.vue')['default']
     CountTo: typeof import('./../components/custom/count-to.vue')['default']
     CrossChainBalance: typeof import('./../components/web3/CrossChainBalance.vue')['default']

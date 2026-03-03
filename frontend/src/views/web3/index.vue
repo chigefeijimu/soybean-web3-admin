@@ -154,6 +154,8 @@ import PortfolioHealth from '@/views/web3/PortfolioHealth.vue';
 import CrossChainPrice from '@/components/web3/CrossChainPrice.vue';
 import DefiGasEstimator from '@/components/web3/DefiGasEstimator.vue';
 import DefiDashboard from '@/views/web3/DefiDashboard.vue';
+import ContractSecurityAudit from '@/components/web3/ContractSecurityAudit.vue';
+import MultisigTxBuilder from '@/views/web3/MultisigTxBuilder.vue';
 
 const { isConnected, account, chainId, balance, chainInfo, connectWallet, switchChain, CHAIN_INFO } = useWeb3();
 
@@ -258,6 +260,7 @@ const tabs = [
   { id: 'approval-revoker', label: 'Approval Revoker', icon: '🔐' },
   { id: 'token-economics', label: 'Token Economics', icon: '📊' },
   { id: 'defi-tvl', label: 'DeFi TVL', icon: '📊' },
+  { id: 'contract-audit', label: 'Contract Audit', icon: '🔍' },
   { id: 'token-transfer', label: 'Transfer', icon: '🔄' },
   { id: 'address-label', label: 'Address Label', icon: '🏷️' },
   { id: 'nft-collection', label: 'NFT Tracker', icon: '🎨' },
@@ -317,6 +320,7 @@ const tabs = [
   { id: 'defi-gas-estimator', label: 'Gas Estimator', icon: '⛽' },
   { id: 'smart-account', label: 'Smart Account', icon: '🔐' },
   { id: 'defi-dashboard', label: 'DeFi Dashboard', icon: '📊' },
+  { id: 'multisig-tx', label: 'Multi-sig', icon: '🔐' },
 ];
 
 // Supported networks with logos
@@ -981,6 +985,11 @@ onMounted(() => {
           <DefiTvlTracker />
         </div>
 
+        <!-- Contract Security Audit Tab -->
+        <div v-show="activeTab === 'contract-audit'">
+          <ContractSecurityAudit />
+        </div>
+
         <!-- Token Transfer Analyzer Tab -->
         <div v-show="activeTab === 'token-transfer'">
           <TokenTransferAnalyzer />
@@ -1257,6 +1266,11 @@ onMounted(() => {
         <!-- DeFi Dashboard Tab -->
         <div v-show="activeTab === 'defi-dashboard'">
           <DefiDashboard />
+        </div>
+
+        <!-- Multi-sig Transaction Builder Tab -->
+        <div v-show="activeTab === 'multisig-tx'">
+          <MultisigTxBuilder />
         </div>
 
         <!-- NFT Collection Tracker Tab -->
