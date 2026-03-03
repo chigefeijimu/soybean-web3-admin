@@ -344,6 +344,12 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-nft-bridge-api/tsconfig.json"
       }
+    },
+    "web3-yield-farming-optimizer": {
+      "type": "application",
+      "root": "apps/web3-yield-farming-optimizer",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-yield-farming-optimizer/src"
     }
   },
   "monorepo": true,

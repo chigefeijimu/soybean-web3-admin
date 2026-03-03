@@ -142,6 +142,7 @@ import TokenHistoryApi from '@/components/web3/TokenHistoryApi/index.vue';
 import TxTimeline from '@/components/web3/TxTimeline.vue';
 import GovernancePowerTracker from '@/components/web3/GovernancePowerTracker.vue';
 import YieldAggregator from '@/components/web3/YieldAggregator/index.vue';
+import YieldFarmingOptimizer from '@/views/web3/YieldFarmingOptimizer.vue';
 import ValidatorTracker from '@/components/web3/ValidatorTracker.vue';
 import NftPortfolioTracker from '@/components/web3/NftPortfolioTracker.vue';
 import LiquidationScanner from '@/views/web3/LiquidationScanner.vue';
@@ -301,6 +302,7 @@ const tabs = [
   { id: 'gas-prediction', label: 'Gas Predict', icon: '🔮' },
   { id: 'tx-accelerator', label: 'Tx Accelerator', icon: '🚀' },
   { id: 'yield-farming', label: 'Yield Farming', icon: '🌾' },
+  { id: 'yield-farming-optimizer', label: 'Yield Optimizer', icon: '🎯' },
   { id: 'defi-insurance', label: 'Insurance', icon: '🛡️' },
   { id: 'defi-alerts', label: 'Alerts', icon: '🚨' },
   { id: 'tx-bundle', label: 'Tx Bundle', icon: '📦' },
@@ -1098,6 +1100,11 @@ onMounted(() => {
         <!-- Yield Farming Dashboard Tab -->
         <div v-show="activeTab === 'yield-farming'">
           <YieldFarmingDashboard />
+        </div>
+
+        <!-- Yield Farming Optimizer Tab -->
+        <div v-show="activeTab === 'yield-farming-optimizer'">
+          <YieldFarmingOptimizer />
         </div>
 
         <!-- DeFi Insurance Tab -->
