@@ -54,16 +54,6 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
-    name: 'web3_staking-rewards-tracker',
-    path: '/staking-rewards-tracker',
-    component: 'layout.base$view.web3_staking-rewards-tracker',
-    meta: {
-      title: 'Staking Rewards Tracker',
-      i18nKey: 'route.staking-rewards-tracker',
-      icon: '⛓️'
-    }
-  },
-  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',

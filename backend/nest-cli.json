@@ -359,6 +359,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-address-clustering/tsconfig.json"
       }
+    },
+    "web3-liquidity-heatmap": {
+      "type": "application",
+      "root": "apps/web3-liquidity-heatmap",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-liquidity-heatmap/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-liquidity-heatmap/tsconfig.json"
+      }
     }
   },
   "monorepo": true,
