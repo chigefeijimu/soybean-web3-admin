@@ -169,6 +169,7 @@ import NetWorthTracker from '@/components/web3/NetWorthTracker/index.vue';
 import DefiRewardsClaimer from './DefiRewardsClaimer.vue';
 import DaoDelegateLeaderboard from './DaoDelegateLeaderboard.vue';
 import DaoDelegation from './DaoDelegation.vue';
+import IdentityAggregator from './IdentityAggregator.vue';
 import PortfolioBackup from './PortfolioBackup.vue';
 import PortfolioInsights from './PortfolioInsights.vue';
 import WalletReputation from './WalletReputation.vue';
@@ -363,6 +364,7 @@ const tabs = [
   { id: 'defi-revenue', label: 'Revenue Tracker', icon: '💹' },
   { id: 'defi-user-analytics', label: 'User Analytics', icon: '📊' },
   { id: 'dex-trading-journal', label: 'Trading Journal', icon: '📝' },
+  { id: 'identity-aggregator', label: 'Identity', icon: '🌐' },
 ];
 
 // Supported networks with logos
@@ -1392,6 +1394,11 @@ onMounted(() => {
         <!-- DEX Trading Journal Tab -->
         <div v-show="activeTab === 'dex-trading-journal'">
           <DexTradingJournal />
+        </div>
+
+        <!-- Identity Aggregator Tab -->
+        <div v-show="activeTab === 'identity-aggregator'">
+          <IdentityAggregator />
         </div>
 
         <!-- AI Portfolio Advisor Tab -->
