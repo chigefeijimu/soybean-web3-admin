@@ -34,4 +34,5 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   "web3_cross-chain-gas-station": () => import("@/views/web3/cross-chain-gas-station/index.vue"),
   "web3_defi-integration-hub": () => import("@/views/web3/defi-integration-hub/index.vue"),
   web3: () => import("@/views/web3/index.vue"),
+  "web3_nft-floor-price-oracle": () => import("@/views/web3/nft-floor-price-oracle/index.vue"),
 };

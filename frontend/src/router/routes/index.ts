@@ -8,7 +8,18 @@ import { transformElegantRoutesToVueRoutes } from '../elegant/transform';
  *
  * @link https://github.com/soybeanjs/elegant-router?tab=readme-ov-file#custom-route
  */
-const customRoutes: CustomRoute[] = [];
+const customRoutes: CustomRoute[] = [
+  {
+    name: 'web3_nft-floor-price-oracle',
+    path: '/web3/nft-floor-price-oracle',
+    component: 'view.web3_nft-floor-price-oracle',
+    meta: {
+      title: 'NFT Floor Price Oracle',
+      i18nKey: 'route.web3_nft-floor-price-oracle',
+      icon: 'mdi:nft'
+    }
+  }
+];
 
 /** create routes when the auth route mode is static */
 export function createStaticRoutes() {

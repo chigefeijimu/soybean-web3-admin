@@ -209,6 +209,15 @@ export const generatedRoutes: GeneratedRoute[] = [
           title: 'web3_domainservice',
           i18nKey: 'route.web3_domainservice'
         }
+      },
+      {
+        name: 'web3_nft-floor-price-oracle',
+        path: '/web3/nft-floor-price-oracle',
+        component: 'view.web3_nft-floor-price-oracle',
+        meta: {
+          title: 'web3_nft-floor-price-oracle',
+          i18nKey: 'route.web3_nft-floor-price-oracle'
+        }
       }
     ]
   }
