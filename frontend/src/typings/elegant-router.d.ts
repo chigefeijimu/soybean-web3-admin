@@ -38,6 +38,7 @@ declare module "@elegant-router/types" {
     "web3_crosschainswapaggregator": "/web3/crosschainswapaggregator";
     "web3_daotreasurymanager": "/web3/daotreasurymanager";
     "web3_defi-integration-hub": "/web3/defi-integration-hub";
+    "web3_deficollateraltracker": "/web3/deficollateraltracker";
     "web3_definews": "/web3/definews";
     "web3_domainservice": "/web3/domainservice";
     "web3_nft-floor-price-oracle": "/web3/nft-floor-price-oracle";
@@ -115,6 +116,7 @@ declare module "@elegant-router/types" {
     | "manage_user"
     | "web3_crosschainswapaggregator"
     | "web3_daotreasurymanager"
+    | "web3_deficollateraltracker"
     | "web3_definews"
     | "web3_domainservice"
     | "web3_cross-chain-gas-station"

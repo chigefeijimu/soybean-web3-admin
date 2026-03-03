@@ -211,6 +211,15 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       },
       {
+        name: 'web3_deficollateraltracker',
+        path: '/web3/deficollateraltracker',
+        component: 'view.web3_deficollateraltracker',
+        meta: {
+          title: 'web3_deficollateraltracker',
+          i18nKey: 'route.web3_deficollateraltracker'
+        }
+      },
+      {
         name: 'web3_definews',
         path: '/web3/definews',
         component: 'view.web3_definews',
