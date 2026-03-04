@@ -1,0 +1,5 @@
+{
+  "compilerOptions": {
+    "tsConfigPath": "apps/web3-token-unlock-calendar/tsconfig.app.json"
+  }
+}
