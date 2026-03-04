@@ -1,52 +1,83 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { GovernanceAnalyticsService } from './governance-analytics.service';
 
 @Controller('governance-analytics')
 export class GovernanceAnalyticsController {
-  constructor(
-    private readonly governanceAnalyticsService: GovernanceAnalyticsService,
-  ) {}
+  constructor(private readonly governanceService: GovernanceAnalyticsService) {}
+
+  @Get('dashboard')
+  async getDashboardMetrics() {
+    return this.governanceService.getDashboardMetrics();
+  }
 
   @Get('daos')
-  async getDAOsByChain(@Query('chain') chain?: string) {
-    return this.governanceAnalyticsService.getDAOsByChain(chain);
-  }
-
-  @Get('dao/:name')
-  async getDAOStats(@Param('name') name: string) {
-    return this.governanceAnalyticsService.getDAOStats(name);
-  }
-
-  @Get('delegates/:dao')
-  async getDelegates(
-    @Param('dao') dao: string,
-    @Query('address') address?: string,
+  async getDAOList(
+    @Query('chain') chain?: string,
+    @Query('sortBy') sortBy?: string,
   ) {
-    return this.governanceAnalyticsService.getDelegatePerformance(dao, address);
+    return this.governanceService.getDAOList(chain, sortBy);
   }
 
-  @Get('voting-power/:address')
-  async getVotingPower(@Param('address') address: string) {
-    return this.governanceAnalyticsService.getVotingPowerAnalysis(address);
+  @Get('daos/search')
+  async searchDAOs(@Query('q') query: string) {
+    return this.governanceService.searchDAOs(query);
   }
 
-  @Get('participation')
-  async getParticipation() {
-    return this.governanceAnalyticsService.getGovernanceParticipation();
+  @Get('daos/:daoId')
+  async getDAODetails(@Param('daoId') daoId: string) {
+    return this.governanceService.getDAODetails(daoId);
   }
 
-  @Get('cross-chain')
-  async getCrossChainStats() {
-    return this.governanceAnalyticsService.getCrossChainGovernanceStats();
+  @Get('daos/:daoId/proposals')
+  async getDAOProposals(
+    @Param('daoId') daoId: string,
+    @Query('status') status?: string,
+    @Query('category') category?: string,
+    @Query('page') page?: number,
+    @Query('pageSize') pageSize?: number,
+  ) {
+    return this.governanceService.getDAOProposals(
+      daoId,
+      status,
+      category,
+      page || 1,
+      pageSize || 20,
+    );
   }
 
-  @Get('alerts')
-  async getAlerts(@Query('dao') dao?: string) {
-    return this.governanceAnalyticsService.getGovernanceAlerts(dao);
+  @Get('daos/:daoId/delegates')
+  async getDAODelegates(
+    @Param('daoId') daoId: string,
+    @Query('sortBy') sortBy?: string,
+    @Query('page') page?: number,
+    @Query('pageSize') pageSize?: number,
+  ) {
+    return this.governanceService.getDAODelegates(
+      daoId,
+      sortBy,
+      page || 1,
+      pageSize || 20,
+    );
   }
 
-  @Get('health')
-  async health() {
-    return { status: 'ok', service: 'Governance Analytics API' };
+  @Get('daos/:daoId/proposals/:proposalId')
+  async getProposalDetails(
+    @Param('daoId') daoId: string,
+    @Param('proposalId') proposalId: string,
+  ) {
+    return this.governanceService.getProposalDetails(daoId, proposalId);
+  }
+
+  @Get('daos/:daoId/delegates/:delegateAddress')
+  async getDelegateDetails(
+    @Param('daoId') daoId: string,
+    @Param('delegateAddress') delegateAddress: string,
+  ) {
+    return this.governanceService.getDelegateDetails(daoId, delegateAddress);
+  }
+
+  @Get('stats')
+  async getGovernanceStats(@Query('daoId') daoId?: string) {
+    return this.governanceService.getGovernanceStats(daoId);
   }
 }

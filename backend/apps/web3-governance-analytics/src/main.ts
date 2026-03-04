@@ -1,11 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './src/app.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
-  app.enableCors();
-  await app.listen(3000);
-  console.log('Governance Analytics API running on http://localhost:3000/api');
+  
+  // Enable CORS
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+  
+  const port = process.env.PORT || 3008;
+  await app.listen(port);
+  console.log(`🚀 Web3 Governance Analytics API is running on: http://localhost:${port}`);
 }
 bootstrap();
