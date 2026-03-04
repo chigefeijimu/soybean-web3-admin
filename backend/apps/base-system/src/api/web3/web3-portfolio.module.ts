@@ -26,6 +26,7 @@ import { Web3EnsController } from './web3-ens.controller';
 import { Web3EnsService } from './web3-ens.service';
 import { Web3TxDecoderController } from './web3-tx-decoder.controller';
 import { Web3DefiController } from './web3-defi.controller';
+import { LendingRateController } from './web3-lending-rate.controller';
 import { TokenPriceController } from './web3-token-price.controller';
 import { TokenPriceService } from './web3-token-price.service';
 import { DataVizController } from './web3-data-viz.controller';
@@ -106,6 +107,7 @@ import { TreasuryAnalyticsService } from './treasury-analytics.service';
     Web3EnsController,
     Web3TxDecoderController,
     Web3DefiController,
+    LendingRateController,
     TokenPriceController,
     DataVizController,
     Web3RugpullController,

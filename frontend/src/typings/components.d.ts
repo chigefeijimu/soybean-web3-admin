@@ -105,6 +105,7 @@ declare module 'vue' {
     IdentityReputation: typeof import('./../components/web3/IdentityReputation/index.vue')['default']
     IpfsUpload: typeof import('./../components/web3/IpfsUpload.vue')['default']
     LangSwitch: typeof import('./../components/common/lang-switch.vue')['default']
+    LendingRateComparator: typeof import('./../components/web3/LendingRateComparator.vue')['default']
     LiquidationAlert: typeof import('./../components/web3/LiquidationAlert.vue')['default']
     LiquidityPoolMonitor: typeof import('./../components/web3/LiquidityPoolMonitor.vue')['default']
     LiquidityPoolScanner: typeof import('./../components/web3/LiquidityPoolScanner.vue')['default']
