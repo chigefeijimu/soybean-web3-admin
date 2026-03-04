@@ -4962,6 +4962,41 @@ export const multisigTxBuilder = {
         method: 'get',
         params: { walletAddress }
       });
+    },
+
+    // ============ Privacy Score API ============
+    
+    // Analyze wallet privacy score
+    analyzePrivacy: (address: string, chains?: string) => {
+      return request({
+        url: '/privacy/analyze',
+        method: 'get',
+        params: { address, chains }
+      });
+    },
+
+    // Get supported chains for privacy analysis
+    getPrivacyChains: () => {
+      return request({
+        url: '/privacy/chains',
+        method: 'get'
+      });
+    },
+
+    // Get privacy scoring factors
+    getPrivacyFactors: () => {
+      return request({
+        url: '/privacy/factors',
+        method: 'get'
+      });
+    },
+
+    // Get privacy recommendations
+    getPrivacyRecommendations: () => {
+      return request({
+        url: '/privacy/recommendations',
+        method: 'get'
+      });
     }
   }
 };
