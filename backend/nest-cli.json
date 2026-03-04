@@ -416,6 +416,21 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web3-token-health-score/tsconfig.json"
       }
+    },
+    "web3-identity-verification": {
+      "type": "application",
+      "root": "apps/web3-identity-verification",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-identity-verification/src"
+    },
+    "web3-dex-trading-journal": {
+      "type": "application",
+      "root": "apps/web3-dex-trading-journal",
+      "entryFile": "main",
+      "sourceRoot": "apps/web3-dex-trading-journal/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web3-dex-trading-journal/tsconfig.json"
+      }
     }
   },
   "monorepo": true,
