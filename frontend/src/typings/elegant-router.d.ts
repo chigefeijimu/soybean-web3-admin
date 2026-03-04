@@ -22,6 +22,7 @@ declare module "@elegant-router/types" {
     "500": "/500";
     "access-key": "/access-key";
     "dao-proposal-scanner": "/dao-proposal-scanner";
+    "governanceproposalimpact": "/governanceproposalimpact";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
     "log": "/log";
@@ -81,6 +82,7 @@ declare module "@elegant-router/types" {
     | "500"
     | "access-key"
     | "dao-proposal-scanner"
+    | "governanceproposalimpact"
     | "home"
     | "iframe-page"
     | "log"
@@ -103,6 +105,7 @@ declare module "@elegant-router/types" {
    */
   export type LastLevelRouteKey = Extract<
     RouteKey,
+    | "governanceproposalimpact"
     | "403"
     | "404"
     | "500"

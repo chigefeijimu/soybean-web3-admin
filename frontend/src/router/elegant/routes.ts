@@ -54,6 +54,15 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'governanceproposalimpact',
+    path: '/governanceproposalimpact',
+    component: 'layout.base$view.governanceproposalimpact',
+    meta: {
+      title: 'governanceproposalimpact',
+      i18nKey: 'route.governanceproposalimpact'
+    }
+  },
+  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',
