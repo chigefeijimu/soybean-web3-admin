@@ -1,0 +1,9 @@
+{
+  "name": "@pod/web3-dca-bot",
+  "version": "1.0.0",
+  "description": "Cross-chain DCA Bot API",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "bun run src/main.ts"
+  }
+}
