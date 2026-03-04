@@ -44,6 +44,7 @@ declare module "@elegant-router/types" {
     "web3_defiprotocolgraph": "/web3/defiprotocolgraph";
     "web3_domainservice": "/web3/domainservice";
     "web3_nft-floor-price-oracle": "/web3/nft-floor-price-oracle";
+    "web3_tokensafetychecker": "/web3/tokensafetychecker";
   };
 
   /**
@@ -122,6 +123,7 @@ declare module "@elegant-router/types" {
     | "web3_definews"
     | "web3_defiprotocolgraph"
     | "web3_domainservice"
+    | "web3_tokensafetychecker"
     | "web3_cross-chain-bridge-analytics"
     | "web3_cross-chain-gas-station"
     | "web3_defi-integration-hub"

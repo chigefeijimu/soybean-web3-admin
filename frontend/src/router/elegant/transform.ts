@@ -189,7 +189,8 @@ const routeMap: RouteMap = {
   "web3_definews": "/web3/definews",
   "web3_defiprotocolgraph": "/web3/defiprotocolgraph",
   "web3_domainservice": "/web3/domainservice",
-  "web3_nft-floor-price-oracle": "/web3/nft-floor-price-oracle"
+  "web3_nft-floor-price-oracle": "/web3/nft-floor-price-oracle",
+  "web3_tokensafetychecker": "/web3/tokensafetychecker"
 };
 
 /**

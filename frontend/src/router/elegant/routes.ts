@@ -263,6 +263,15 @@ export const generatedRoutes: GeneratedRoute[] = [
           title: 'web3_nft-floor-price-oracle',
           i18nKey: 'route.web3_nft-floor-price-oracle'
         }
+      },
+      {
+        name: 'web3_tokensafetychecker',
+        path: '/web3/tokensafetychecker',
+        component: 'view.web3_tokensafetychecker',
+        meta: {
+          title: 'web3_tokensafetychecker',
+          i18nKey: 'route.web3_tokensafetychecker'
+        }
       }
     ]
   }
