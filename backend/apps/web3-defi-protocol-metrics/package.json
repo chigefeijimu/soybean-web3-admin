@@ -1,0 +1,24 @@
+{
+  "name": "web3-defi-protocol-metrics",
+  "version": "1.0.0",
+  "description": "Cross-chain DeFi Protocol Metrics API",
+  "scripts": {
+    "build": "nest build web3-defi-protocol-metrics",
+    "start": "nest start web3-defi-protocol-metrics",
+    "start:dev": "nest start web3-defi-protocol-metrics --watch",
+    "start:prod": "node dist/apps/web3-defi-protocol-metrics/main"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.0.0",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.3.1",
+    "typescript": "^5.1.3"
+  }
+}
