@@ -78,6 +78,16 @@ const customRoutes: CustomRoute[] = [
       i18nKey: 'route.web3_multisig-health-monitor',
       icon: 'mdi:shield-check'
     }
+  },
+  {
+    name: 'web3_governance-analytics',
+    path: '/web3/governance-analytics',
+    component: 'view.web3_governance-analytics',
+    meta: {
+      title: 'Governance Analytics',
+      i18nKey: 'route.web3_governance-analytics',
+      icon: 'mdi:vote'
+    }
   }
 ];
 
