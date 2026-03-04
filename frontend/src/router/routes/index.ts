@@ -10,6 +10,16 @@ import { transformElegantRoutesToVueRoutes } from '../elegant/transform';
  */
 const customRoutes: CustomRoute[] = [
   {
+    name: 'web3_nft-watchlist',
+    path: '/web3/nft-watchlist',
+    component: 'view.web3_nft-watchlist',
+    meta: {
+      title: 'NFT Watchlist',
+      i18nKey: 'route.web3_nft-watchlist',
+      icon: 'mdi:eye'
+    }
+  },
+  {
     name: 'web3_nft-floor-price-oracle',
     path: '/web3/nft-floor-price-oracle',
     component: 'view.web3_nft-floor-price-oracle',
