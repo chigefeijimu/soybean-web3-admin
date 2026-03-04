@@ -88,6 +88,16 @@ const customRoutes: CustomRoute[] = [
       i18nKey: 'route.web3_governance-analytics',
       icon: 'mdi:vote'
     }
+  },
+  {
+    name: 'web3_defi-position-aggregator',
+    path: '/web3/defi-position-aggregator',
+    component: 'view.web3_defi-position-aggregator',
+    meta: {
+      title: 'DeFi Position Aggregator',
+      i18nKey: 'route.web3_defi-position-aggregator',
+      icon: 'mdi:wallet'
+    }
   }
 ];
 
