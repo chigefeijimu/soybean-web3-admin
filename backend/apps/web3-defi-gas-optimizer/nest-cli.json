@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": false,
+    "tsConfigPath": "tsconfig.json"
+  },
+  "monorepo": true,
+  "root": "apps/web3-defi-gas-optimizer",
+  "entryFile": "src/main",
+  "assets": [],
+  "watchAssets": []
+}
