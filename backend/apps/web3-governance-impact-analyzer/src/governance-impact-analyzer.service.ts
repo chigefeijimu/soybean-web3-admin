@@ -1,529 +1,436 @@
 import { Injectable } from '@nestjs/common';
 
-interface ProposalImpact {
-  proposalId: string;
-  daoId: string;
-  daoName: string;
-  title: string;
-  description: string;
-  status: string;
-  type: string;
-  impactScore: number;
-  impactLevel: 'bullish' | 'neutral' | 'bearish';
-  priceImpact: {
-    shortTerm: { min: number; max: number; confidence: number };
-    mediumTerm: { min: number; max: number; confidence: number };
-    longTerm: { min: number; max: number; confidence: number };
-  };
-  factors: ImpactFactor[];
-  riskAssessment: RiskAssessment;
-  portfolioImplications: PortfolioImplication[];
-  comparableProposals: ComparableProposal[];
-  sentiment: SentimentAnalysis;
-  marketReaction: MarketReaction;
-}
-
-interface ImpactFactor {
-  factor: string;
-  impact: 'positive' | 'negative' | 'neutral';
-  weight: number;
-  description: string;
-}
-
-interface RiskAssessment {
+interface ImpactScore {
   overall: number;
-  level: 'low' | 'medium' | 'high' | 'critical';
-  factors: { category: string; score: number; description: string }[];
-}
-
-interface PortfolioImplication {
-  position: string;
-  action: 'increase' | 'decrease' | 'hold' | 'monitor';
-  reasoning: string;
+  bullish: number;
+  neutral: number;
+  bearish: number;
   confidence: number;
 }
 
-interface ComparableProposal {
-  id: string;
-  daoName: string;
+interface RiskAssessment {
+  level: 'low' | 'medium' | 'high' | 'critical';
+  factors: string[];
+  score: number;
+}
+
+interface MarketPrediction {
+  passProbability: number;
+  failProbability: number;
+  priceImpact: {
+    shortTerm: { direction: string; percentage: number };
+    mediumTerm: { direction: string; percentage: number };
+    longTerm: { direction: string; percentage: number };
+  };
+  affectedTokens: Array<{
+    token: string;
+    impact: string;
+    confidence: number;
+  }>;
+}
+
+interface ProposalImpact {
+  dao: string;
+  proposalId: string;
   title: string;
-  outcome: 'passed' | 'failed';
-  priceChange7d: number;
-  similarity: number;
+  description: string;
+  status: string;
+  impactScore: ImpactScore;
+  riskAssessment: RiskAssessment;
+  marketPrediction: MarketPrediction;
+  sentiment: {
+    overall: string;
+    community: number;
+    whale: number;
+  };
+  affectedProtocols: string[];
+  recommendation: string;
+  createdAt: string;
 }
 
-interface SentimentAnalysis {
-  overall: number;
-  social: number;
-  onchain: number;
-  market: number;
-  trend: 'improving' | 'stable' | 'declining';
-}
-
-interface MarketReaction {
-  historicalSimilar: number;
-  whaleActivity: 'accumulating' | 'distributing' | 'neutral';
-  fundingRate: number;
-  openInterest: number;
-}
-
-interface AggregatedStats {
-  totalAnalyzed: number;
-  avgImpactScore: number;
-  bullishCount: number;
-  bearishCount: number;
-  neutralCount: number;
-  highRiskCount: number;
-  upcomingVotes: ProposalImpact[];
-  recentlyPassed: ProposalImpact[];
-  marketSentiment: number;
-}
+const SUPPORTED_DAOS = [
+  { name: 'Uniswap', chain: 'Ethereum', category: 'DEX' },
+  { name: 'Aave', chain: 'Ethereum', category: 'Lending' },
+  { name: 'MakerDAO', chain: 'Ethereum', category: 'Stablecoin' },
+  { name: 'Compound', chain: 'Ethereum', category: 'Lending' },
+  { name: 'Curve', chain: 'Ethereum', category: 'DEX' },
+  { name: 'Lido', chain: 'Ethereum', category: 'Staking' },
+  { name: 'ENS', chain: 'Ethereum', category: 'Infrastructure' },
+  { name: 'Balancer', chain: 'Ethereum', category: 'DEX' },
+  { name: 'Optimism', chain: 'Optimism', category: 'Layer2' },
+  { name: 'Arbitrum', chain: 'Arbitrum', category: 'Layer2' },
+  { name: 'Polygon', chain: 'Polygon', category: 'Layer2' },
+  { name: 'GMX', chain: 'Arbitrum', category: 'DEX' },
+  { name: 'Rocket Pool', chain: 'Ethereum', category: 'Staking' },
+  { name: 'Synthetix', chain: 'Ethereum', category: 'Derivatives' },
+  { name: 'Connext', chain: 'Ethereum', category: 'Bridge' },
+];
 
 @Injectable()
 export class GovernanceImpactAnalyzerService {
-  private proposals: any[] = [
-    {
-      id: 'uni-156',
-      daoId: 'uniswap',
-      daoName: 'Uniswap',
-      title: 'Deploy Uniswap V4 on Arbitrum and Optimism',
-      description: 'Proposal to deploy the latest version of Uniswap protocol on Layer 2 networks to reduce gas costs and improve throughput.',
-      status: 'active',
-      type: 'upgrade',
-      forVotes: 4500000,
-      againstVotes: 1200000,
-      totalVotes: 6000000,
-      quorum: 4000000,
-      startTime: '2026-02-28T00:00:00Z',
-      endTime: '2026-03-05T00:00:00Z',
-    },
-    {
-      id: 'aave-90',
-      daoId: 'aave',
-      daoName: 'Aave',
-      title: 'Add wstETH as Collateral on V3',
-      description: 'Enable wrapped stETH as collateral on Aave V3 Ethereum pool.',
-      status: 'active',
-      type: 'parameter',
-      forVotes: 125000,
-      againstVotes: 15000,
-      totalVotes: 145000,
-      quorum: 80000,
-      startTime: '2026-03-01T00:00:00Z',
-      endTime: '2026-03-04T00:00:00Z',
-    },
-    {
-      id: 'mkr-235',
-      daoId: 'makerdao',
-      daoName: 'MakerDAO',
-      title: 'Adjust DSR to 4.5%',
-      description: 'Proposal to increase the Dai Savings Rate to 4.5% to improve DAI adoption.',
-      status: 'active',
-      type: 'parameter',
-      forVotes: 45000,
-      againstVotes: 18000,
-      totalVotes: 70000,
-      quorum: 30000,
-      startTime: '2026-03-01T12:00:00Z',
-      endTime: '2026-03-08T12:00:00Z',
-    },
-    {
-      id: 'op-46',
-      daoId: 'optimism',
-      daoName: 'Optimism',
-      title: 'Retroactive Public Goods Funding Round 19',
-      description: 'Allocate 30M OP tokens to Retroactive Public Goods Funding.',
-      status: 'active',
-      type: 'treasury',
-      forVotes: 28000000,
-      againstVotes: 5000000,
-      totalVotes: 35000000,
-      quorum: 20000000,
-      startTime: '2026-02-26T00:00:00Z',
-      endTime: '2026-03-05T00:00:00Z',
-    },
-    {
-      id: 'arb-39',
-      daoId: 'arbitrum',
-      daoName: 'Arbitrum',
-      title: 'Security Council Renewal - March 2026',
-      description: 'Renew the Security Council members for the next term.',
-      status: 'active',
-      type: 'parameter',
-      forVotes: 150000000,
-      againstVotes: 25000000,
-      totalVotes: 190000000,
-      quorum: 100000000,
-      startTime: '2026-02-28T00:00:00Z',
-      endTime: '2026-03-07T00:00:00Z',
-    },
-    {
-      id: 'lido-35',
-      daoId: 'lido',
-      daoName: 'Lido',
-      title: 'Enable wstETH/ETH Gauge on Curve',
-      description: 'Enable the wstETH/ETH pool on Curve Finance with 2% cap.',
-      status: 'active',
-      type: 'parameter',
-      forVotes: 8500000,
-      againstVotes: 1200000,
-      totalVotes: 10000000,
-      quorum: 5000000,
-      startTime: '2026-03-01T00:00:00Z',
-      endTime: '2026-03-04T00:00:00Z',
-    },
-    {
-      id: 'ens-29',
-      daoId: 'ens',
-      daoName: 'ENS DAO',
-      title: 'Extend Registrar Grace Period',
-      description: 'Extend the grace period for expired domain names from 90 to 180 days.',
-      status: 'active',
-      type: 'parameter',
-      forVotes: 185000,
-      againstVotes: 42000,
-      totalVotes: 240000,
-      quorum: 100000,
-      startTime: '2026-02-27T00:00:00Z',
-      endTime: '2026-03-06T00:00:00Z',
-    },
-    // Recently passed proposals
-    {
-      id: 'uni-155',
-      daoId: 'uniswap',
-      daoName: 'Uniswap',
-      title: 'Allocate Treasury for Developer Grants',
-      description: 'Request 5M UNI tokens from treasury to fund developer grants program.',
-      status: 'passed',
-      type: 'treasury',
-      forVotes: 8500000,
-      againstVotes: 2100000,
-      totalVotes: 11000000,
-      quorum: 4000000,
-      startTime: '2026-02-15T00:00:00Z',
-      endTime: '2026-02-22T00:00:00Z',
-    },
-    {
-      id: 'aave-89',
-      daoId: 'aave',
-      daoName: 'Aave',
-      title: 'Adjust USDC Risk Parameters',
-      description: 'Increase USDC liquidation threshold from 87% to 89%.',
-      status: 'passed',
-      type: 'parameter',
-      forVotes: 95000,
-      againstVotes: 12000,
-      totalVotes: 110000,
-      quorum: 80000,
-      startTime: '2026-02-20T00:00:00Z',
-      endTime: '2026-02-25T00:00:00Z',
-    },
-    {
-      id: 'op-45',
-      daoId: 'optimism',
-      daoName: 'Optimism',
-      title: 'Upgrade Gas Price Oracle',
-      description: 'Update the L1 gas price oracle to use a more efficient pricing mechanism.',
-      status: 'passed',
-      type: 'upgrade',
-      forVotes: 45000000,
-      againstVotes: 8000000,
-      totalVotes: 60000000,
-      quorum: 20000000,
-      startTime: '2026-02-10T00:00:00Z',
-      endTime: '2026-02-17T00:00:00Z',
-    },
-  ];
+  private proposals: Map<string, ProposalImpact> = new Map();
 
-  private generateImpactAnalysis(proposal: any): ProposalImpact {
-    const forPercentage = (proposal.forVotes / proposal.totalVotes) * 100;
-    const againstPercentage = (proposal.againstVotes / proposal.totalVotes) * 100;
-    const passProbability = forPercentage / (forPercentage + againstPercentage + 1);
-    
-    // Calculate base impact score based on proposal type
-    const typeImpact: { [key: string]: number } = {
-      upgrade: 15,
-      parameter: 10,
-      treasury: 20,
-      text: 5,
-      emergency: 25,
-    };
-    
-    const baseImpact = typeImpact[proposal.type] || 10;
-    const passBonus = passProbability > 0.6 ? 10 : 0;
-    const quorumMet = proposal.totalVotes >= proposal.quorum ? 5 : -10;
-    
-    const impactScore = Math.min(100, Math.max(0, baseImpact + passBonus + quorumMet + (Math.random() * 20 - 10)));
-    
-    let impactLevel: 'bullish' | 'neutral' | 'bearish';
-    if (impactScore >= 60) impactLevel = 'bullish';
-    else if (impactScore <= 40) impactLevel = 'bearish';
-    else impactLevel = 'neutral';
-    
-    // Generate price impact estimates
-    const priceImpact = {
-      shortTerm: {
-        min: Math.round((impactScore - 50) * 0.3 * 10) / 10,
-        max: Math.round((impactScore - 50) * 0.5 * 10) / 10,
-        confidence: Math.round(70 + Math.random() * 20),
-      },
-      mediumTerm: {
-        min: Math.round((impactScore - 50) * 0.5 * 10) / 10,
-        max: Math.round((impactScore - 50) * 0.8 * 10) / 10,
-        confidence: Math.round(60 + Math.random() * 20),
-      },
-      longTerm: {
-        min: Math.round((impactScore - 50) * 0.8 * 10) / 10,
-        max: Math.round((impactScore - 50) * 1.2 * 10) / 10,
-        confidence: Math.round(50 + Math.random() * 20),
-      },
-    };
-    
-    // Generate impact factors
-    const factors: ImpactFactor[] = [
+  constructor() {
+    this.initializeSampleData();
+  }
+
+  private initializeSampleData() {
+    const sampleProposals: ProposalImpact[] = [
       {
-        factor: 'Pass Probability',
-        impact: passProbability > 0.6 ? 'positive' : passProbability < 0.4 ? 'negative' : 'neutral',
-        weight: 0.25,
-        description: `Based on current voting, probability of passing is ${(passProbability * 100).toFixed(1)}%`,
+        dao: 'Uniswap',
+        proposalId: '1',
+        title: 'Deploy Uniswap V4 on Arbitrum',
+        description: 'Proposal to deploy Uniswap V4 on Arbitrum network with new hook mechanisms',
+        status: 'active',
+        impactScore: { overall: 75, bullish: 70, neutral: 20, bearish: 10, confidence: 85 },
+        riskAssessment: { level: 'medium', factors: ['Technical risk', 'Liquidity migration'], score: 45 },
+        marketPrediction: {
+          passProbability: 75,
+          failProbability: 25,
+          priceImpact: {
+            shortTerm: { direction: 'bullish', percentage: 3.5 },
+            mediumTerm: { direction: 'bullish', percentage: 8.2 },
+            longTerm: { direction: 'bullish', percentage: 12.5 },
+          },
+          affectedTokens: [
+            { token: 'UNI', impact: 'positive', confidence: 90 },
+            { token: 'ARB', impact: 'positive', confidence: 75 },
+          ],
+        },
+        sentiment: { overall: 'bullish', community: 72, whale: 80 },
+        affectedProtocols: ['Uniswap', 'SushiSwap', 'Curve'],
+        recommendation: 'Consider increasing UNI exposure before proposal passes',
+        createdAt: new Date().toISOString(),
       },
       {
-        factor: 'Quorum Participation',
-        impact: proposal.totalVotes >= proposal.quorum ? 'positive' : 'negative',
-        weight: 0.2,
-        description: `${((proposal.totalVotes / proposal.quorum) * 100).toFixed(1)}% of required quorum reached`,
+        dao: 'Aave',
+        proposalId: '2',
+        title: 'Add ETH Liquid Staking Tokens as Collateral',
+        description: 'Proposal to add rETH and stETH as collateral types on Aave V3',
+        status: 'pending',
+        impactScore: { overall: 82, bullish: 78, neutral: 15, bearish: 7, confidence: 92 },
+        riskAssessment: { level: 'low', factors: ['Smart contract risk', 'Liquidation risk'], score: 28 },
+        marketPrediction: {
+          passProbability: 85,
+          failProbability: 15,
+          priceImpact: {
+            shortTerm: { direction: 'bullish', percentage: 2.1 },
+            mediumTerm: { direction: 'bullish', percentage: 5.8 },
+            longTerm: { direction: 'bullish', percentage: 9.3 },
+          },
+          affectedTokens: [
+            { token: 'AAVE', impact: 'positive', confidence: 88 },
+            { token: 'rETH', impact: 'positive', confidence: 82 },
+            { token: 'stETH', impact: 'positive', confidence: 80 },
+          ],
+        },
+        sentiment: { overall: 'bullish', community: 78, whale: 85 },
+        affectedProtocols: ['Aave', 'Lido', 'Rocket Pool'],
+        recommendation: 'Positive for LST adoption - consider accumulation strategy',
+        createdAt: new Date().toISOString(),
       },
       {
-        factor: 'Proposal Type',
-        impact: proposal.type === 'treasury' ? 'positive' : proposal.type === 'upgrade' ? 'positive' : 'neutral',
-        weight: 0.15,
-        description: `${proposal.type} proposals typically have ${proposal.type === 'treasury' ? 'high' : 'moderate'} market impact`,
+        dao: 'MakerDAO',
+        proposalId: '3',
+        title: 'Adjust DSR to 4.5%',
+        description: 'Proposal to increase the DAI Savings Rate to 4.5% from current 3.5%',
+        status: 'active',
+        impactScore: { overall: 68, bullish: 45, neutral: 35, bearish: 20, confidence: 78 },
+        riskAssessment: { level: 'medium', factors: ['Interest rate risk', 'Liquidity risk'], score: 52 },
+        marketPrediction: {
+          passProbability: 60,
+          failProbability: 40,
+          priceImpact: {
+            shortTerm: { direction: 'neutral', percentage: 0.8 },
+            mediumTerm: { direction: 'bullish', percentage: 2.5 },
+            longTerm: { direction: 'neutral', percentage: 1.2 },
+          },
+          affectedTokens: [
+            { token: 'MKR', impact: 'positive', confidence: 70 },
+            { token: 'DAI', impact: 'neutral', confidence: 85 },
+          ],
+        },
+        sentiment: { overall: 'neutral', community: 55, whale: 60 },
+        affectedProtocols: ['MakerDAO', 'Aave', 'Compound'],
+        recommendation: 'Monitor proposal outcome - minimal DAI impact expected',
+        createdAt: new Date().toISOString(),
       },
       {
-        factor: 'Community Sentiment',
-        impact: Math.random() > 0.5 ? 'positive' : 'neutral',
-        weight: 0.2,
-        description: 'Social media sentiment is currently ' + (Math.random() > 0.5 ? 'positive' : 'mixed'),
+        dao: 'Curve',
+        proposalId: '4',
+        title: 'CRV Token Buyback Program',
+        description: 'Implement weekly CRV buyback program using protocol revenues',
+        status: 'passed',
+        impactScore: { overall: 88, bullish: 85, neutral: 10, bearish: 5, confidence: 95 },
+        riskAssessment: { level: 'low', factors: ['Execution risk'], score: 18 },
+        marketPrediction: {
+          passProbability: 95,
+          failProbability: 5,
+          priceImpact: {
+            shortTerm: { direction: 'bullish', percentage: 5.2 },
+            mediumTerm: { direction: 'bullish', percentage: 12.8 },
+            longTerm: { direction: 'bullish', percentage: 18.5 },
+          },
+          affectedTokens: [
+            { token: 'CRV', impact: 'positive', confidence: 95 },
+            { token: 'cvxCRV', impact: 'positive', confidence: 88 },
+          ],
+        },
+        sentiment: { overall: 'bullish', community: 88, whale: 92 },
+        affectedProtocols: ['Curve', 'Convex'],
+        recommendation: 'Bullish for CRV - maintain exposure',
+        createdAt: new Date().toISOString(),
       },
       {
-        factor: 'Whale Activity',
-        impact: Math.random() > 0.6 ? 'positive' : Math.random() > 0.3 ? 'neutral' : 'negative',
-        weight: 0.2,
-        description: 'Large token holders showing ' + (Math.random() > 0.5 ? 'accumulation' : 'neutral') + ' patterns',
+        dao: 'Lido',
+        proposalId: '5',
+        title: 'LDO Staking Rewards Distribution',
+        description: 'Launch LDO staking rewards distribution program for early participants',
+        status: 'active',
+        impactScore: { overall: 72, bullish: 68, neutral: 22, bearish: 10, confidence: 80 },
+        riskAssessment: { level: 'low', factors: ['Inflation risk'], score: 25 },
+        marketPrediction: {
+          passProbability: 70,
+          failProbability: 30,
+          priceImpact: {
+            shortTerm: { direction: 'bullish', percentage: 2.8 },
+            mediumTerm: { direction: 'bullish', percentage: 6.5 },
+            longTerm: { direction: 'bullish', percentage: 10.2 },
+          },
+          affectedTokens: [
+            { token: 'LDO', impact: 'positive', confidence: 85 },
+            { token: 'stETH', impact: 'positive', confidence: 72 },
+          ],
+        },
+        sentiment: { overall: 'bullish', community: 75, whale: 78 },
+        affectedProtocols: ['Lido', 'Rocket Pool'],
+        recommendation: 'Positive for LDO ecosystem growth',
+        createdAt: new Date().toISOString(),
       },
     ];
+
+    sampleProposals.forEach(p => {
+      this.proposals.set(`${p.dao.toLowerCase()}-${p.proposalId}`, p);
+    });
+  }
+
+  async analyzeProposal(
+    dao: string,
+    proposalId: string,
+    title?: string,
+    description?: string,
+  ): Promise<ProposalImpact> {
+    const existing = this.proposals.get(`${dao.toLowerCase()}-${proposalId}`);
+    if (existing) return existing;
+
+    const impactScore = this.calculateImpactScore(dao, title || '', description || '');
+    const riskAssessment = this.assessRisk(dao, title || '', description || '');
+    const marketPrediction = this.predictMarket(dao, title || '', description || '');
     
-    // Risk assessment
-    const riskFactors = [
-      { category: 'Execution Risk', score: Math.round(20 + Math.random() * 30), description: 'Technical implementation complexity' },
-      { category: 'Market Risk', score: Math.round(15 + Math.random() * 35), description: 'Potential market volatility around vote' },
-      { category: 'Regulatory Risk', score: Math.round(10 + Math.random() * 25), description: 'Regulatory uncertainty in jurisdiction' },
-      { category: 'Social Risk', score: Math.round(15 + Math.random() * 30), description: 'Community disagreement potential' },
-    ];
-    const overallRisk = riskFactors.reduce((sum, f) => sum + f.score, 0) / riskFactors.length;
-    
-    const riskAssessment: RiskAssessment = {
-      overall: Math.round(overallRisk),
-      level: overallRisk < 25 ? 'low' : overallRisk < 45 ? 'medium' : overallRisk < 65 ? 'high' : 'critical',
-      factors: riskFactors,
-    };
-    
-    // Portfolio implications
-    const portfolioImplications: PortfolioImplication[] = [
-      {
-        position: proposal.daoName + ' Token',
-        action: impactScore > 60 ? 'increase' : impactScore < 40 ? 'decrease' : 'hold',
-        reasoning: impactScore > 60 
-          ? 'High impact score suggests positive outcome likely' 
-          : impactScore < 40 
-            ? 'Lower impact score and passing probability'
-            : 'Wait for clearer voting trends',
-        confidence: Math.round(60 + Math.random() * 30),
-      },
-      {
-        position: 'Related DeFi Tokens',
-        action: impactScore > 55 ? 'increase' : 'monitor',
-        reasoning: 'Cross-protocol synergies may drive adjacent token movements',
-        confidence: Math.round(50 + Math.random() * 25),
-      },
-      {
-        position: 'Stablecoin Allocation',
-        action: riskAssessment.level === 'high' ? 'increase' : 'hold',
-        reasoning: riskAssessment.level === 'high' 
-          ? 'Increase hedging given elevated risk levels' 
-          : 'Maintain current allocation',
-        confidence: Math.round(70 + Math.random() * 20),
-      },
-    ];
-    
-    // Comparable proposals
-    const comparableProposals: ComparableProposal[] = [
-      {
-        id: 'uni-154',
-        daoName: 'Uniswap',
-        title: 'Update Protocol Fee from 0.05% to 0.08%',
-        outcome: 'failed',
-        priceChange7d: -2.5,
-        similarity: 0.75,
-      },
-      {
-        id: 'uni-153',
-        daoName: 'Uniswap',
-        title: 'Add New Fee Tier',
-        outcome: 'passed',
-        priceChange7d: 5.2,
-        similarity: 0.65,
-      },
-      {
-        id: 'aave-85',
-        daoName: 'Aave',
-        title: 'Add CRV Collateral',
-        outcome: 'passed',
-        priceChange7d: 8.3,
-        similarity: 0.7,
-      },
-    ];
-    
-    // Sentiment analysis
-    const sentiment: SentimentAnalysis = {
-      overall: Math.round(50 + Math.random() * 40),
-      social: Math.round(50 + Math.random() * 40),
-      onchain: Math.round(50 + Math.random() * 40),
-      market: Math.round(50 + Math.random() * 40),
-      trend: Math.random() > 0.6 ? 'improving' : Math.random() > 0.3 ? 'stable' : 'declining',
-    };
-    
-    // Market reaction
-    const marketReaction: MarketReaction = {
-      historicalSimilar: Math.round(60 + Math.random() * 30),
-      whaleActivity: Math.random() > 0.5 ? 'accumulating' : Math.random() > 0.3 ? 'neutral' : 'distributing',
-      fundingRate: Math.round((Math.random() * 0.1 - 0.02) * 10000) / 10000,
-      openInterest: Math.round(Math.random() * 100000000),
-    };
-    
-    return {
-      proposalId: proposal.id,
-      daoId: proposal.daoId,
-      daoName: proposal.daoName,
-      title: proposal.title,
-      description: proposal.description,
-      status: proposal.status,
-      type: proposal.type,
-      impactScore: Math.round(impactScore),
-      impactLevel,
-      priceImpact,
-      factors,
+    const proposal: ProposalImpact = {
+      dao,
+      proposalId,
+      title: title || `Proposal ${proposalId}`,
+      description: description || 'Impact analysis pending',
+      status: 'analyzed',
+      impactScore,
       riskAssessment,
-      portfolioImplications,
-      comparableProposals,
-      sentiment,
-      marketReaction,
+      marketPrediction,
+      sentiment: {
+        overall: impactScore.bullish > impactScore.bearish ? 'bullish' : 'bearish',
+        community: Math.floor(50 + Math.random() * 40),
+        whale: Math.floor(50 + Math.random() * 40),
+      },
+      affectedProtocols: this.identifyAffectedProtocols(dao),
+      recommendation: this.generateRecommendation(impactScore, riskAssessment),
+      createdAt: new Date().toISOString(),
+    };
+
+    this.proposals.set(`${dao.toLowerCase()}-${proposalId}`, proposal);
+    return proposal;
+  }
+
+  async getProposalImpact(dao: string, proposalId: string): Promise<ProposalImpact | null> {
+    return this.proposals.get(`${dao.toLowerCase()}-${proposalId}`) || null;
+  }
+
+  async getDaoImpactSummary(chainId?: string, dao?: string) {
+    const allProposals = Array.from(this.proposals.values());
+    const filtered = dao 
+      ? allProposals.filter(p => p.dao.toLowerCase() === dao.toLowerCase())
+      : allProposals;
+
+    const summary = {
+      totalProposals: filtered.length,
+      activeProposals: filtered.filter(p => p.status === 'active').length,
+      passedProposals: filtered.filter(p => p.status === 'passed').length,
+      pendingProposals: filtered.filter(p => p.status === 'pending').length,
+      averageImpactScore: filtered.length > 0
+        ? Math.round(filtered.reduce((sum, p) => sum + p.impactScore.overall, 0) / filtered.length)
+        : 0,
+      bullishCount: filtered.filter(p => p.impactScore.overall > 60).length,
+      bearishCount: filtered.filter(p => p.impactScore.overall < 40).length,
+      highRiskProposals: filtered.filter(p => p.riskAssessment.level === 'high' || p.riskAssessment.level === 'critical').length,
+      proposals: filtered.slice(0, 20),
+    };
+
+    return summary;
+  }
+
+  async getTrendingProposals(limit: number = 10) {
+    const allProposals = Array.from(this.proposals.values());
+    return allProposals
+      .sort((a, b) => b.impactScore.confidence - a.impactScore.confidence)
+      .slice(0, limit);
+  }
+
+  async getRiskAssessment(dao: string, proposalId: string): Promise<RiskAssessment | null> {
+    const proposal = this.proposals.get(`${dao.toLowerCase()}-${proposalId}`);
+    return proposal?.riskAssessment || null;
+  }
+
+  async getMarketPrediction(dao: string, proposalId: string): Promise<MarketPrediction | null> {
+    const proposal = this.proposals.get(`${dao.toLowerCase()}-${proposalId}`);
+    return proposal?.marketPrediction || null;
+  }
+
+  async getSupportedDaos() {
+    return SUPPORTED_DAOS;
+  }
+
+  private calculateImpactScore(dao: string, title: string, description: string): ImpactScore {
+    const text = `${dao} ${title} ${description}`.toLowerCase();
+    let bullish = 30 + Math.random() * 40;
+    let bearish = Math.random() * 30;
+    let neutral = 100 - bullish - bearish;
+    
+    if (text.includes('upgrade') || text.includes('deploy')) bullish += 10;
+    if (text.includes('risk') || text.includes('adjust')) bearish += 15;
+    if (text.includes('reward') || text.includes('incentive')) bullish += 15;
+    if (text.includes('fee') || text.includes('treasury')) neutral += 10;
+    
+    bullish = Math.min(bullish, 90);
+    bearish = Math.min(bearish, 40);
+    neutral = Math.max(neutral, 5);
+    
+    const total = bullish + bearish + neutral;
+    bullish = (bullish / total) * 100;
+    bearish = (bearish / total) * 100;
+    neutral = (neutral / total) * 100;
+    
+    const overall = Math.round(bullish - bearish * 0.5 + 50);
+    const confidence = 70 + Math.floor(Math.random() * 25);
+    
+    return {
+      overall: Math.min(100, Math.max(0, overall)),
+      bullish: Math.round(bullish),
+      neutral: Math.round(neutral),
+      bearish: Math.round(bearish),
+      confidence,
     };
   }
 
-  getProposalImpacts(dao?: string, status?: string, limit: number = 20): ProposalImpact[] {
-    let filtered = this.proposals;
+  private assessRisk(dao: string, title: string, description: string): RiskAssessment {
+    const text = `${dao} ${title} ${description}`.toLowerCase();
+    const factors: string[] = [];
+    let score = 20;
     
-    if (dao) {
-      filtered = filtered.filter(p => p.daoId === dao);
+    if (text.includes('technical') || text.includes('upgrade')) {
+      factors.push('Technical complexity');
+      score += 20;
+    }
+    if (text.includes('collateral') || text.includes('asset')) {
+      factors.push('Asset risk');
+      score += 15;
+    }
+    if (text.includes('governance') || text.includes('vote')) {
+      factors.push('Governance uncertainty');
+      score += 10;
+    }
+    if (text.includes('smart contract')) {
+      factors.push('Smart contract risk');
+      score += 25;
+    }
+    if (text.includes('liquidity')) {
+      factors.push('Liquidity risk');
+      score += 15;
+    }
+    if (factors.length === 0) {
+      factors.push('General market risk');
     }
     
-    if (status) {
-      filtered = filtered.filter(p => p.status === status);
-    }
+    score = Math.min(score, 100);
+    let level: 'low' | 'medium' | 'high' | 'critical';
+    if (score < 25) level = 'low';
+    else if (score < 50) level = 'medium';
+    else if (score < 75) level = 'high';
+    else level = 'critical';
     
-    return filtered.map(p => this.generateImpactAnalysis(p)).slice(0, limit);
+    return { level, factors, score };
   }
 
-  getProposalImpactDetails(id: string): ProposalImpact | null {
-    const proposal = this.proposals.find(p => p.id === id);
-    if (!proposal) return null;
+  private predictMarket(dao: string, title: string, description: string): MarketPrediction {
+    const text = `${dao} ${title} ${description}`.toLowerCase();
+    let passProb = 50 + Math.random() * 40;
+    const failProb = 100 - passProb;
     
-    return this.generateImpactAnalysis(proposal);
-  }
-
-  getAggregatedStats(): AggregatedStats {
-    const impacts = this.proposals.map(p => this.generateImpactAnalysis(p));
+    const shortTerm = (Math.random() * 8 - 2);
+    const mediumTerm = shortTerm * 1.8;
+    const longTerm = shortTerm * 2.5;
     
-    const activeImpacts = impacts.filter(i => i.status === 'active');
-    const passedImpacts = impacts.filter(i => i.status === 'passed');
+    const affectedTokens: Array<{ token: string; impact: string; confidence: number }> = [];
     
-    return {
-      totalAnalyzed: this.proposals.length,
-      avgImpactScore: Math.round(impacts.reduce((sum, i) => sum + i.impactScore, 0) / impacts.length),
-      bullishCount: impacts.filter(i => i.impactLevel === 'bullish').length,
-      bearishCount: impacts.filter(i => i.impactLevel === 'bearish').length,
-      neutralCount: impacts.filter(i => i.impactLevel === 'neutral').length,
-      highRiskCount: impacts.filter(i => i.riskAssessment.level === 'high' || i.riskAssessment.level === 'critical').length,
-      upcomingVotes: activeImpacts.sort((a, b) => b.impactScore - a.impactScore).slice(0, 5),
-      recentlyPassed: passedImpacts.slice(0, 5),
-      marketSentiment: Math.round(50 + Math.random() * 30),
-    };
-  }
-
-  getDaoImpactSummary(daoId: string) {
-    const daoProposals = this.proposals.filter(p => p.daoId === daoId);
-    const impacts = daoProposals.map(p => this.generateImpactAnalysis(p));
-    
-    return {
-      daoId,
-      totalProposals: daoProposals.length,
-      avgImpactScore: Math.round(impacts.reduce((sum, i) => sum + i.impactScore, 0) / impacts.length),
-      bullishProposals: impacts.filter(i => i.impactLevel === 'bullish').length,
-      bearishProposals: impacts.filter(i => i.impactLevel === 'bearish').length,
-      highRiskProposals: impacts.filter(i => i.riskAssessment.level === 'high' || i.riskAssessment.level === 'critical').length,
-      proposals: impacts,
-    };
-  }
-
-  getImpactComparison(proposalIds: string[]) {
-    return proposalIds.map(id => {
-      const proposal = this.proposals.find(p => p.id === id);
-      if (!proposal) return null;
-      return this.generateImpactAnalysis(proposal);
-    }).filter(Boolean);
-  }
-
-  simulateScenario(proposalId: string, scenario: 'optimistic' | 'realistic' | 'pessimistic') {
-    const proposal = this.proposals.find(p => p.id === proposalId);
-    if (!proposal) return null;
-    
-    const base = this.generateImpactAnalysis(proposal);
-    
-    const scenarioModifiers = {
-      optimistic: { priceMod: 1.3, confidenceMod: -15, riskMod: -10 },
-      realistic: { priceMod: 1.0, confidenceMod: 0, riskMod: 0 },
-      pessimistic: { priceMod: 0.7, confidenceMod: 10, riskMod: 15 },
+    const tokenMap: Record<string, string[]> = {
+      'Uniswap': ['UNI', 'USDC', 'ETH'],
+      'Aave': ['AAVE', 'USDC', 'ETH'],
+      'MakerDAO': ['MKR', 'DAI', 'ETH'],
+      'Compound': ['COMP', 'USDC', 'ETH'],
+      'Curve': ['CRV', 'USDC', 'ETH'],
+      'Lido': ['LDO', 'stETH', 'ETH'],
     };
     
-    const mod = scenarioModifiers[scenario];
+    const tokens = tokenMap[dao] || ['TOKEN'];
+    tokens.forEach(t => {
+      affectedTokens.push({
+        token: t,
+        impact: Math.random() > 0.3 ? 'positive' : 'neutral',
+        confidence: 70 + Math.floor(Math.random() * 25),
+      });
+    });
     
     return {
-      ...base,
-      impactScore: Math.round(base.impactScore * mod.priceMod),
+      passProbability: Math.round(passProb),
+      failProbability: Math.round(failProb),
       priceImpact: {
-        shortTerm: {
-          min: Math.round(base.priceImpact.shortTerm.min * mod.priceMod * 10) / 10,
-          max: Math.round(base.priceImpact.shortTerm.max * mod.priceMod * 10) / 10,
-          confidence: Math.max(0, Math.min(100, base.priceImpact.shortTerm.confidence + mod.confidenceMod)),
-        },
-        mediumTerm: {
-          min: Math.round(base.priceImpact.mediumTerm.min * mod.priceMod * 10) / 10,
-          max: Math.round(base.priceImpact.mediumTerm.max * mod.priceMod * 10) / 10,
-          confidence: Math.max(0, Math.min(100, base.priceImpact.mediumTerm.confidence + mod.confidenceMod)),
-        },
-        longTerm: {
-          min: Math.round(base.priceImpact.longTerm.min * mod.priceMod * 10) / 10,
-          max: Math.round(base.priceImpact.longTerm.max * mod.priceMod * 10) / 10,
-          confidence: Math.max(0, Math.min(100, base.priceImpact.longTerm.confidence + mod.confidenceMod)),
-        },
+        shortTerm: { direction: shortTerm > 0 ? 'bullish' : 'bearish', percentage: Math.abs(Math.round(shortTerm * 10) / 10) },
+        mediumTerm: { direction: mediumTerm > 0 ? 'bullish' : 'bearish', percentage: Math.abs(Math.round(mediumTerm * 10) / 10) },
+        longTerm: { direction: longTerm > 0 ? 'bullish' : 'bearish', percentage: Math.abs(Math.round(longTerm * 10) / 10) },
       },
-      riskAssessment: {
-        ...base.riskAssessment,
-        overall: Math.min(100, Math.max(0, base.riskAssessment.overall + mod.riskMod)),
-        level: base.riskAssessment.overall + mod.riskMod < 25 ? 'low' : base.riskAssessment.overall + mod.riskMod < 45 ? 'medium' : base.riskAssessment.overall + mod.riskMod < 65 ? 'high' : 'critical',
-      },
-      scenario,
+      affectedTokens,
     };
+  }
+
+  private identifyAffectedProtocols(dao: string): string[] {
+    const protocolMap: Record<string, string[]> = {
+      'Uniswap': ['Uniswap', 'SushiSwap', 'Curve', 'Balancer'],
+      'Aave': ['Aave', 'Compound', 'Liquity'],
+      'MakerDAO': ['MakerDAO', 'Aave', 'Spark'],
+      'Curve': ['Curve', 'Convex', 'Yearn'],
+      'Lido': ['Lido', 'Rocket Pool', 'Stakewise'],
+    };
+    return protocolMap[dao] || [dao];
+  }
+
+  private generateRecommendation(impactScore: ImpactScore, riskAssessment: RiskAssessment): string {
+    if (impactScore.overall > 70 && riskAssessment.level === 'low') {
+      return 'Strong bullish signal - favorable risk/reward opportunity';
+    } else if (impactScore.overall > 60 && riskAssessment.level === 'medium') {
+      return 'Moderate bullish signal - consider position with risk management';
+    } else if (impactScore.overall < 40) {
+      return 'Bearish signal - caution advised';
+    } else if (riskAssessment.level === 'high' || riskAssessment.level === 'critical') {
+      return 'High risk - await more clarity before action';
+    }
+    return 'Neutral - monitor for developments';
   }
 }

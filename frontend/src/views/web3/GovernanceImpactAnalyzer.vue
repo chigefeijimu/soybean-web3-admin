@@ -1,748 +1,613 @@
 <template>
   <div class="governance-impact-analyzer">
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card class="header-card">
-          <div class="header-content">
-            <div class="title-section">
-              <h1>📊 Governance Impact Analyzer</h1>
-              <p class="subtitle">AI-powered proposal impact analysis and price prediction</p>
-            </div>
-            <div class="header-actions">
-              <el-select v-model="selectedDao" placeholder="Filter by DAO" clearable class="dao-filter">
-                <el-option label="All DAOs" value="" />
-                <el-option label="Uniswap" value="uniswap" />
-                <el-option label="Aave" value="aave" />
-                <el-option label="MakerDAO" value="makerdao" />
-                <el-option label="Optimism" value="optimism" />
-                <el-option label="Arbitrum" value="arbitrum" />
-                <el-option label="Lido" value="lido" />
-                <el-option label="ENS" value="ens" />
-              </el-select>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <div class="header-section">
+      <h1>🗳️ Governance Impact Analyzer</h1>
+      <p class="subtitle">AI-driven DAO proposal impact analysis</p>
+    </div>
 
-    <!-- Stats Overview -->
-    <el-row :gutter="20" class="stats-row">
-      <el-col :span="4">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon total-icon">📋</div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats?.totalAnalyzed || 0 }}</div>
-              <div class="stat-label">Total Analyzed</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon bullish-icon">🐂</div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats?.bullishCount || 0 }}</div>
-              <div class="stat-label">Bullish</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon bearish-icon">🐻</div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats?.bearishCount || 0 }}</div>
-              <div class="stat-label">Bearish</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon neutral-icon">⚖️</div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats?.neutralCount || 0 }}</div>
-              <div class="stat-label">Neutral</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon risk-icon">⚠️</div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats?.highRiskCount || 0 }}</div>
-              <div class="stat-label">High Risk</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card class="stat-card">
-          <div class="stat-content">
-            <div class="stat-icon sentiment-icon">{{ sentimentEmoji }}</div>
-            <div class="stat-info">
-              <div class="stat-value">{{ stats?.marketSentiment || 50 }}</div>
-              <div class="stat-label">Sentiment</div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <!-- DAO Selector -->
+    <div class="dao-selector">
+      <a-select
+        v-model:value="selectedDao"
+        style="width: 200px"
+        :options="daoOptions"
+        placeholder="Select DAO"
+        @change="loadProposals"
+      />
+      <a-button type="primary" @click="analyzeNewProposal">
+        <template #icon><SearchOutlined /></template>
+        Analyze New Proposal
+      </a-button>
+    </div>
 
-    <el-row :gutter="20">
-      <!-- Upcoming Votes -->
-      <el-col :span="12">
-        <el-card class="proposals-card">
-          <template #header>
-            <div class="card-header">
-              <span>🔥 Upcoming Votes</span>
-              <el-tag type="danger">High Impact</el-tag>
-            </div>
+    <!-- Summary Dashboard -->
+    <a-row :gutter="[16, 16]" class="summary-row">
+      <a-col :span="6">
+        <a-statistic
+          title="Total Proposals"
+          :value="summary.totalProposals"
+          :value-style="{ color: '#1890ff' }"
+        />
+      </a-col>
+      <a-col :span="6">
+        <a-statistic
+          title="Active"
+          :value="summary.activeProposals"
+          :value-style="{ color: '#52c41a' }"
+        />
+      </a-col>
+      <a-col :span="6">
+        <a-statistic
+          title="Bullish Signals"
+          :value="summary.bullishCount"
+          :value-style="{ color: '#73d13d' }"
+        />
+      </a-col>
+      <a-col :span="6">
+        <a-statistic
+          title="High Risk"
+          :value="summary.highRiskProposals"
+          :value-style="{ color: '#ff4d4f' }"
+        />
+      </a-col>
+    </a-row>
+
+    <a-row :gutter="[16, 16]">
+      <!-- Proposal List -->
+      <a-col :span="12">
+        <a-card title="📋 Proposal Impact List" :bordered="false">
+          <template #extra>
+            <a-button type="link" @click="loadProposals">Refresh</a-button>
           </template>
-          <div class="proposals-list">
-            <div 
-              v-for="proposal in stats?.upcomingVotes || []" 
-              :key="proposal.proposalId"
-              class="proposal-item"
-              @click="selectProposal(proposal)"
+          <a-list
+            :data-source="proposals"
+            :loading="loading"
+            :pagination="{ pageSize: 10 }"
+          >
+            <template #renderItem="{ item }">
+              <a-list-item 
+                :class="{ 'selected': selectedProposal?.proposalId === item.proposalId }"
+                @click="selectProposal(item)"
+              >
+                <a-list-item-meta>
+                  <template #title>
+                    <span class="proposal-title">{{ item.title }}</span>
+                  </template>
+                  <template #description>
+                    <a-tag :color="getStatusColor(item.status)">{{ item.status }}</a-tag>
+                    <span class="dao-name">{{ item.dao }}</span>
+                  </template>
+                </a-list-item-meta>
+                <template #actions>
+                  <a-progress 
+                    type="circle" 
+                    :percent="item.impactScore.overall" 
+                    :width="40"
+                    :stroke-color="getImpactColor(item.impactScore.overall)"
+                  />
+                </template>
+              </a-list-item>
+            </template>
+          </a-list>
+        </a-card>
+      </a-col>
+
+      <!-- Impact Details -->
+      <a-col :span="12">
+        <a-card v-if="selectedProposal" title="📊 Impact Analysis" :bordered="false">
+          <!-- Impact Score -->
+          <div class="impact-section">
+            <h3>Impact Score</h3>
+            <div class="score-display">
+              <a-progress 
+                :percent="selectedProposal.impactScore.overall"
+                :stroke-color="getImpactColor(selectedProposal.impactScore.overall)"
+                :format="percent => `${percent}`"
+              />
+              <div class="score-details">
+                <span class="bullish">Bullish: {{ selectedProposal.impactScore.bullish }}%</span>
+                <span class="neutral">Neutral: {{ selectedProposal.impactScore.neutral }}%</span>
+                <span class="bearish">Bearish: {{ selectedProposal.impactScore.bearish }}%</span>
+              </div>
+              <div class="confidence">
+                Confidence: {{ selectedProposal.impactScore.confidence }}%
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk Assessment -->
+          <div class="risk-section">
+            <h3>Risk Assessment</h3>
+            <a-tag :color="getRiskColor(selectedProposal.riskAssessment.level)" class="risk-tag">
+              {{ selectedProposal.riskAssessment.level.toUpperCase() }}
+            </a-tag>
+            <a-progress 
+              :percent="selectedProposal.riskAssessment.score"
+              :stroke-color="getRiskColor(selectedProposal.riskAssessment.level)"
+              :show-info="false"
+            />
+            <ul class="risk-factors">
+              <li v-for="(factor, idx) in selectedProposal.riskAssessment.factors" :key="idx">
+                {{ factor }}
+              </li>
+            </ul>
+          </div>
+
+          <!-- Market Prediction -->
+          <div class="prediction-section">
+            <h3>Market Prediction</h3>
+            <div class="prediction-grid">
+              <div class="prediction-item">
+                <span class="label">Pass Probability</span>
+                <a-progress 
+                  :percent="selectedProposal.marketPrediction.passProbability"
+                  status="active"
+                  :stroke-color="#52c41a"
+                />
+              </div>
+              <div class="prediction-item">
+                <span class="label">Fail Probability</span>
+                <a-progress 
+                  :percent="selectedProposal.marketPrediction.failProbability"
+                  status="exception"
+                  :stroke-color="#ff4d4f"
+                />
+              </div>
+            </div>
+            
+            <div class="price-impact">
+              <h4>Price Impact</h4>
+              <a-row :gutter="8">
+                <a-col :span="8">
+                  <div class="impact-card">
+                    <div class="impact-label">Short Term</div>
+                    <div :class="['impact-value', selectedProposal.marketPrediction.priceImpact.shortTerm.direction]">
+                      {{ selectedProposal.marketPrediction.priceImpact.shortTerm.direction === 'bullish' ? '↑' : '↓' }}
+                      {{ selectedProposal.marketPrediction.priceImpact.shortTerm.percentage }}%
+                    </div>
+                  </div>
+                </a-col>
+                <a-col :span="8">
+                  <div class="impact-card">
+                    <div class="impact-label">Medium Term</div>
+                    <div :class="['impact-value', selectedProposal.marketPrediction.priceImpact.mediumTerm.direction]">
+                      {{ selectedProposal.marketPrediction.priceImpact.mediumTerm.direction === 'bullish' ? '↑' : '↓' }}
+                      {{ selectedProposal.marketPrediction.priceImpact.mediumTerm.percentage }}%
+                    </div>
+                  </div>
+                </a-col>
+                <a-col :span="8">
+                  <div class="impact-card">
+                    <div class="impact-label">Long Term</div>
+                    <div :class="['impact-value', selectedProposal.marketPrediction.priceImpact.longTerm.direction]">
+                      {{ selectedProposal.marketPrediction.priceImpact.longTerm.direction === 'bullish' ? '↑' : '↓' }}
+                      {{ selectedProposal.marketPrediction.priceImpact.longTerm.percentage }}%
+                    </div>
+                  </div>
+                </a-col>
+              </a-row>
+            </div>
+          </div>
+
+          <!-- Affected Tokens -->
+          <div class="tokens-section">
+            <h3>Affected Tokens</h3>
+            <a-tag 
+              v-for="token in selectedProposal.marketPrediction.affectedTokens" 
+              :key="token.token"
+              :color="token.impact === 'positive' ? 'green' : 'default'"
             >
-              <div class="proposal-header">
-                <el-tag size="small">{{ proposal.daoName }}</el-tag>
-                <el-tag :type="getImpactType(proposal.impactLevel)" size="small">
-                  {{ proposal.impactLevel }}
-                </el-tag>
-              </div>
-              <div class="proposal-title">{{ proposal.title }}</div>
-              <div class="proposal-meta">
-                <span>Impact: <strong :class="proposal.impactLevel">{{ proposal.impactScore }}%</strong></span>
-                <span>Type: {{ proposal.type }}</span>
-              </div>
-            </div>
+              {{ token.token }} ({{ token.confidence }}%)
+            </a-tag>
           </div>
-        </el-card>
-      </el-col>
 
-      <!-- Recently Passed -->
-      <el-col :span="12">
-        <el-card class="proposals-card">
-          <template #header>
-            <div class="card-header">
-              <span>✅ Recently Passed</span>
-              <el-tag type="success">Analyzed</el-tag>
-            </div>
-          </template>
-          <div class="proposals-list">
-            <div 
-              v-for="proposal in stats?.recentlyPassed || []" 
-              :key="proposal.proposalId"
-              class="proposal-item passed"
-              @click="selectProposal(proposal)"
-            >
-              <div class="proposal-header">
-                <el-tag size="small">{{ proposal.daoName }}</el-tag>
-                <el-tag type="success" size="small">passed</el-tag>
-              </div>
-              <div class="proposal-title">{{ proposal.title }}</div>
-              <div class="proposal-meta">
-                <span>Impact: <strong :class="proposal.impactLevel">{{ proposal.impactScore }}%</strong></span>
-                <span>Type: {{ proposal.type }}</span>
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <!-- Proposal Details -->
-    <el-row :gutter="20" v-if="selectedProposal">
-      <el-col :span="24">
-        <el-card class="detail-card">
-          <template #header>
-            <div class="card-header">
-              <span>📋 {{ selectedProposal.title }}</span>
-              <el-button @click="selectedProposal = null" text>Close</el-button>
-            </div>
-          </template>
-
-          <el-row :gutter="20">
-            <!-- Impact Score -->
-            <el-col :span="6">
-              <div class="impact-score-card">
-                <div class="score-circle" :class="selectedProposal.impactLevel">
-                  <span class="score-value">{{ selectedProposal.impactScore }}</span>
-                  <span class="score-label">Impact</span>
+          <!-- Sentiment -->
+          <div class="sentiment-section">
+            <h3>Sentiment Analysis</h3>
+            <a-row :gutter="16">
+              <a-col :span="12">
+                <div class="sentiment-item">
+                  <span>Community</span>
+                  <a-progress :percent="selectedProposal.sentiment.community" :show-info="false" />
                 </div>
-                <el-tag :type="getImpactType(selectedProposal.impactLevel)" size="large">
-                  {{ selectedProposal.impactLevel.toUpperCase() }}
-                </el-tag>
-              </div>
-            </el-col>
+              </a-col>
+              <a-col :span="12">
+                <div class="sentiment-item">
+                  <span>Whales</span>
+                  <a-progress :percent="selectedProposal.sentiment.whale" :show-info="false" />
+                </div>
+              </a-col>
+            </a-row>
+          </div>
 
-            <!-- Price Impact -->
-            <el-col :span="18">
-              <el-tabs v-model="activeTab">
-                <el-tab-pane label="Price Impact" name="price">
-                  <el-table :data="priceImpactData" style="width: 100%">
-                    <el-table-column prop="period" label="Period" width="120" />
-                    <el-table-column label="Min %">
-                      <template #default="{ row }">
-                        <span :class="row.min >= 0 ? 'positive' : 'negative'">
-                          {{ row.min >= 0 ? '+' : '' }}{{ row.min }}%
-                        </span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="Max %">
-                      <template #default="{ row }">
-                        <span :class="row.max >= 0 ? 'positive' : 'negative'">
-                          {{ row.max >= 0 ? '+' : '' }}{{ row.max }}%
-                        </span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="confidence" label="Confidence">
-                      <template #default="{ row }">
-                        <el-progress :percentage="row.confidence" :color="getProgressColor(row.confidence)" />
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-tab-pane>
+          <!-- Recommendation -->
+          <div class="recommendation-section">
+            <h3>💡 Recommendation</h3>
+            <a-alert
+              :message="selectedProposal.recommendation"
+              :type="selectedProposal.impactScore.overall > 60 ? 'success' : 'warning'"
+              show-icon
+            />
+          </div>
 
-                <el-tab-pane label="Risk Assessment" name="risk">
-                  <el-row :gutter="20">
-                    <el-col :span="8">
-                      <div class="risk-overview">
-                        <div class="risk-score" :class="selectedProposal.riskAssessment.level">
-                          {{ selectedProposal.riskAssessment.overall }}
-                        </div>
-                        <div class="risk-label">Risk Score</div>
-                        <el-tag :type="getRiskType(selectedProposal.riskAssessment.level)">
-                          {{ selectedProposal.riskAssessment.level.toUpperCase() }}
-                        </el-tag>
-                      </div>
-                    </el-col>
-                    <el-col :span="16">
-                      <div class="risk-factors">
-                        <div v-for="factor in selectedProposal.riskAssessment.factors" :key="factor.category" class="risk-factor">
-                          <div class="factor-header">
-                            <span>{{ factor.category }}</span>
-                            <span>{{ factor.score }}</span>
-                          </div>
-                          <el-progress :percentage="factor.score" :color="getRiskColor(factor.score)" />
-                          <div class="factor-desc">{{ factor.description }}</div>
-                        </div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </el-tab-pane>
+          <!-- Affected Protocols -->
+          <div class="protocols-section">
+            <h3>Affected Protocols</h3>
+            <a-tag v-for="protocol in selectedProposal.affectedProtocols" :key="protocol">
+              {{ protocol }}
+            </a-tag>
+          </div>
+        </a-card>
+        <a-empty v-else description="Select a proposal to view impact analysis" />
+      </a-col>
+    </a-row>
 
-                <el-tab-pane label="Portfolio Implications" name="portfolio">
-                  <el-table :data="selectedProposal.portfolioImplications" style="width: 100%">
-                    <el-table-column prop="position" label="Position" width="180" />
-                    <el-table-column prop="action" label="Action" width="120">
-                      <template #default="{ row }">
-                        <el-tag :type="getActionType(row.action)">{{ row.action }}</el-tag>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="reasoning" label="Reasoning" />
-                    <el-table-column prop="confidence" label="Confidence" width="150">
-                      <template #default="{ row }">
-                        <el-progress :percentage="row.confidence" :color="getProgressColor(row.confidence)" />
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-tab-pane>
-
-                <el-tab-pane label="Impact Factors" name="factors">
-                  <el-table :data="selectedProposal.factors" style="width: 100%">
-                    <el-table-column prop="factor" label="Factor" width="180" />
-                    <el-table-column prop="impact" label="Impact" width="120">
-                      <template #default="{ row }">
-                        <el-tag :type="getFactorType(row.impact)">{{ row.impact }}</el-tag>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="weight" label="Weight" width="100">
-                      <template #default="{ row }">
-                        {{ (row.weight * 100).toFixed(0) }}%
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="description" label="Description" />
-                  </el-table>
-                </el-tab-pane>
-
-                <el-tab-pane label="Comparable Proposals" name="comparable">
-                  <el-table :data="selectedProposal.comparableProposals" style="width: 100%">
-                    <el-table-column prop="id" label="ID" width="100" />
-                    <el-table-column prop="daoName" label="DAO" width="120" />
-                    <el-table-column prop="title" label="Title" />
-                    <el-table-column prop="outcome" label="Outcome" width="100">
-                      <template #default="{ row }">
-                        <el-tag :type="row.outcome === 'passed' ? 'success' : 'danger'">
-                          {{ row.outcome }}
-                        </el-tag>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="priceChange7d" label="7d Change" width="100">
-                      <template #default="{ row }">
-                        <span :class="row.priceChange7d >= 0 ? 'positive' : 'negative'">
-                          {{ row.priceChange7d >= 0 ? '+' : '' }}{{ row.priceChange7d }}%
-                        </span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="similarity" label="Similarity" width="120">
-                      <template #default="{ row }">
-                        <el-progress :percentage="row.similarity * 100" :color="'#67c23a'" />
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-tab-pane>
-
-                <el-tab-pane label="Scenario Simulation" name="scenario">
-                  <div class="scenario-buttons">
-                    <el-button 
-                      v-for="scenario in ['optimistic', 'realistic', 'pessimistic']" 
-                      :key="scenario"
-                      :type="selectedScenario === scenario ? 'primary' : 'default'"
-                      @click="loadScenario(scenario)"
-                    >
-                      {{ scenario.charAt(0).toUpperCase() + scenario.slice(1) }}
-                    </el-button>
-                  </div>
-                  <div v-if="scenarioResult" class="scenario-result">
-                    <el-row :gutter="20">
-                      <el-col :span="6">
-                        <div class="scenario-score" :class="scenarioResult.impactLevel">
-                          {{ scenarioResult.impactScore }}
-                        </div>
-                        <div class="scenario-label">Impact Score</div>
-                      </el-col>
-                      <el-col :span="18">
-                        <el-descriptions :column="2" border>
-                          <el-descriptions-item label="Short Term">
-                            <span :class="scenarioResult.priceImpact.shortTerm.min >= 0 ? 'positive' : 'negative'">
-                              {{ scenarioResult.priceImpact.shortTerm.min >= 0 ? '+' : '' }}{{ scenarioResult.priceImpact.shortTerm.min }}% ~ {{ scenarioResult.priceImpact.shortTerm.max }}%
-                            </span>
-                          </el-descriptions-item>
-                          <el-descriptions-item label="Medium Term">
-                            <span :class="scenarioResult.priceImpact.mediumTerm.min >= 0 ? 'positive' : 'negative'">
-                              {{ scenarioResult.priceImpact.mediumTerm.min >= 0 ? '+' : '' }}{{ scenarioResult.priceImpact.mediumTerm.min }}% ~ {{ scenarioResult.priceImpact.mediumTerm.max }}%
-                            </span>
-                          </el-descriptions-item>
-                          <el-descriptions-item label="Long Term">
-                            <span :class="scenarioResult.priceImpact.longTerm.min >= 0 ? 'positive' : 'negative'">
-                              {{ scenarioResult.priceImpact.longTerm.min >= 0 ? '+' : '' }}{{ scenarioResult.priceImpact.longTerm.min }}% ~ {{ scenarioResult.priceImpact.longTerm.max }}%
-                            </span>
-                          </el-descriptions-item>
-                          <el-descriptions-item label="Risk Level">
-                            <el-tag :type="getRiskType(scenarioResult.riskAssessment.level)">
-                              {{ scenarioResult.riskAssessment.level }}
-                            </el-tag>
-                          </el-descriptions-item>
-                        </el-descriptions>
-                      </el-col>
-                    </el-row>
-                  </div>
-                </el-tab-pane>
-              </el-tabs>
-            </el-col>
-          </el-row>
-        </el-card>
-      </el-col>
-    </el-row>
+    <!-- Analyze Modal -->
+    <a-modal
+      v-model:open="analyzeModalVisible"
+      title="Analyze New Proposal"
+      @ok="submitAnalysis"
+      :confirm-loading="analyzing"
+    >
+      <a-form :model="analyzeForm" layout="vertical">
+        <a-form-item label="DAO">
+          <a-select v-model:value="analyzeForm.dao" :options="daoOptions" />
+        </a-form-item>
+        <a-form-item label="Proposal ID">
+          <a-input v-model:value="analyzeForm.proposalId" placeholder="e.g., 123" />
+        </a-form-item>
+        <a-form-item label="Proposal Title">
+          <a-input v-model:value="analyzeForm.title" placeholder="Enter proposal title" />
+        </a-form-item>
+        <a-form-item label="Description">
+          <a-textarea v-model:value="analyzeForm.description" :rows="3" placeholder="Proposal description" />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ref, onMounted, computed } from 'vue';
+import { SearchOutlined } from '@ant-design/icons-vue';
+import { message } from 'ant-design-vue';
+import axios from 'axios';
 
-const selectedDao = ref('')
-const selectedProposal = ref<any>(null)
-const activeTab = ref('price')
-const selectedScenario = ref('realistic')
-const scenarioResult = ref<any>(null)
-const stats = ref<any>(null)
-const proposals = ref<any[]>([])
-
-const sentimentEmoji = computed(() => {
-  const sentiment = stats.value?.marketSentiment || 50
-  if (sentiment >= 70) return '😄'
-  if (sentiment >= 55) return '🙂'
-  if (sentiment >= 45) return '😐'
-  if (sentiment >= 30) return '😕'
-  return '😰'
-})
-
-const priceImpactData = computed(() => {
-  if (!selectedProposal.value) return []
-  const { priceImpact } = selectedProposal.value
-  return [
-    { period: 'Short Term (24h)', min: priceImpact.shortTerm.min, max: priceImpact.shortTerm.max, confidence: priceImpact.shortTerm.confidence },
-    { period: 'Medium Term (7d)', min: priceImpact.mediumTerm.min, max: priceImpact.mediumTerm.max, confidence: priceImpact.mediumTerm.confidence },
-    { period: 'Long Term (30d)', min: priceImpact.longTerm.min, max: priceImpact.longTerm.max, confidence: priceImpact.longTerm.confidence },
-  ]
-})
-
-const getImpactType = (level: string) => {
-  const types: Record<string, string> = {
-    bullish: 'success',
-    neutral: 'warning',
-    bearish: 'danger',
-  }
-  return types[level] || 'info'
+interface ImpactScore {
+  overall: number;
+  bullish: number;
+  neutral: number;
+  bearish: number;
+  confidence: number;
 }
 
-const getRiskType = (level: string) => {
-  const types: Record<string, string> = {
-    low: 'success',
-    medium: 'warning',
-    high: 'danger',
-    critical: 'danger',
-  }
-  return types[level] || 'info'
+interface RiskAssessment {
+  level: string;
+  factors: string[];
+  score: number;
 }
 
-const getActionType = (action: string) => {
-  const types: Record<string, string> = {
-    increase: 'success',
-    decrease: 'danger',
-    hold: 'warning',
-    monitor: 'info',
-  }
-  return types[action] || 'info'
+interface MarketPrediction {
+  passProbability: number;
+  failProbability: number;
+  priceImpact: {
+    shortTerm: { direction: string; percentage: number };
+    mediumTerm: { direction: string; percentage: number };
+    longTerm: { direction: string; percentage: number };
+  };
+  affectedTokens: Array<{
+    token: string;
+    impact: string;
+    confidence: number;
+  }>;
 }
 
-const getFactorType = (impact: string) => {
-  const types: Record<string, string> = {
-    positive: 'success',
-    negative: 'danger',
-    neutral: 'info',
-  }
-  return types[impact] || 'info'
+interface Proposal {
+  dao: string;
+  proposalId: string;
+  title: string;
+  description: string;
+  status: string;
+  impactScore: ImpactScore;
+  riskAssessment: RiskAssessment;
+  marketPrediction: MarketPrediction;
+  sentiment: {
+    overall: string;
+    community: number;
+    whale: number;
+  };
+  affectedProtocols: string[];
+  recommendation: string;
 }
 
-const getProgressColor = (percentage: number) => {
-  if (percentage >= 70) return '#67c23a'
-  if (percentage >= 50) return '#e6a23c'
-  return '#f56c6c'
-}
+const loading = ref(false);
+const analyzing = ref(false);
+const selectedDao = ref('all');
+const proposals = ref<Proposal[]>([]);
+const selectedProposal = ref<Proposal | null>(null);
+const analyzeModalVisible = ref(false);
+const analyzeForm = ref({
+  dao: 'Uniswap',
+  proposalId: '',
+  title: '',
+  description: '',
+});
 
-const getRiskColor = (score: number) => {
-  if (score < 25) return '#67c23a'
-  if (score < 45) return '#e6a23c'
-  return '#f56c6c'
-}
+const summary = ref({
+  totalProposals: 0,
+  activeProposals: 0,
+  passedProposals: 0,
+  pendingProposals: 0,
+  averageImpactScore: 0,
+  bullishCount: 0,
+  bearishCount: 0,
+  highRiskProposals: 0,
+});
 
-const selectProposal = (proposal: any) => {
-  selectedProposal.value = proposal
-  selectedScenario.value = 'realistic'
-  scenarioResult.value = null
-}
+const daoOptions = [
+  { value: 'all', label: 'All DAOs' },
+  { value: 'Uniswap', label: 'Uniswap' },
+  { value: 'Aave', label: 'Aave' },
+  { value: 'MakerDAO', label: 'MakerDAO' },
+  { value: 'Compound', label: 'Compound' },
+  { value: 'Curve', label: 'Curve' },
+  { value: 'Lido', label: 'Lido' },
+  { value: 'ENS', label: 'ENS' },
+  { value: 'Balancer', label: 'Balancer' },
+  { value: 'Optimism', label: 'Optimism' },
+  { value: 'Arbitrum', label: 'Arbitrum' },
+];
 
-const loadStats = async () => {
-  try {
-    const response = await fetch('/api/governance-impact-analyzer/stats')
-    stats.value = await response.json()
-  } catch (error) {
-    console.error('Failed to load stats:', error)
-  }
-}
+const API_BASE = '/api/governance-impact-analyzer';
 
 const loadProposals = async () => {
+  loading.value = true;
   try {
-    const url = selectedDao.value 
-      ? `/api/governance-impact-analyzer/proposals?dao=${selectedDao.value}`
-      : '/api/governance-impact-analyzer/proposals'
-    const response = await fetch(url)
-    proposals.value = await response.json()
+    const daoParam = selectedDao.value === 'all' ? undefined : selectedDao.value;
+    const [summaryRes, proposalsRes] = await Promise.all([
+      axios.get(`${API_BASE}/summary`, { params: { dao: daoParam } }),
+      axios.get(`${API_BASE}/trending`, { params: { limit: 20 } }),
+    ]);
+    summary.value = summaryRes.data;
+    proposals.value = proposalsRes.data;
+    if (proposals.value.length > 0 && !selectedProposal.value) {
+      selectedProposal.value = proposals.value[0];
+    }
   } catch (error) {
-    console.error('Failed to load proposals:', error)
+    console.error('Failed to load proposals:', error);
+    message.error('Failed to load proposals');
+  } finally {
+    loading.value = false;
   }
-}
+};
 
-const loadScenario = async (scenario: string) => {
-  if (!selectedProposal.value) return
-  selectedScenario.value = scenario
+const selectProposal = (proposal: Proposal) => {
+  selectedProposal.value = proposal;
+};
+
+const analyzeNewProposal = () => {
+  analyzeForm.value = {
+    dao: 'Uniswap',
+    proposalId: String(Date.now()).slice(-4),
+    title: '',
+    description: '',
+  };
+  analyzeModalVisible.value = true;
+};
+
+const submitAnalysis = async () => {
+  analyzing.value = true;
   try {
-    const response = await fetch(`/api/governance-impact-analyzer/simulate/${selectedProposal.value.proposalId}?scenario=${scenario}`)
-    scenarioResult.value = await response.json()
+    const res = await axios.post(`${API_BASE}/analyze`, analyzeForm.value);
+    message.success('Proposal analyzed successfully');
+    analyzeModalVisible.value = false;
+    await loadProposals();
+    selectedProposal.value = res.data;
   } catch (error) {
-    console.error('Failed to load scenario:', error)
+    console.error('Analysis failed:', error);
+    message.error('Failed to analyze proposal');
+  } finally {
+    analyzing.value = false;
   }
-}
+};
 
-watch(selectedDao, () => {
-  loadProposals()
-})
+const getStatusColor = (status: string) => {
+  const colors: Record<string, string> = {
+    active: 'green',
+    passed: 'blue',
+    pending: 'orange',
+    failed: 'red',
+    analyzed: 'purple',
+  };
+  return colors[status] || 'default';
+};
+
+const getImpactColor = (score: number) => {
+  if (score >= 70) return '#52c41a';
+  if (score >= 50) return '#1890ff';
+  if (score >= 30) return '#faad14';
+  return '#ff4d4f';
+};
+
+const getRiskColor = (level: string) => {
+  const colors: Record<string, string> = {
+    low: '#52c41a',
+    medium: '#faad14',
+    high: '#ff4d4f',
+    critical: '#d9363e',
+  };
+  return colors[level] || '#d9d9d9';
+};
 
 onMounted(() => {
-  loadStats()
-  loadProposals()
-})
+  loadProposals();
+});
 </script>
 
 <style scoped>
 .governance-impact-analyzer {
-  padding: 20px;
+  padding: 24px;
 }
 
-.header-card {
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+.header-section {
+  margin-bottom: 24px;
 }
 
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.title-section h1 {
-  margin: 0;
+.header-section h1 {
+  margin-bottom: 8px;
   font-size: 28px;
 }
 
 .subtitle {
-  margin: 5px 0 0;
-  opacity: 0.9;
-}
-
-.dao-filter {
-  width: 200px;
-}
-
-.stats-row {
-  margin-bottom: 20px;
-}
-
-.stat-card {
-  text-align: center;
-}
-
-.stat-content {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.stat-icon {
-  font-size: 32px;
-}
-
-.stat-value {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.stat-label {
-  font-size: 12px;
   color: #666;
+  font-size: 14px;
 }
 
-.proposals-card {
-  margin-bottom: 20px;
-}
-
-.card-header {
+.dao-selector {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.proposals-list {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.proposal-item {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.proposal-item:hover {
-  background: #f5f7fa;
-}
-
-.proposal-item.passed {
-  opacity: 0.8;
-}
-
-.proposal-header {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
+.summary-row {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
 }
 
 .proposal-title {
   font-weight: 500;
-  margin-bottom: 6px;
-  font-size: 14px;
 }
 
-.proposal-meta {
+.dao-name {
+  margin-left: 8px;
+  color: #666;
+}
+
+.selected {
+  background: #e6f7ff;
+  border-left: 3px solid #1890ff;
+}
+
+.impact-section,
+.risk-section,
+.prediction-section,
+.tokens-section,
+.sentiment-section,
+.recommendation-section,
+.protocols-section {
+  margin-bottom: 24px;
+}
+
+.impact-section h3,
+.risk-section h3,
+.prediction-section h3,
+.tokens-section h3,
+.sentiment-section h3,
+.recommendation-section h3,
+.protocols-section h3 {
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.score-details {
   display: flex;
-  gap: 15px;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.score-details .bullish {
+  color: #52c41a;
+}
+
+.score-details .neutral {
+  color: #1890ff;
+}
+
+.score-details .bearish {
+  color: #ff4d4f;
+}
+
+.confidence {
+  margin-top: 8px;
+  color: #666;
   font-size: 12px;
-  color: #666;
 }
 
-.proposal-meta .bullish {
-  color: #67c23a;
-}
-
-.proposal-meta .bearish {
-  color: #f56c6c;
-}
-
-.proposal-meta .neutral {
-  color: #e6a23c;
-}
-
-.detail-card {
-  margin-bottom: 20px;
-}
-
-.impact-score-card {
-  text-align: center;
-  padding: 20px;
-}
-
-.score-circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 15px;
-  border: 4px solid;
-}
-
-.score-circle.bullish {
-  border-color: #67c23a;
-  background: #f0f9eb;
-}
-
-.score-circle.bearish {
-  border-color: #f56c6c;
-  background: #fef0f0;
-}
-
-.score-circle.neutral {
-  border-color: #e6a23c;
-  background: #fdf6ec;
-}
-
-.score-value {
-  font-size: 36px;
-  font-weight: bold;
-}
-
-.score-label {
-  font-size: 12px;
-  color: #666;
-}
-
-.positive {
-  color: #67c23a;
-}
-
-.negative {
-  color: #f56c6c;
-}
-
-.risk-overview {
-  text-align: center;
-  padding: 20px;
-}
-
-.risk-score {
-  font-size: 48px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.risk-score.low {
-  color: #67c23a;
-}
-
-.risk-score.medium {
-  color: #e6a23c;
-}
-
-.risk-score.high,
-.risk-score.critical {
-  color: #f56c6c;
-}
-
-.risk-label {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 10px;
+.risk-tag {
+  font-weight: 600;
 }
 
 .risk-factors {
-  padding: 10px;
+  margin-top: 12px;
+  padding-left: 20px;
 }
 
-.risk-factor {
-  margin-bottom: 15px;
-}
-
-.factor-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-  font-size: 13px;
-}
-
-.factor-desc {
-  font-size: 12px;
+.risk-factors li {
   color: #666;
-  margin-top: 5px;
+  margin-bottom: 4px;
 }
 
-.scenario-buttons {
-  margin-bottom: 20px;
-  display: flex;
-  gap: 10px;
+.prediction-grid {
+  margin-bottom: 16px;
 }
 
-.scenario-result {
-  padding: 20px;
-  background: #f5f7fa;
+.prediction-item {
+  margin-bottom: 12px;
+}
+
+.prediction-item .label {
+  display: block;
+  margin-bottom: 4px;
+  color: #666;
+  font-size: 12px;
+}
+
+.price-impact {
+  margin-top: 16px;
+}
+
+.price-impact h4 {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.impact-card {
+  text-align: center;
+  padding: 12px;
+  background: #f5f5f5;
   border-radius: 8px;
 }
 
-.scenario-score {
-  font-size: 48px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.scenario-score.bullish {
-  color: #67c23a;
-}
-
-.scenario-score.bearish {
-  color: #f56c6c;
-}
-
-.scenario-score.neutral {
-  color: #e6a23c;
-}
-
-.scenario-label {
-  text-align: center;
+.impact-label {
+  font-size: 12px;
   color: #666;
-  margin-bottom: 15px;
+  margin-bottom: 4px;
+}
+
+.impact-value {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.impact-value.bullish {
+  color: #52c41a;
+}
+
+.impact-value.bearish {
+  color: #ff4d4f;
+}
+
+.sentiment-item {
+  margin-bottom: 8px;
+}
+
+.sentiment-item span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #666;
 }
 </style>
