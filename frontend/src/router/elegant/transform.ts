@@ -168,6 +168,7 @@ const routeMap: RouteMap = {
   "500": "/500",
   "access-key": "/access-key",
   "dao-proposal-scanner": "/dao-proposal-scanner",
+  "defi-risk-adjusted-returns": "/defi-risk-adjusted-returns",
   "governanceproposalimpact": "/governanceproposalimpact",
   "home": "/home",
   "iframe-page": "/iframe-page/:url",
@@ -191,6 +192,7 @@ const routeMap: RouteMap = {
   "web3_defiprotocolgraph": "/web3/defiprotocolgraph",
   "web3_domainservice": "/web3/domainservice",
   "web3_nft-floor-price-oracle": "/web3/nft-floor-price-oracle",
+  "web3_portfolioriskassessment": "/web3/portfolioriskassessment",
   "web3_tokensafetychecker": "/web3/tokensafetychecker"
 };
 

@@ -22,6 +22,7 @@ declare module "@elegant-router/types" {
     "500": "/500";
     "access-key": "/access-key";
     "dao-proposal-scanner": "/dao-proposal-scanner";
+    "defi-risk-adjusted-returns": "/defi-risk-adjusted-returns";
     "governanceproposalimpact": "/governanceproposalimpact";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
@@ -45,6 +46,7 @@ declare module "@elegant-router/types" {
     "web3_defiprotocolgraph": "/web3/defiprotocolgraph";
     "web3_domainservice": "/web3/domainservice";
     "web3_nft-floor-price-oracle": "/web3/nft-floor-price-oracle";
+    "web3_portfolioriskassessment": "/web3/portfolioriskassessment";
     "web3_tokensafetychecker": "/web3/tokensafetychecker";
   };
 
@@ -82,6 +84,7 @@ declare module "@elegant-router/types" {
     | "500"
     | "access-key"
     | "dao-proposal-scanner"
+    | "defi-risk-adjusted-returns"
     | "governanceproposalimpact"
     | "home"
     | "iframe-page"
@@ -113,6 +116,7 @@ declare module "@elegant-router/types" {
     | "login"
     | "access-key"
     | "dao-proposal-scanner"
+    | "defi-risk-adjusted-returns"
     | "home"
     | "log_login"
     | "log_operation"
@@ -126,6 +130,7 @@ declare module "@elegant-router/types" {
     | "web3_definews"
     | "web3_defiprotocolgraph"
     | "web3_domainservice"
+    | "web3_portfolioriskassessment"
     | "web3_tokensafetychecker"
     | "web3_cross-chain-bridge-analytics"
     | "web3_cross-chain-gas-station"

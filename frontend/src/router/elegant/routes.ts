@@ -54,6 +54,15 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'defi-risk-adjusted-returns',
+    path: '/defi-risk-adjusted-returns',
+    component: 'layout.base$view.defi-risk-adjusted-returns',
+    meta: {
+      title: 'defi-risk-adjusted-returns',
+      i18nKey: 'route.defi-risk-adjusted-returns'
+    }
+  },
+  {
     name: 'governanceproposalimpact',
     path: '/governanceproposalimpact',
     component: 'layout.base$view.governanceproposalimpact',
@@ -271,6 +280,15 @@ export const generatedRoutes: GeneratedRoute[] = [
         meta: {
           title: 'web3_nft-floor-price-oracle',
           i18nKey: 'route.web3_nft-floor-price-oracle'
+        }
+      },
+      {
+        name: 'web3_portfolioriskassessment',
+        path: '/web3/portfolioriskassessment',
+        component: 'view.web3_portfolioriskassessment',
+        meta: {
+          title: 'web3_portfolioriskassessment',
+          i18nKey: 'route.web3_portfolioriskassessment'
         }
       },
       {

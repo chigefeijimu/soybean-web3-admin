@@ -1,0 +1,14 @@
+{
+  "$schema": "../../node_modules/nestjs-schematics/schema.json",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/web3-defi-risk-adjusted-returns/tsconfig.app.json"
+  },
+  "root": "apps/web3-defi-risk-adjusted-returns",
+  "entryFile": "main",
+  "entryFile": "main",
+  "name": "web3-defi-risk-adjusted-returns"
+}

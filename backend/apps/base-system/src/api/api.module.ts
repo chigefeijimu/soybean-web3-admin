@@ -28,6 +28,7 @@ import { TokenLaunchScannerModule } from './web3/token-launch-scanner/token-laun
 import { DefiRiskCalculatorModule } from './web3/defi-risk-calculator.module';
 import { ContractSecurityAuditModule } from './web3/contract-security-audit.module';
 import { Web3DefiRiskRadarModule } from './web3/defi-risk-radar.module';
+import { Web3PortfolioRiskAssessmentModule } from './web3/portfolio-risk-assessment.module';
 import { DefiTvlHistoryModule } from './web3-defi-tvl-history/defi-tvl-history.module';
 import { DefiTvlHistoryController } from './web3-defi-tvl-history/defi-tvl-history.controller';
 import { DefiMarketOverviewModule } from './web3-defi-market-overview/defi-market-overview.module';
@@ -52,6 +53,7 @@ import { AiMarketPredictionModule } from './web3/ai-market-prediction.module';
 import { AiMarketPredictionController } from './web3/ai-market-prediction.controller';
 import { Web3DefiRewardsController } from './web3/web3-defi-rewards.controller';
 import { Web3DefiRiskRadarController } from './web3/web3-defi-risk-radar.controller';
+import { Web3PortfolioRiskAssessmentController } from './web3/portfolio-risk-assessment.controller';
 import { MultisigHealthMonitorModule } from './web3/multisig-health-monitor.module';
 import { MultisigHealthMonitorController } from './web3/multisig-health-monitor.controller';
 import { DefiProtocolGraphModule } from './web3/defi-protocol-graph.module';
@@ -90,6 +92,7 @@ import { DefiProtocolGraphController } from './web3/defi-protocol-graph.controll
     DefiMarketOverviewModule,
     AiMarketPredictionModule,
     Web3DefiRiskRadarModule,
+    Web3PortfolioRiskAssessmentModule,
     MultisigHealthMonitorModule,
     DefiProtocolGraphModule,
   ],
@@ -114,6 +117,7 @@ import { DefiProtocolGraphController } from './web3/defi-protocol-graph.controll
     AiMarketPredictionController,
     Web3DefiRewardsController,
     Web3DefiRiskRadarController,
+    Web3PortfolioRiskAssessmentController,
     MultisigHealthMonitorController,
     DefiProtocolGraphController,
   ],
